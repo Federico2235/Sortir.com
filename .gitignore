@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env
 /.env.local
@@ -15,30 +14,27 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-
-###< symfony/phpunit-bridge ###
-
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
 # Created by https://www.toptal.com/developers/gitignore/api/symfony,phpstorm,phpunit,composer
 # Edit at https://www.toptal.com/developers/gitignore?templates=symfony,phpstorm,phpunit,composer
 
 ### Composer ###
 composer.phar
 
-
 # Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
-# composer.lock
+composer.lock
 
 ### PhpStorm ###
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm, and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
-/*.idea
+/.idea
 /.idea/*
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -67,7 +63,7 @@ composer.phar
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
+# since they will be recreated, and may cause churn. Uncomment if using
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
@@ -122,12 +118,7 @@ fabric.properties
 # .idea/misc.xml
 # *.ipr
 
-# Sonarlint plugin
-# https://plugins.jetbrains.com/plugin/7973-sonarlint
-.idea/**/sonarlint/
-
 # SonarQube Plugin
-# https://plugins.jetbrains.com/plugin/7238-sonarqube-community-plugin
 .idea/**/sonarIssues.xml
 
 # Markdown Navigator plugin
@@ -153,25 +144,17 @@ fabric.properties
 # Reference: https://phpunit.de/
 
 # Generated files
-
 .phpunit.cache
 
 # PHPUnit
 /app/phpunit.xml
+
 # Build data
 /build/
 
 ### Symfony ###
-# Cache and logs (Symfony2)
-/app/cache/*
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
-
-# Email spool folder
-/app/spool/*
-
-# Cache, session files and logs (Symfony3)
+# Cache and logs (Symfony 3+)
+# The .gitkeep files are added to prevent Git from ignoring empty directories
 /var/cache/*
 /var/logs/*
 /var/sessions/*
@@ -179,11 +162,13 @@ fabric.properties
 !var/logs/.gitkeep
 !var/sessions/.gitkeep
 
-# Logs (Symfony4)
+# Logs (Symfony4+)
+# No need to ignore the logs folder, as it's already covered above
 /var/log/*
 !var/log/.gitkeep
 
-# Parameters
+# Parameters (use env vars instead)
+# /app/config/parameters.yml is not used in Symfony 4 or higher (use .env files instead)
 /app/config/parameters.yml
 /app/config/parameters.ini
 
@@ -214,5 +199,3 @@ fabric.properties
 ### Symfony Patch ###
 /web/css/
 /web/js/
-
-# End of https://www.toptal.com/developers/gitignore/api/symfony,phpstorm,phpunit,composer

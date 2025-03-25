@@ -1,4 +1,6 @@
 ###> symfony/framework-bundle ###
+/.env.dev
+/.env.test
 /.env
 /.env.dev
 /.env.test

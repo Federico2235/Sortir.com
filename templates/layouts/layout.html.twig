@@ -1,12 +1,12 @@
-{% extends 'base.html.twig' %}
+{% extends 'main/base.html.twig' %}
 
 {% block body %}
 <header class="p-3">
-  {% include '_header.html.twig' %}
+  {% include 'layouts/_header.html.twig' %}
 </header>
 
 <nav class="p-3">
-  {% include '_navigation.html.twig' %}
+  {% include 'layouts/_navigation.html.twig' %}
 </nav>
 
 <main class="container p-4 my-4 rounded shadow-sm">
@@ -14,6 +14,6 @@
 </main>
 
 <footer class="p-3 mt-4">
-  {% include '_footer.html.twig' %}
+  {% include 'layouts/_footer.html.twig' %}
 </footer>
 {% endblock %}

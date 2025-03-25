@@ -42,7 +42,7 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     private Collection $sorties;
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Site $site = null;
 
     #[ORM\Column(length: 255)]
@@ -221,6 +221,6 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
 
     public function getUserIdentifier(): string
     {
-        // TODO: Implement getUserIdentifier() method.
+        return (string) $this->pseudo;
     }
 }

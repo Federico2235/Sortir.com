@@ -2,12 +2,13 @@
 
 namespace App\DataFixtures;
 
+use AllowDynamicProperties;
 use App\Entity\Participant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class ParticipantFixtures extends Fixture
+#[AllowDynamicProperties] class ParticipantFixtures extends Fixture
 {
 
 

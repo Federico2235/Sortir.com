@@ -2,21 +2,31 @@
     <li class="nav-item">
         <a class="nav-link active" aria-current="page" href="#">Sortir.com</a>
     </li>
-    {% if admin %}
+    {#  {% if admin %}
         <li class="nav-item">
             <a class="nav-link" href="#">Villes</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">Sites</a>
         </li>
-    {% endif %}
+    {% endif %} #}
     <li class="nav-item">
         <a class="nav-link" href="#">Accueil</a>
     </li>
+    {# {% if !isAuthenticated %} #}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+    </li>
+    {# {% endif %} #}
+    {# {% if isAuthenticated %}
     <li class="nav-item">
         <a class="nav-link" href="#">Mon profil</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">Se déconnecter</a>
     </li>
+    {% endif %}#}
 </ul>

@@ -1,0 +1,9 @@
+dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 8px;
+}
+
+dt {
+    font-weight: bold;
+}

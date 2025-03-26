@@ -1,15 +1,15 @@
-:root {
-    --bulma-footer-background-color: #1a1a1a; /* Exemple : gris très foncé */
-    --bulma-footer-color: #f5f5f5;             /* Exemple : texte clair */
-    --bulma-footer-padding: 1.5rem;              /* Exemple : 2rem de padding */
-}
+/*:root {*/
+/*    --bulma-footer-background-color: #1a1a1a; !* Exemple : gris très foncé *!*/
+/*    --bulma-footer-color: #f5f5f5;             !* Exemple : texte clair *!*/
+/*    --bulma-footer-padding: 1.5rem;              !* Exemple : 2rem de padding *!*/
+/*}*/
 
 
-footer {
-    background-color: var(--bulma-footer-background-color);
-    color: var(--bulma-footer-color);
-    padding: var(--bulma-footer-padding);
-}
+/*footer {*/
+/*    background-color: var(--bulma-footer-background-color);*/
+/*    color: var(--bulma-footer-color);*/
+/*    padding: var(--bulma-footer-padding);*/
+/*}*/
 
 /*form {*/
 /*    border-radius: var(--bulma-control-radius),*/
@@ -25,3 +25,8 @@ footer {
 /*    font-weight: var(--bulma-label-weight);*/
 /*    font-size: var(--bulma-help-size);*/
 /*}*/
+
+footer {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}

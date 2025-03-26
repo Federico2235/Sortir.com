@@ -1,13 +1,13 @@
 <nav class="fixed top-0 left-0 right-0 z-50">
     <ul class="flex justify-center space-x-6 p-4 bg-gray-800 bg-opacity-70 backdrop-blur-md shadow-lg">
-        <li><a class="text-gray-200 hover:text-orange-400 transition-colors" href="#">Sortir.com</a></li>
-        <li><a class="text-gray-200 hover:text-orange-400 transition-colors" href="#">Accueil</a></li>
+        <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="#">Sortir.com</a></li>
+        <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="#">Accueil</a></li>
         {% if app.user %}
-            <li><a class="text-gray-200 hover:text-orange-400 transition-colors" href="#">Mon profil</a></li>
-            <li><a class="text-gray-200 hover:text-orange-400 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="#">Mon profil</a></li>
+            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
         {% else %}
-            <li><a class="text-gray-200 hover:text-orange-400 transition-colors" href="{{ path('app_register') }}">S'inscrire</a></li>
-            <li><a class="text-gray-200 hover:text-orange-400 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
+            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_register') }}">S'inscrire</a></li>
+            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
         {% endif %}
     </ul>
 </nav>

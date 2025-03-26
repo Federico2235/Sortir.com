@@ -28,7 +28,7 @@
                 <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>{{ sortie.organisateur.nom }}</td>
-                <td><a href=>Afficher</a></td>
+                <td><a href="{{ path('read', {'id': sortie.id}) }}">Afficher</a></td>
 {% endfor %}
         </tbody>
 

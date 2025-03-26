@@ -30,7 +30,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $site3->setNom('LA ROCHE SUR YON');
         $manager->persist($site3);
 
-        // Ahora creamos el 'Participant' y lo asociamos a un 'Site'
+
         $participant = new Participant();
         $participant->setNom('Doe');
         $participant->setPrenom('John');
@@ -39,9 +39,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant->setAdministrateur(false);
         $participant->setActif(true);
         $participant->setPseudo('johndoe');
+        $participant->setRoles(['ROLE_USER']);
         $participant->setPassword($this->passwordHasher->hashPassword($participant, '123456'));
 
-        // Asociamos un Site (en este caso, site1)
+
         $participant->setSite($site1);
         $manager->persist($participant);
 
@@ -53,12 +54,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant2->setAdministrateur(true);
         $participant2->setActif(true);
         $participant2->setPseudo('emilysmith123');
+        $participant2->setRoles(['ROLE_USER']);
      $participant2->setSite($site2);
      $participant2->setPassword($this->passwordHasher->hashPassword($participant2, 'lalala'));
      $manager->persist($participant2);
 
 
-        // Tercer participante
+
         $participant3 = new Participant();
         $participant3->setNom('Martin');
         $participant3->setPrenom('Louis');
@@ -69,13 +71,15 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant3->setPseudo('louis_martin');
         $participant3->setSite($site3);
         $participant3->setPassword($this->passwordHasher->hashPassword($participant3, 'tatata'));
+       $participant3->setRoles(['ROLE_ADMIN']);
         $manager->persist($participant3);
 
-        // Persistimos el participante
+
 
 
 
 
         $manager->flush();
     }
+
 }

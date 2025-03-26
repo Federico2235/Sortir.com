@@ -81,7 +81,7 @@ class Sortie
 
     public function getDateHeureDebut(): ?\DateTimeImmutable
     {
-        return $this->dateHeureDebut;
+        return $this->dateHeureDebut ;
     }
 
     public function setDateHeureDebut(\DateTimeImmutable $dateHeureDebut): static

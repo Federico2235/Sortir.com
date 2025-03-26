@@ -13,6 +13,7 @@ use App\Form\VilleType;
 use App\Form\SiteType;
 use App\Repository\EtatRepository;
 use App\Repository\SiteRepository;
+use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +24,11 @@ final class SortieController extends AbstractController
 {
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     public function createSortie(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $em,
-        EtatRepository $etatRepository
-    ): Response {
+        EtatRepository         $etatRepository
+    ): Response
+    {
         // Création du formulaire Ville
         $ville = new Ville();
         $villeForm = $this->createForm(VilleType::class, $ville);
@@ -70,5 +72,31 @@ final class SortieController extends AbstractController
             'lieuForm' => $lieuForm->createView(),
             'villeForm' => $villeForm->createView(),
         ]);
+    }
+
+    #[Route('/detail/{id}', name: 'read', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function readSortie(
+        int                    $id,
+        Request                $request,
+        SortieRepository       $repository,
+    ): Response
+    {
+        $sortie = $repository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException("Sortie introuvable !");
+        }
+
+        return $this->render('sortie/read.html.twig',[
+            'sortie' => $sortie
+        ]);
+    }
+
+     # [Route('/inscription/{id}', name: 'inscription', requirements:['id' =>'\d+'], methods: ['POST'])]
+    public function inscription(
+        int $id,
+        Request $request
+    ): Response{
+
     }
 }

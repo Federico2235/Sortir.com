@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantProfileType;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Sortie;
+use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +17,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class MainController extends AbstractController
 {
     #[Route('/', name: 'app_main')]
-    public function index(): Response
+    public function index(SortieRepository $sortieRepository): Response
     {
-        return $this->render('main/index.html.twig');
+$sorties=$sortieRepository->findAll();
+        return $this->render('main/index.html.twig',[
+            'sorties'=>$sorties
+        ]);
     }
 
     #[Route('/login', name: 'app_login')]

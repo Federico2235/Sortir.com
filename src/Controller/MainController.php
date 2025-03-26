@@ -31,7 +31,7 @@ final class MainController extends AbstractController
     public function profil(): Response
     {
         return $this->render('main/profil.html.twig', [
-            'user' => $this->getUser(),
+            'participant' => $this->getUser(), // Changé 'user' en 'participant' pour cohérence
         ]);
     }
 
@@ -44,7 +44,7 @@ final class MainController extends AbstractController
     ): Response {
         /** @var Participant $participant */
         $participant = $this->getUser();
-        $oldPassword = $participant->getPassword();
+        $oldPassword = $participant->getPassword(); // Correction: $participant au lieu de $participant
 
         $form = $this->createForm(ParticipantProfileType::class, $participant, [
             'is_password_required' => false
@@ -56,7 +56,7 @@ final class MainController extends AbstractController
             $newPassword = $form->get('password')->getData();
 
             if (!empty($newPassword)) {
-                // Optionnel : vérifier que le nouveau mot de passe est différent
+                // Option: vérifier si le nouveau mot de passe est différent de l'ancien
                 if ($passwordHasher->isPasswordValid($participant, $newPassword)) {
                     $this->addFlash('warning', 'Le nouveau mot de passe doit être différent de l\'actuel');
                     return $this->redirectToRoute('app_profil_edit');
@@ -66,7 +66,7 @@ final class MainController extends AbstractController
                     $passwordHasher->hashPassword($participant, $newPassword)
                 );
             } else {
-                // Conserver l'ancien mot de passe si aucun nouveau n'est fourni
+                // Si aucun nouveau mot de passe, on conserve l'ancien
                 $participant->setPassword($oldPassword);
             }
 
@@ -78,6 +78,7 @@ final class MainController extends AbstractController
 
         return $this->render('main/profil_edit.html.twig', [
             'form' => $form->createView(),
+            'participant' => $participant // Ajouté pour cohérence
         ]);
     }
 }

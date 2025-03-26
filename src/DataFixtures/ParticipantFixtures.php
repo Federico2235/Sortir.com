@@ -41,4 +41,5 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $manager->flush();
 
     }
+
 }

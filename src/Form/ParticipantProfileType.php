@@ -28,18 +28,8 @@ class ParticipantProfileType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent correspondre',
                 'required' => $options['is_password_required'],
-                'first_options'  => [
-                    'label' => 'Nouveau mot de passe',
-                    'attr' => [
-                        'placeholder' => 'Laissez vide pour ne pas changer',
-                        'autocomplete' => 'new-password'
-                    ],
-                    'required' => false
-                ],
-                'second_options' => [
-                    'label' => 'Confirmation',
-                    'required' => false
-                ],
+                'first_options' => ['label' => 'Nouveau mot de passe'],
+                'second_options' => ['label' => 'Confirmation'],
                 'mapped' => true
             ]);
     }

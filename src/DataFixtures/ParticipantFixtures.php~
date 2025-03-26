@@ -5,7 +5,6 @@ namespace App\DataFixtures;
 use AllowDynamicProperties;
 use App\Entity\Participant;
 use App\Entity\Site;
-use App\Repository\SiteRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -13,21 +12,25 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[AllowDynamicProperties] class ParticipantFixtures extends Fixture
 {
 
-
     public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->passwordHasher = $passwordHasher;
     }
     public function load(ObjectManager $manager): void
     {
-        $site = $manager->getRepository(Site::class)->find(1);
+        $site1 = new Site();
+        $site1->setNom('SAINT HERBLAIN');
+        $manager->persist($site1);
 
-        if (!$site) {
-            throw new \Exception("El sitio con ID 5 no existe.");
-        }
+        $site2 = new Site();
+        $site2->setNom('CHARTRES DE BRETAGNE');
+        $manager->persist($site2);
 
+        $site3 = new Site();
+        $site3->setNom('LA ROCHE SUR YON');
+        $manager->persist($site3);
 
-
+        // Ahora creamos el 'Participant' y lo asociamos a un 'Site'
         $participant = new Participant();
         $participant->setNom('Doe');
         $participant->setPrenom('John');
@@ -36,20 +39,15 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant->setAdministrateur(false);
         $participant->setActif(true);
         $participant->setPseudo('johndoe');
-        $participant->setSite($site);
 
-        // Encriptar el password
-        $hashedPassword = $this->passwordHasher->hashPassword($participant, '123456');
-        $participant->setPassword($hashedPassword);
+        // Asociamos un Site (en este caso, site1)
+        $participant->setSite($site1);
 
-        // Establecer roles
-        $participant->setRoles(['ROLE_USER']);
-
-        // Persistir la entidad en la base de datos
+        // Persistimos el participante
         $manager->persist($participant);
 
-        // Hacer flush para guardar en la base de datos
-        $manager->flush();
 
+
+        $manager->flush();
     }
 }

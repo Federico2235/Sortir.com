@@ -12,13 +12,16 @@ class SiteFixtures extends Fixture
     {
         $sites = ['SAINT HERBLAIN', 'CHARTRES DE BRETAGNE', 'LA ROCHE SUR YON'];
 
-        foreach ($sites as $nom){
+        foreach ($sites as $index => $nom){
 
             $site = new Site();
             $site ->setNom($nom);
 
             $manager->persist($site);
-        }
+           
+                }
+
+
         $manager->flush();
     }
 }

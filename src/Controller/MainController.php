@@ -23,4 +23,10 @@ final class MainController extends AbstractController
     {
         return $this->render('security/register.html.twig');
     }
+    #[Route('/profil', name: 'app_profil')]
+    public function profil(): Response
+    {
+        return $this->render('main/profil.html.twig');
+    }
+
 }

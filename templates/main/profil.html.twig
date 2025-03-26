@@ -1,0 +1,22 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
+{% endblock %}
+
+
+
+{% block title %}Page d'accueil{% endblock %}
+
+{% block content %}
+   <h1>Bonjour {{ app.user.prenom }}</h1>
+   <h2>Voici les informations de votre Profil : </h2>
+    <dl>
+        <dt>Nom :</dt> <dd>{{ app.user.nom }}</dd>
+        <dt>Prénom :</dt> <dd>{{ app.user.prenom }}</dd>
+        <dt>Téléphone :</dt> <dd>{{ app.user.telephone }}</dd>
+        <dt>Email :</dt> <dd>{{ app.user.mail }}</dd>
+        <dt>Pseudo :</dt> <dd>{{ app.user.pseudo }}</dd>
+    </dl>
+
+{% endblock %}

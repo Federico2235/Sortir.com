@@ -18,5 +18,6 @@
         <dt>Email :</dt> <dd>{{ app.user.mail }}</dd>
         <dt>Pseudo :</dt> <dd>{{ app.user.pseudo }}</dd>
     </dl>
+    <btn class="btn btn-primary"><a href="{{ path('app_profil_edit') }}">Modifier mon profil</a></btn>
 
 {% endblock %}

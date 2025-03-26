@@ -20,7 +20,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
     }
     public function load(ObjectManager $manager): void
     {
-        $site = $manager->getRepository(Site::class)->find(9);
+        $site = $manager->getRepository(Site::class)->find(1);
 
         if (!$site) {
             throw new \Exception("El sitio con ID 5 no existe.");

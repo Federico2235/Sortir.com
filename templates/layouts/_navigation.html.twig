@@ -13,20 +13,23 @@
     <li class="nav-item">
         <a class="nav-link" href="/">Accueil</a>
     </li>
-    {# {% if !isAuthenticated %} #}
+
+
+
+     {% if app.user %}
+    <li class="nav-item">
+        <a class="nav-link" href="#">Mon profil</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+    </li>
+
+    {% else %}
     <li class="nav-item">
         <a class="nav-link" href="{{ path('app_register') }}">S'inscrire</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
     </li>
-    {# {% endif %} #}
-    {# {% if isAuthenticated %}
-    <li class="nav-item">
-        <a class="nav-link" href="#">Mon profil</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Se déconnecter</a>
-    </li>
-    {% endif %}#}
+    {% endif %}
 </ul>

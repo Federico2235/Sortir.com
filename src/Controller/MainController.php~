@@ -14,9 +14,7 @@ final class MainController extends AbstractController
     public function index(SortieRepository $sortieRepository): Response
     {
 $sorties=$sortieRepository->findAll();
-        return $this->render('main/index.html.twig',[
-            'sorties'=>$sorties
-        ]);
+        return $this->render('main/index.html.twig')
     }
     #[Route('/login', name: 'app_login')]
     public function login(): Response

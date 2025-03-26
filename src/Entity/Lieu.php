@@ -22,10 +22,10 @@ class Lieu
     private ?string $rue = null;
 
     #[ORM\Column]
-    private ?float $latitude = null;
+    private ?float $latitude = 0;
 
     #[ORM\Column]
-    private ?float $longitude = null;
+    private ?float $longitude = 0;
 
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     #[ORM\JoinColumn(nullable: false)]

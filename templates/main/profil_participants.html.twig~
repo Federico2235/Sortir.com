@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="box">
-   <h2><strong>Profil de :</strong> {{ participant.pseudo}} </h2>
+   <h2>Profil de :{{ participant.pseudo}} </h2>
     <dl>
         <dt>Nom :</dt> <dd>{{participant.nom }}</dd>
         <dt>Prénom :</dt> <dd>{{ participant.prenom }}</dd>

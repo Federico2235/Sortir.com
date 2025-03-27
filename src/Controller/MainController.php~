@@ -41,7 +41,7 @@ $sorties=$sortieRepository->findAll();
     }
 
     #[Route('/profil/edit', name: 'app_profil_edit')]
-
+   
     public function modifierProfil(
         Request $request,
         EntityManagerInterface $entityManager,

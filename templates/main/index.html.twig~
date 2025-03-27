@@ -6,36 +6,35 @@
     <div class="box">
 
 
-    <h2>Bienvenue sur la page d'accueil</h2>
-    <p>Ceci est la zone de contenu avec un fond jaune pastel pour la différencier.</p>
-    <p>Ajoute ici tes composants, listes ou formulaires à ton goût.</p>
+        <h2>Bienvenue sur la page d'accueil</h2>
+        <p>Ceci est la zone de contenu avec un fond jaune pastel pour la différencier.</p>
+        <p>Ajoute ici tes composants, listes ou formulaires à ton goût.</p>
 
 
-
-    <table>
-        <thead>
+        <table>
+            <thead>
             <tr>
                 <th>Nom de la sortie</th>
-        <th>Date de la sortie</th>
-        <th>Cloture</th>
-        <th>Etat</th>
-        <th>Organisateur</th>
-        <th>Actions</th>
+                <th>Date de la sortie</th>
+                <th>Cloture</th>
+                <th>Etat</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for sortie in sorties %}
+            </thead>
+            <tbody>
+            {% for sortie in sorties %}
             <tr>
                 <td>{{ sortie.nom }}</td>
                 <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
                 <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>{{ sortie.organisateur.nom }}</td>
-                <td><a href="{{ path('read', {'id': sortie.id}) }}">Afficher</a></td>
-{% endfor %}
-        </tbody>
+                <td><a href="{{ path('app_readSortie', {'id': sortie.id}) }}">Afficher</a></td>
+                {% endfor %}
+            </tbody>
 
-    </table>
+        </table>
     </div>
 
 {% endblock %}

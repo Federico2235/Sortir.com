@@ -17,10 +17,11 @@
     <p>Code Postal : {{ sortie.lieu.ville.codePostal }}</p>
     <p>Latitude : {{ sortie.lieu.latitude }}</p>
     <p>Longitude : {{ sortie.lieu.longitude }}</p>
+    <p>Participants : {{ sortie.participants.count() }}</p>
 
-    <form method="post" id="inscription">
-        <span id="{{ sortie.id }}"></span>
-        <button type="submit" >Je m'inscris !</button>
+    <form method="post" action="{{ path('inscription', {'id': sortie.id}) }}" id="inscription">
+        <button type="submit">Je m'inscris !</button>
     </form>
+
 
 {% endblock %}

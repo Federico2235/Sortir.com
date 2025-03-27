@@ -36,7 +36,7 @@
 
 
         </dl>
-        <br>
+
         <div class="control field is-grouped is-grouped-right">
             <button class="button is-primary" >
                 <a href="{{ path('app_profil_edit') }}">

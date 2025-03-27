@@ -11,25 +11,29 @@
 
     <table>
         <thead>
-            <tr>
-                <th>Nom de la sortie</th>
-        <th>Date de la sortie</th>
-        <th>Cloture</th>
-        <th>Etat</th>
-        <th>Organisateur</th>
-        <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Cloture</th>
+            <th>Etat</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
+        {{ form_start(filterForm) }}
+        {{ form_widget(filterForm) }}
+        {{ form_end(filterForm) }}
+
         {% for sortie in sorties %}
-            <tr>
-                <td>{{ sortie.nom }}</td>
-                <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
-                <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
-                <td>{{ sortie.etat.libelle }}</td>
-                <td>{{ sortie.organisateur.nom }}</td>
-                <td><a href="{{ path('read', {'id': sortie.id}) }}">Afficher</a></td>
-{% endfor %}
+        <tr>
+            <td>{{ sortie.nom }}</td>
+            <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
+            <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
+            <td>{{ sortie.etat.libelle }}</td>
+            <td>{{ sortie.organisateur.nom }}</td>
+            <td><a href=>Afficher</a></td>
+            {% endfor %}
         </tbody>
 
     </table>

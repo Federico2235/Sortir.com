@@ -9,40 +9,45 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block content %}
-    <div class="box">
-        <h1 class="block title">Bonjour {{ app.user.prenom }}</h1>
-        <h2 class="block title is-5">Voici les informations de votre Profil</h2>
-        <dl>
-            <div class="block box">
-                <dt>Nom :</dt>
-                <dd><strong>{{ app.user.nom }}</strong></dd>
-            </div>
-            <div class="block box">
-                <dt>Prénom :</dt>
-                <dd><strong>{{ app.user.prenom }}</strong></dd>
-            </div>
-            <div class="block box">
-                <dt>Téléphone :</dt>
-                <dd><strong>{{ app.user.telephone }}</strong></dd>
-            </div>
-            <div class="block box">
-                <dt>Email :</dt>
-                <dd><strong>{{ app.user.mail }}</strong></dd>
-            </div>
-            <div class="block box">
-                <dt>Pseudo :</dt>
-                <dd><strong>{{ app.user.pseudo }}</strong></dd>
-            </div>
+    <div class="columns is-centered">
+        <div class="column is-6">
+
+            <div class="box">
+                <h1 class="block title">Bonjour {{ app.user.prenom }}</h1>
+                <h2 class="block title is-5">Voici les informations de votre Profil</h2>
+                <dl>
+                    <div class="block box">
+                        <dt>Nom :</dt>
+                        <dd><strong>{{ app.user.nom }}</strong></dd>
+                    </div>
+                    <div class="block box">
+                        <dt>Prénom :</dt>
+                        <dd><strong>{{ app.user.prenom }}</strong></dd>
+                    </div>
+                    <div class="block box">
+                        <dt>Téléphone :</dt>
+                        <dd><strong>{{ app.user.telephone }}</strong></dd>
+                    </div>
+                    <div class="block box">
+                        <dt>Email :</dt>
+                        <dd><strong>{{ app.user.mail }}</strong></dd>
+                    </div>
+                    <div class="block box">
+                        <dt>Pseudo :</dt>
+                        <dd><strong>{{ app.user.pseudo }}</strong></dd>
+                    </div>
 
 
-        </dl>
-        <br>
-        <div class="control field is-grouped is-grouped-right">
-            <button class="button is-primary" >
-                <a href="{{ path('app_profil_edit') }}">
-                    Modifier mon profil
-                </a>
-            </button>
+                </dl>
+                <br>
+                <div class="control field is-grouped is-grouped-right">
+                    <button class="button is-primary">
+                        <a href="{{ path('app_profil_edit') }}">
+                            Modifier mon profil
+                        </a>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

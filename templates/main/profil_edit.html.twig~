@@ -10,8 +10,8 @@
 
 
                 <h1 class="block title">Modifier ton profil</h1>
+                <div class="field">
                     <div class="field-body">
-                        <div class="field">
 
 
                         <form method="post" class="needs-validation" novalidate>

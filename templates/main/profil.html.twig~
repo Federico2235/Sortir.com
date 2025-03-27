@@ -9,7 +9,9 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block content %}
-    <div class="box">
+    <div class="columns is-centered">
+
+<div class="box">
         <h1 class="block title">Bonjour {{ app.user.prenom }}</h1>
         <h2 class="block title is-5">Voici les informations de votre Profil</h2>
         <dl>
@@ -36,7 +38,7 @@
 
 
         </dl>
-
+        <br>
         <div class="control field is-grouped is-grouped-right">
             <button class="button is-primary" >
                 <a href="{{ path('app_profil_edit') }}">
@@ -44,6 +46,7 @@
                 </a>
             </button>
         </div>
+    </div>
     </div>
 
 

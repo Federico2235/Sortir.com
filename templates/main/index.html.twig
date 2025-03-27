@@ -28,6 +28,8 @@
             {{ form_end(filterForm) }}
 
             {% for sortie in sorties %}
+
+            {% if sortie.dateHeureDebut > ("now"|date_modify("+30 days"))|date("d/m/Y") %}
             <tr>
                 <td>{{ sortie.nom }}</td>
                 <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
@@ -47,6 +49,7 @@
                     {% endif %}
 
                 </td>
+                {% endif %}
 
 {% endfor %}
         </tbody>

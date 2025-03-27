@@ -42,6 +42,7 @@ final class SortieController extends AbstractController
 
         // Création du formulaire Sortie
         $sortie = new Sortie();
+        $form = $this->createForm(SortieType::class, $sortie);
         $sortie->setOrganisateur($this->getUser());
         $sortie->setLieu($lieu);
         $sortie->setSite($sortie->getOrganisateur()->getSite());
@@ -53,21 +54,24 @@ final class SortieController extends AbstractController
         $sortie->setEtat($etat);
 
         // Vérification des formulaires
-        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-            $em->persist($ville);
-        }
-        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-            $em->persist($lieu);
-        }
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            $em->persist($sortie);
-            $em->flush();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($villeForm->isSubmitted() && $villeForm->isValid()) {
+                $em->persist($ville);
+            }
+            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+                $em->persist($lieu);
+            }
+            if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+                $em->persist($sortie);
+                $em->flush();
 
-            $this->addFlash('success', 'Votre sortie a été créée !');
-            return $this->redirect('/');
+                $this->addFlash('success', 'Votre sortie a été créée !');
+                return $this->redirect('/');
+            }
         }
-
         return $this->render('sortie/create.html.twig', [
+            'form' => $form->createView(),
             'sortieForm' => $sortieForm->createView(),
             'lieuForm' => $lieuForm->createView(),
             'villeForm' => $villeForm->createView(),

@@ -6,11 +6,46 @@
 
     <h2>Créer une sortie !</h2>
 
-    {{ form_start(sortieForm) }}
+    {# {{ form_start(sortieForm) }}
     {{ form_widget(sortieForm) }}
     {{ form_widget(lieuForm) }}
     {{ form_widget(villeForm) }}
     <button>Ajouter une sortie !</button>
-    {{ form_end(sortieForm) }}
+    {{ form_end(sortieForm) }} #}
 
+    <div class="columns is-centered">
+        <div class="column is-half">
+            {{ form_start(sortieForm) }}
+            {{ form_widget(sortieForm) }}
+            <div class="field">
+                <div class="control">
+                    <button type="submit" class="button is-primary">Créer</button>
+                </div>
+            </div>
+            {{ form_end(sortieForm) }}
+        </div>
+    </div>
+    {% block javascripts %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Utilisez les IDs générés par Symfony
+                const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
+                const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
+
+                if (dateDebut && dateLimite) {
+                    dateDebut.addEventListener('change', function () {
+                        dateLimite.max = this.value;
+                        if (new Date(dateLimite.value) > new Date(this.value)) {
+                            dateLimite.value = '';
+                        }
+                    });
+
+                    // Initialiser la valeur max si dateHeureDebut a déjà une valeur
+                    if (dateDebut.value) {
+                        dateLimite.max = dateDebut.value;
+                    }
+                }
+            });
+        </script>
+    {% endblock %}
 {% endblock %}

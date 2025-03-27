@@ -1,0 +1,43 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
+{% endblock %}
+
+
+
+{% block title %}Page d'accueil{% endblock %}
+
+{% block content %}
+    <div class="box">
+        <h1 class="block title">Bonjour {{ app.user.prenom }}</h1>
+        <h2 class="block title is-5">Voici les informations de votre Profil</h2>
+        <dl>
+            <div class="block">
+                <dt>Nom :</dt>
+                <dd><strong>{{ app.user.nom }}</strong></dd>
+            </div>
+            <div class="block">
+                <dt>Prénom :</dt>
+                <dd>{{ app.user.prenom }}</dd>
+            </div>
+            <div class="block">
+                <dt>Téléphone :</dt>
+                <dd>{{ app.user.telephone }}</dd>
+            </div>
+            <div class="block">
+                <dt>Email :</dt>
+                <dd>{{ app.user.mail }}</dd>
+            </div>
+            <div class="block">
+                <dt>Pseudo :</dt>
+                <dd>{{ app.user.pseudo }}</dd>
+            </div>
+
+
+        </dl>
+        <btn class="btn btn-primary"><a href="{{ path('app_profil_edit') }}">Modifier mon profil</a></btn>
+    </div>
+
+
+{% endblock %}

@@ -65,6 +65,30 @@ class LieuFixtures extends Fixture
             ['nom' => 'Marché aux Fleurs', 'rue' => 'Cours Saleya', 'lat' => 43.6955, 'lon' => 7.273]
         ];
 
+        $lieuxStrasbourg = [
+            ['nom' => 'Cathédrale Notre-Dame', 'rue' => 'Pl. de la Cathédrale', 'lat' => 48.5818, 'lon' => 7.7509],
+            ['nom' => 'Petite France', 'rue' => 'Quartier Petite France', 'lat' => 48.5794, 'lon' => 7.7396],
+            ['nom' => 'Palais Rohan', 'rue' => '2 Pl. du Château', 'lat' => 48.5815, 'lon' => 7.7515],
+            ['nom' => 'Parc de l\'Orangerie', 'rue' => 'Allée de la Robertsau', 'lat' => 48.5964, 'lon' => 7.7766],
+            ['nom' => 'Barrages Vauban', 'rue' => 'Pl. du Quartier Blanc', 'lat' => 48.5791, 'lon' => 7.7378]
+        ];
+
+        $lieuxNantes = [
+            ['nom' => 'Château des Ducs de Bretagne', 'rue' => '4 Pl. Marc Elder', 'lat' => 47.216, 'lon' => -1.552],
+            ['nom' => 'Les Machines de l\'Île', 'rue' => 'Bd Léon Bureau', 'lat' => 47.206, 'lon' => -1.562],
+            ['nom' => 'Passage Pommeraye', 'rue' => 'Passage Pommeraye', 'lat' => 47.215, 'lon' => -1.556],
+            ['nom' => 'Cathédrale Saint-Pierre-et-Saint-Paul', 'rue' => 'Pl. Saint-Pierre', 'lat' => 47.218, 'lon' => -1.552],
+            ['nom' => 'Île de Versailles', 'rue' => 'Île de Versailles', 'lat' => 47.225, 'lon' => -1.548]
+        ];
+
+        $lieuxMontpellier = [
+            ['nom' => 'Place de la Comédie', 'rue' => 'Pl. de la Comédie', 'lat' => 43.6086, 'lon' => 3.8792],
+            ['nom' => 'Jardin des Plantes', 'rue' => 'Blvd Henri IV', 'lat' => 43.6136, 'lon' => 3.8737],
+            ['nom' => 'Promenade du Peyrou', 'rue' => 'Rue Foch', 'lat' => 43.611, 'lon' => 3.871],
+            ['nom' => 'Arc de Triomphe', 'rue' => 'Rue Foch', 'lat' => 43.6116, 'lon' => 3.8707],
+            ['nom' => 'Esplanade Charles-de-Gaulle', 'rue' => 'Esplanade Charles-de-Gaulle', 'lat' => 43.6097, 'lon' => 3.882]
+        ];
+
         $manager->flush();
     }
 }

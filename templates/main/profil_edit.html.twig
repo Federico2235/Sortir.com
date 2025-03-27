@@ -17,36 +17,40 @@
                         <form method="post" class="needs-validation" novalidate>
                             {{ form_start(form, { 'attr': { 'class': 'row g-3' } }) }}
 
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.pseudo, { 'attr': { 'class': 'form-control' } }) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.nom, { 'attr': { 'class': 'form-control' } }) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.prenom, { 'attr': { 'class': 'form-control' } }) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.telephone, { 'attr': { 'class': 'form-control' } }) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.mail, { 'attr': { 'class': 'form-control' } }) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.password.first, {
                                     'label': 'Nouveau mot de passe',
                                     'attr': {'class': 'form-control'}
                                 }) }}
                             </div>
-                            <div class="col-md-6">
+                            <div class="">
                                 {{ form_row(form.password.second, {
                                     'label': 'Confirmez le mot de passe',
                                     'attr': {'class': 'form-control'}
                                 }) }}
                             </div>
 
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary mt-3">Modifier</button>
+                            <div class="control field is-grouped is-grouped-right">
+                                <button class="button is-primary">
+                                    <a href="{{ path('app_profil_edit') }}">
+                                        Modifier
+                                    </a>
+                                </button>
                             </div>
 
                             {{ form_end(form) }}

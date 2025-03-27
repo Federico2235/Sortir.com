@@ -107,7 +107,7 @@ final class MainController extends AbstractController
     }
 
     #[Route('/profil', name: 'app_profil')]
-    #[IsGranted('ROLE_USER')]
+
     public function profil(): Response
     {
         return $this->render('main/profil.html.twig', [
@@ -125,7 +125,7 @@ final class MainController extends AbstractController
 
 
     #[Route('/profil/edit', name: 'app_profil_edit')]
-    #[IsGranted('ROLE_USER')]
+
     public function modifierProfil(
         Request                     $request,
         EntityManagerInterface      $entityManager,

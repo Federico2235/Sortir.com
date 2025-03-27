@@ -17,22 +17,10 @@
     <p>Code Postal : {{ sortie.lieu.ville.codePostal }}</p>
     <p>Latitude : {{ sortie.lieu.latitude }}</p>
     <p>Longitude : {{ sortie.lieu.longitude }}</p>
+    <p>Participants : {{ sortie.participants.count() }}</p>
 
-    <form method="post" id="inscription">
-        <span id="{{ sortie.id }}"></span>
-        <button type="submit" >Je m'inscris !</button>
+    <form method="post" action="{{ path('inscription', {'id': sortie.id}) }}" id="inscription">
+        <button type="submit">Je m'inscris !</button>
     </form>
 
-    <table>
-        <tr>
-            <th>Pseudo</th>
-            <th>Nom</th>
-        </tr>
-    {% for participant in sortie.participants %}
-        <tr>
-            <td>{{ participant.pseudo }}</td>
-            <td>{{ participant.prenom }} {{ participant.nom }}</td>
-        </tr>
-    {% endfor %}
-    </table>
 {% endblock %}

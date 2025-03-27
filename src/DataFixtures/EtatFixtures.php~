@@ -13,7 +13,7 @@ class EtatFixtures extends Fixture
         $etats = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'];
 
         foreach ($etats as $libelle){
-
+    
             $etat = new Etat();
             $etat ->setLibelle($libelle);
 

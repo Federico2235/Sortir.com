@@ -1,0 +1,16 @@
+{% extends 'layouts/layout.html.twig' %}
+
+{% block title %}Créer une sortie !{% endblock %}
+
+{% block content %}
+
+    <h2>Créer une sortie !</h2>
+
+    {{ form_start(sortieForm) }}
+    {{ form_widget(sortieForm) }}
+    {{ form_widget(lieuForm) }}
+    {{ form_widget(villeForm) }}
+    <button>Ajouter une sortie !</button>
+    {{ form_end(sortieForm) }}
+
+{% endblock %}

@@ -23,6 +23,10 @@
             </tr>
             </thead>
             <tbody>
+            {{ form_start(filterForm) }}
+            {{ form_widget(filterForm) }}
+            {{ form_end(filterForm) }}
+
             {% for sortie in sorties %}
             <tr>
                 <td>{{ sortie.nom }}</td>

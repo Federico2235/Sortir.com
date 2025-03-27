@@ -21,30 +21,38 @@ class SortieFilterType extends AbstractType
             ->add('site', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => 'nom',
-                'placeholder' => 'Choisir un site',
+                'label' => 'Choisissez un site',
                 'required' => false,
+                'placeholder' => '- Aucune préférence -',
+                'data' => $options['default_site'] ?? null,
+                'attr' => ['class' => 'form-control']
             ])
-            // Recherche de concordence avec la saisie
-            ->add('nom', TextType::class, [
+//            // Recherche de concordence avec la saisie
+            ->
+            add('nom', TextType::class, [
                 'required' => false,
                 'label' => 'Le nom de la sortie contient',
-                'attr' => ['placeholder' => 'Rechercher par nom'],
+                'attr' => [
+                    'placeholder' => 'Rechercher par nom',
+                    'class' => 'form-control'],
             ])
-            // Sélection de l'interval souhaité
+            // INTERVAL
+            //// Sélection du Début de l'interval
             ->add('dateDebut', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'label' => 'Entre',
                 'attr' => ['placeholder' => 'Date de début'],
             ])
+            //// Sélection de la Fin de l'interval
             ->add('dateFin', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
                 'label' => 'et',
                 'attr' => ['placeholder' => 'Date de fin'],
             ])
-            // Checklist
-            // Checkpoint Organisateur
+            // CHECKLIST
+            //// Checkpoint Organisateur
             ->add('organisateur', CheckboxType::class, [
                 'required' => false,
                 'label' => 'Sorties dont je suis l\'organisateur/trice',

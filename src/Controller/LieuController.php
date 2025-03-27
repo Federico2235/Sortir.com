@@ -2,34 +2,26 @@
 
 namespace App\Controller;
 
-use App\Entity\Lieu;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\LieuRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class LieuController extends AbstractController
 {
-    #[\Symfony\Component\Routing\Annotation\Route('/get-lieux', name: 'get_lieux', methods: ['GET'])]
-    public function getLieux(Request $request, EntityManagerInterface $em): JsonResponse
+    #[Route('/lieux/{villeId}', name: 'get_lieux_by_ville', methods: ['GET'])]
+    public function getLieuxByVille(int $villeId, LieuRepository $lieuRepository): JsonResponse
     {
-        $villeId = $request->query->get('ville_id');
-        if (!$villeId) {
-            return new JsonResponse(['error' => 'Aucune ville sélectionnée'], 400);
-        }
+        $lieux = $lieuRepository->findBy(['ville' => $villeId]);
 
-        $lieux = $em->getRepository(Lieu::class)->findBy(['ville' => $villeId]);
-
-        $response = [];
+        $data = [];
         foreach ($lieux as $lieu) {
-            $response[] = [
+            $data[] = [
                 'id' => $lieu->getId(),
-                'nom' => $lieu->getNom()
+                'nom' => $lieu->getNom(),
             ];
         }
 
-        return new JsonResponse($response);
+        return new JsonResponse($data);
     }
 }

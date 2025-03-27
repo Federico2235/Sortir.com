@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Symfony\Component\String\s;
 
 final class MainController extends AbstractController
 {
@@ -40,7 +41,9 @@ final class MainController extends AbstractController
         $passee = $filterForm->get('passee')->getData();
 
         // Création du builder de la requête qui va assembler les différents filtres
-        $queryBuilder = $sortieRepository->createQueryBuilder('s');
+        $queryBuilder = $sortieRepository->createQueryBuilder('s')
+            ->where('s.dateHeureDebut >= :dateLimite')
+            ->setParameter('dateLimite', new \DateTime('-1 month'));
 
         // Sélecteur prposeant les différents sites
         if ($site) {

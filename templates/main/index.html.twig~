@@ -7,7 +7,7 @@
     <p>Ceci est la zone de contenu avec un fond jaune pastel pour la différencier.</p>
     <p>Ajoute ici tes composants, listes ou formulaires à ton goût.</p>
 
-//Table for sorties list
+
 
     <table>
         <thead>
@@ -27,8 +27,17 @@
                 <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
                 <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
                 <td>{{ sortie.etat.libelle }}</td>
-                <td>{{ sortie.organisateur.nom }}</td>
-                <td><a href=>Afficher</a></td>
+                <td><a href="{{ path('app_profil_id', {'id': sortie.organisateur.id})}}">{{ sortie.organisateur.nom }}</a></td>
+                <td><a href="{{ path('read', {'id': sortie.id}) }}">Afficher</a>
+                {% if app.user == sortie.organisateur and sortie.etat.libelle=='Créée' %}
+                    <a href="">Publier</a>
+                    {% endif %}
+                    {% if app.user == sortie.organisateur and sortie.etat.libelle=='Ouverte' %}
+                    <a href="">Annuler</a>
+                    {% endif %}
+
+                </td>
+
 {% endfor %}
         </tbody>
 

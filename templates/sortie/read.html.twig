@@ -23,4 +23,16 @@
         <button type="submit" >Je m'inscris !</button>
     </form>
 
+    <table>
+        <tr>
+            <th>Pseudo</th>
+            <th>Nom</th>
+        </tr>
+    {% for participant in sortie.participants %}
+        <tr>
+            <td>{{ participant.pseudo }}</td>
+            <td>{{ participant.prenom }} {{ participant.nom }}</td>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock %}

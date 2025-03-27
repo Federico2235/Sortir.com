@@ -27,7 +27,7 @@
 {#    </main>#}
 
     <main class="container" style="margin-top: 6rem; margin-bottom: 6rem;">
-        <div class=""
+        <div class="box"
              style="">
             {% block content %}{% endblock %}
         </div>

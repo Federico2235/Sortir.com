@@ -9,8 +9,9 @@
     {{ form_start(sortieForm) }}
     {{ form_widget(sortieForm) }}
     {{ form_widget(lieuForm) }}
-    {{ form_widget(villeForm) }}
     <button>Ajouter une sortie !</button>
     {{ form_end(sortieForm) }}
+
+    <script src="{{ asset('js/ville.js') }}"></script>
 
 {% endblock %}

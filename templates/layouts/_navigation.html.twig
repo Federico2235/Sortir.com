@@ -8,8 +8,8 @@
         </li>
     {% endif %} #}
     <ul class="flex justify-center space-x-6 p-4 bg-teal-700 bg-opacity-60 backdrop-blur-md shadow-lg">
-        <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="#">Sortir.com</a></li>
-        <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="#">Accueil</a></li>
+
+        <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="/">Accueil</a></li>
         {% if app.user %}
             <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
             <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>

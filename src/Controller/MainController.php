@@ -115,6 +115,15 @@ final class MainController extends AbstractController
         ]);
     }
 
+    #[Route('/profil/{id}', name: 'app_profil_id', requirements: ['id' => '\d+'])]
+    public function profilById(Participant $participant): Response
+    {
+        return $this->render('main/profil_participants.html.twig', [
+            'participant' => $participant,
+        ]);
+    }
+
+
     #[Route('/profil/edit', name: 'app_profil_edit')]
     #[IsGranted('ROLE_USER')]
     public function modifierProfil(

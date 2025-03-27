@@ -9,8 +9,8 @@
 {% block title %}Page d'accueil{% endblock %}
 
 {% block content %}
-
-   <h2>Profil de :{{ participant.pseudo}} </h2>
+<div class="box">
+   <h2><strong>Profil de :</strong> {{ participant.pseudo}} </h2>
     <dl>
         <dt>Nom :</dt> <dd>{{participant.nom }}</dd>
         <dt>Prénom :</dt> <dd>{{ participant.prenom }}</dd>
@@ -18,6 +18,6 @@
         <dt>Email :</dt> <dd>{{ participant.mail }}</dd>
         <dt>Pseudo :</dt> <dd>{{participant.pseudo }}</dd>
     </dl>
-  
+</div>
 
 {% endblock %}

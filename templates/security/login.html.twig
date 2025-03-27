@@ -3,35 +3,84 @@
 {% block title %}Log in!{% endblock %}
 
 {% block content %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="box">
+                <form method="post">
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    {% if error %}
+                        <div class="notification is-danger">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="notification is-info">
+                            You are logged in as {{ app.user.userIdentifier }},
+                            <a href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="field">
+                        <div class="field-label is-normal">
+                            <label class="label" for="inputPseudo">Sign in</label>
+                        </div>
+                        <div class="field-body">
+                            <div class="field">
+                                <p class="control is-expanded has-icons-left">
+                                    <input class="input"
+                                           type="text"
+                                           name="pseudo"
+                                           id="inputPseudo"
+                                           value="{{ last_username }}"
+                                           autocomplete="username"
+                                           placeholder="pseudo"
+                                           required
+                                           autofocus>
+                                    <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input"
+                                   type="password"
+                                   name="password"
+                                   id="inputPassword"
+                                   placeholder="Password"
+                                   autocomplete="current-password"
+                                   required>
+                            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+                        </p>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" name="_remember_me">
+                                Remember me
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <p class="control">
+                            <button class="button is-primary">
+                                Login
+                            </button>
+                        </p>
+                    </div>
+
+                </form>
+            </div>
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputPseudo">Pseudo</label>
-    <input type="text" value="{{ last_username }}" name="pseudo" id="inputPseudo" class="form-control" autocomplete="username" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
 {% endblock %}

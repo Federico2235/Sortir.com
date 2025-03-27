@@ -124,6 +124,15 @@ final class SortieController extends AbstractController
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
 
+        if($sortie->getDateLimiteInscription() < new \DateTimeImmutable()) {
+            $this->addFlash('danger', 'La sortie est cloturée.');
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
+        if($sortie->getEtat()->getLibelle() !== 'Ouverte') {
+            $this->addFlash('danger', 'La sortie n est pas ouverte.');
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
+
         // Ajout du participant
         $sortie->addParticipant($user);
         //$sortie->setNbInscriptions($sortie->getNbInscriptions() - 1);

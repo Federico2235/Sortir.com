@@ -1,0 +1,23 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
+{% endblock %}
+
+
+
+{% block title %}Page d'accueil{% endblock %}
+
+{% block content %}
+<div class="box">
+   <h2><strong>Profil de :</strong> {{ participant.pseudo}} </h2>
+    <dl>
+        <dt>Nom :</dt> <dd>{{participant.nom }}</dd>
+        <dt>Prénom :</dt> <dd>{{ participant.prenom }}</dd>
+        <dt>Téléphone :</dt> <dd>{{ participant.telephone }}</dd>
+        <dt>Email :</dt> <dd>{{ participant.mail }}</dd>
+        <dt>Pseudo :</dt> <dd>{{participant.pseudo }}</dd>
+    </dl>
+</div>
+
+{% endblock %}

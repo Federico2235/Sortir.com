@@ -1,7 +1,4 @@
 <ul class="nav justify-content-center">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="/">Sortir.com</a>
-    </li>
     {#  {% if admin %}
         <li class="nav-item">
             <a class="nav-link" href="#">Villes</a>
@@ -22,6 +19,9 @@
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('create') }}">Creer une sortie</a>
     </li>
 
     {% else %}

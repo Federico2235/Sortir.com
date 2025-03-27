@@ -13,7 +13,7 @@
         {% if app.user %}
             <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
             <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
-            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('create') }}">Créer une sortie</a></li>
+            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
         {% else %}
             <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
         {% endif %}

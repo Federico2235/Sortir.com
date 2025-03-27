@@ -8,9 +8,45 @@
 
     {{ form_start(sortieForm) }}
     {{ form_widget(sortieForm) }}
-    {{ form_widget(lieuForm) }}
+    {{ form_start(lieuForm) }}
+    {{ form_row(lieuForm.nom) }}
+    {{ form_row(lieuForm.rue) }}
+    {{ form_row(lieuForm.latitude , {'attr': {'id': 'latitude'}}) }}
+    {{ form_row(lieuForm.longitude, {'attr': {'id': 'longitude'}}) }}
+    <div id="map" style="height: 400px;"></div>
+{#    <input type="text" id="latitude" name="latitude" readonly>#}
+{#    <input type="text" id="longitude" name="longitude" readonly>#}
+{{ form_end(lieuForm) }}
     {{ form_widget(villeForm) }}
     <button>Ajouter une sortie !</button>
     {{ form_end(sortieForm) }}
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var map = L.map('map').setView([48.8566, 2.3522], 13); // Coordenadas iniciales (París)
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            var marker = L.marker([48.8566, 2.3522], { draggable: true }).addTo(map);
+
+            function updateLatLng(lat, lng) {
+                document.getElementById("latitude").value = lat;
+                document.getElementById("longitude").value = lng;
+            }
+
+            marker.on('dragend', function (event) {
+                var position = marker.getLatLng();
+                updateLatLng(position.lat, position.lng);
+            });
+            map.on('click', function (event) {
+                marker.setLatLng(event.latlng);
+                updateLatLng(event.latlng.lat, event.latlng.lng);
+            });
+        });
+
+    </script>
 
 {% endblock %}

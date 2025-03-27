@@ -1,15 +1,32 @@
-body {
-    background-color: floralwhite;
-}
-header {
-    background-color: cornflowerblue;
-}
-nav {
-    background-color: lightcoral;
-}
-main {
-    background-color: lightblue;
-}
+/*:root {*/
+/*    --bulma-footer-background-color: #1a1a1a; !* Exemple : gris très foncé *!*/
+/*    --bulma-footer-color: #f5f5f5;             !* Exemple : texte clair *!*/
+/*    --bulma-footer-padding: 1.5rem;              !* Exemple : 2rem de padding *!*/
+/*}*/
+
+
+/*footer {*/
+/*    background-color: var(--bulma-footer-background-color);*/
+/*    color: var(--bulma-footer-color);*/
+/*    padding: var(--bulma-footer-padding);*/
+/*}*/
+
+/*form {*/
+/*    border-radius: var(--bulma-control-radius),*/
+/*    var(--bulma-control-radius-small);*/
+/*    border-width: var(--bulma-control-border-width);*/
+/*    border-color: var(--bulma-control-size);*/
+/*    height: var(--bulma-control-height);*/
+/*    line-height: var(--bulma-control-line-height);*/
+/*    padding: var(--bulma-control-padding-horizontal),*/
+/*    var(--bulma-control-padding-vertical);*/
+/*    box-shadow: var(--bulma-control-focus-shadow-l);*/
+/*    color: var(--bulma-label-color);*/
+/*    font-weight: var(--bulma-label-weight);*/
+/*    font-size: var(--bulma-help-size);*/
+/*}*/
+
 footer {
-    background-color: midnightblue;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }

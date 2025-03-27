@@ -182,7 +182,7 @@ final class SortieController extends AbstractController
         if ($sortie->getDateHeureDebut() > $now) {
             $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
             $sortie->setEtat($etatAnnule);
-            $sortie->setInfosSortie($sortie->getInfosSortie() . '<span style="color: red; font-weight: bold;">(Annulation!!: ' . $motif . '</span> par : ' . $user->getNom() . ' ' . $user->getPrenom() . ')');
+            $sortie->setInfosSortie($sortie->getInfosSortie() . '<br><span style="color: red; font-weight: bold;">(Annulation!!: ' . $motif . ' par : ' . $user->getNom() . ' ' . $user->getPrenom() . ')</span>');
             $em->flush(); // Mettre à jour les modifications dans la base de données $em
 
             $this->addFlash('success', 'Sortie annulé.');

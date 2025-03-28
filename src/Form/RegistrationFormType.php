@@ -7,6 +7,7 @@ use App\Entity\Site;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,14 +31,7 @@ class RegistrationFormType extends AbstractType
                'placeholder' => 'Seleccione un sitio', // Esto agrega una opción de marcador de posición
            ])
 
-//            ->add('agreeTerms', CheckboxType::class, [
-//                'mapped' => false,
-//                'constraints' => [
-//                    new IsTrue([
-//                        'message' => 'You should agree to our terms.',
-//                    ]),
-//                ],
-//            ])
+
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -55,10 +49,21 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-        ;
+
+
+            ->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Admin' => 'ROLE_ADMIN',
+                    'User' => 'ROLE_USER',
+
+                ],
+                'multiple' => true,
+                'expanded' => true,
+            ]);
+
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $res   olver): void
     {
         $resolver->setDefaults([
             'data_class' => Participant::class,

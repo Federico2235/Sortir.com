@@ -1,3 +1,13 @@
+{#{% block form_row %}#}
+{#    <div class="field">#}
+{#        {{ form_label(form, null, { 'label_attr': {'class': 'label'} }) }}#}
+{#        <div class="control">#}
+{#            {{ form_widget(form, { 'attr': {'class': 'input'} }) }}#}
+{#        </div>#}
+{#        {{ form_errors(form) }}#}
+{#    </div>#}
+{#{% endblock %}#}
+
 {% block form_row %}
     {% set is_checkbox = 'checkbox' in form.vars.block_prefixes %}
     <div class="field">

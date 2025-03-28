@@ -1,29 +1,38 @@
 {% extends 'layouts/layout.html.twig' %}
-
-{% block title %}Créer une sortie !{% endblock %}
-
-{% block content %}
-
+{% block title %}Créer une sortie !
+{% endblock %}{% block content %}
     <div class="columns is-centered">
-        <div class="column is-6">
-            <div class="box">
-
-            <h2 class="title">Créer une sortie !</h2>
-
+    <div class="column is-6">
+        <div class="box"><h2 class="title">Créer une sortie
+                !</h2>
             {{ form_start(sortieForm) }}
             {{ form_widget(sortieForm) }}
-                {{ form_widget(villeForm) }}
-                <div id="lieuCountainer" style="display: none">
-                    {{ form_widget(lieuForm) }}
-                </div>
-                <div class="control field is-grouped is-grouped-right">
-                    <button  type="submit" class="button is-primary">
-                            Ajouter une sortie !
-                    </button>
-                </div>
-            {{ form_end(sortieForm) }}
+            {{ form_widget(lieuForm) }}
+            {{ form_widget(villeForm) }}
+            <div class="control field is-grouped is-grouped-right">
+                <button type="submit" class="button is-primary"> Ajouter une sortie !</button>
+            </div> {{ form_end(sortieForm) }}
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Utilisez les IDs générés par Symfony
+            const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
+            const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('js/ville.js') }}"></script>
+            if (dateDebut && dateLimite) {
+                dateDebut.addEventListener('change', function() {
+                    dateLimite.max = this.value;
+                    if (new Date(dateLimite.value) > new Date(this.value)) {
+                        dateLimite.value = '';
+                    }
+                });
 
-{% endblock %}
+                // Initialiser la valeur max si dateHeureDebut a déjà une valeur
+                if (dateDebut.value) {
+                    dateLimite.max = dateDebut.value;
+                }
+            }
+        });
+    </script>
+    </div>{% endblock %}

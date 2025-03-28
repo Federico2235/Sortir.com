@@ -29,6 +29,15 @@
     <main class="container" style="margin-top: 6rem; margin-bottom: 6rem;">
         <div class=""
              style="">
+            <div class="container mt-4">
+            {% for label, messages in app.flashes %}
+                <div class="alert alert-{{ label }}">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            </div>
             {% block content %}{% endblock %}
         </div>
     </main>

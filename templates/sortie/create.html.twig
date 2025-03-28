@@ -4,7 +4,11 @@
 
 {% block content %}
 
-    <h2>Créer une sortie !</h2>
+    <div class="columns is-centered">
+        <div class="column is-6">
+            <div class="box">
+
+            <h2 class="title">Créer une sortie !</h2>
 
     {# {{ form_start(sortieForm) }}
     {{ form_widget(sortieForm) }}
@@ -31,6 +35,20 @@
                 // Utilisez les IDs générés par Symfony
                 const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
                 const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
+            {{ form_start(sortieForm) }}
+            {{ form_widget(sortieForm) }}
+            {{ form_widget(lieuForm) }}
+            {{ form_widget(villeForm) }}
+                <div class="control field is-grouped is-grouped-right">
+                    <button  type="submit" class="button is-primary">
+                            Ajouter une sortie !
+                    </button>
+                </div>
+            {{ form_end(sortieForm) }}
+
+            </div>
+        </div>
+    </div>
 
                 if (dateDebut && dateLimite) {
                     dateDebut.addEventListener('change', function () {

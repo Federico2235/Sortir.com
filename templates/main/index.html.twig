@@ -1,62 +1,124 @@
 {% extends 'layouts/layout.html.twig' %}
 
-{% block title %}Page d'accueil{% endblock %}
+{% block title %}Accueil  | {{ parent() }} {% endblock %}
 
 {% block content %}
-    <div class="box">
+    <section class="section">
+        <div class="container">
+            <!-- Titre principal de la page -->
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="box">
+                        <h2 class="title is-3 has-text-centered">Bienvenue sur la page d'accueil</h2>
+                        <p class="subtitle is-6 has-text-centered">
+                            Retrouvez ici toutes les sorties disponibles et filtrez-les selon vos préférences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire de filtre -->
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="card">
+                        <!-- En-tête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title has-text-centered">
+                                Filtrer les sorties
+                            </p>
+                        </header>
+
+                        {{ form_start(filterForm, {'attr': {'class': 'field'}}) }}
+
+                        <!-- Contenu de la card avec les champs du formulaire -->
+                        <div class="card-content">
+                            <div class="content">
+                                <div class="field is-grouped is-grouped-centered is-flex-wrap-wrap">
+                                    {{ form_widget(filterForm) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pied de la card avec un lien agissant comme bouton de soumission -->
+                        <footer class="card-footer">
+                            <a href="#"
+                               class="card-footer-item hover-primary"
+                               onclick="event.preventDefault(); this.closest('form').submit();">
+                                Appliquer le filtre
+                            </a>
+                        </footer>
+
+                        {{ form_end(filterForm) }}
+                    </div>
+                </div>
+            </div>
 
 
-        <h2>Bienvenue sur la page d'accueil</h2>
-        <p>Ceci est la zone de contenu avec un fond jaune pastel pour la différencier.</p>
-        <p>Ajoute ici tes composants, listes ou formulaires à ton goût.</p>
+            <!-- Tableau des sorties -->
+            <div class="columns is-centered">
+                <div class="column is-10">
+                    <div class="box">
+                        <table class="table is-fullwidth is-striped is-hoverable">
+                            <thead>
+                            <tr>
+                                <th>Nom de la sortie</th>
+                                <th>Date de la sortie</th>
+                                <th>Clôture</th>
+                                <th>État</th>
+                                <th>Organisateur</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for sortie in sorties %}
+                                <tr>
+                                    <td>{{ sortie.nom }}</td>
+                                    <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
+                                    <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
+                                    <td>{{ sortie.etat.libelle }}</td>
+                                    <td>
+                                        {% if app.user is not null and sortie.organisateur.id == app.user.id %}
+                                            <a href="{{ path('app_profil') }}">
+                                                {{ sortie.organisateur.nom }}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('app_profil_id', {'id': sortie.organisateur.id}) }}">
+                                                {{ sortie.organisateur.nom }}
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <!-- Bouton Afficher -->
+                                        <a href="{{ path('app_detailSortie', {'id': sortie.id}) }}"
+                                           class="button is-primary is-small">
+                                            Afficher
+                                        </a>
 
+                                        <!-- Bouton Publier (uniquement si l’utilisateur est organisateur et que l’état est 'Créée') -->
+                                        {% if app.user == sortie.organisateur and sortie.etat.libelle == 'Créée' %}
+                                            <form action="{{ path('publier', {'id': sortie.id}) }}" method="POST"
+                                                  style="display:inline-block;">
+                                                <button class="button is-success is-small" type="submit">
+                                                    Publier
+                                                </button>
+                                            </form>
+                                        {% endif %}
 
-        <table>
-            <thead>
-            <tr>
-                <th>Nom de la sortie</th>
-                <th>Date de la sortie</th>
-                <th>Cloture</th>
-                <th>Etat</th>
-                <th>Organisateur</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{ form_start(filterForm) }}
-            {{ form_widget(filterForm) }}
-            {{ form_end(filterForm) }}
-
-            {% for sortie in sorties %}
-
-            {% if sortie.dateHeureDebut > ("now"|date_modify("+30 days"))|date("d/m/Y") %}
-            <tr>
-                <td>{{ sortie.nom }}</td>
-                <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
-                <td>{{ sortie.dateLimiteInscription | date('d/m/Y') }}</td>
-                <td>{{ sortie.etat.libelle }}</td>
-                <td> {% if app.user is not null and sortie.organisateur.id == app.user.id %}
-                        <a href="{{ path('app_profil') }}">{{ sortie.organisateur.nom }}</a>
-                    {% else %}
-                        <a href="{{ path('app_profil_id', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.nom }}</a>
-                    {% endif %}</td>
-                <td><a href="{{ path('app_detailSortie', {'id': sortie.id}) }}">Afficher</a>
-                {% if app.user == sortie.organisateur and sortie.etat.libelle=='Créée' %}
-                    <form  action="{{ path('publier', {'id': sortie.id}) }}" method="POST">
-                        <button type="submit">Publier</button>
-                    </form>
-                    {% endif %}
-                    {% if app.user == sortie.organisateur and sortie.etat.libelle=='Ouverte' %}
-                    <a href="{{ path('annulation_confirm', {'id': sortie.id}) }}">Annuler</a>
-                    {% endif %}
-
-                </td>
-                {% endif %}
-
-{% endfor %}
-        </tbody>
-
-        </table>
-    </div>
-
+                                        <!-- Bouton Annuler (uniquement si l’utilisateur est organisateur et que l’état est 'Ouverte') -->
+                                        {% if app.user == sortie.organisateur and sortie.etat.libelle == 'Ouverte' %}
+                                            <a href="{{ path('annulation_confirm', {'id': sortie.id}) }}"
+                                               class="button is-warning is-small">
+                                                Annuler
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

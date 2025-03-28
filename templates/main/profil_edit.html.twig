@@ -7,8 +7,8 @@
     <div class="container mt-4">
         <h1 class="mb-4">Modifier ton profil</h1>
 
-        <form method="post" class="needs-validation" novalidate>
-            {{ form_start(form, { 'attr': { 'class': 'row g-3' } }) }}
+        <form method="post" class="needs-validation" novalidate  enctype="multipart/form-data">
+            {{ form_start(form) }}
 
             <div class="col-md-6">
                 {{ form_row(form.pseudo, { 'attr': { 'class': 'form-control' } }) }}
@@ -37,6 +37,13 @@
                     'attr': {'class': 'form-control'}
                 }) }}
             </div>
+            <div class="col-md-6">
+                {{ form_row(form.photo, {
+                    'label': 'Ajouter une photo de profil',
+                    'attr': {'class': 'form-control'}
+                }) }}
+            </div>
+
 
             <div class="col-12">
                 <button type="submit" class="btn btn-primary mt-3">Modifier</button>

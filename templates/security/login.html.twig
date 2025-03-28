@@ -1,6 +1,6 @@
 {% extends 'layouts/layout.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Log in! | {{ parent() }} {% endblock %}
 
 {% block content %}
     <div class="columns is-centered">
@@ -38,8 +38,8 @@
                                            required
                                            autofocus>
                                     <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
+                                        <i class="fas fa-user"></i>
+                                    </span>
                                 </p>
                             </div>
                         </div>

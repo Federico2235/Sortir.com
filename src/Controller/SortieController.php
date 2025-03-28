@@ -138,16 +138,22 @@ final class SortieController extends AbstractController
             $this->addFlash('danger', 'La sortie est cloturée.');
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
+        if($sortie->getEtat()->getLibelle() == 'Ouverte') {
 
-        // Ajout du participant
-        $sortie->addParticipant($user);
-        //$sortie->setNbInscriptions($sortie->getNbInscriptions() - 1);
+            // Ajout du participant
+            $sortie->addParticipant($user);
+            //$sortie->setNbInscriptions($sortie->getNbInscriptions() - 1);
 
-        $em->flush();
+            $em->flush();
 
-        $this->addFlash('success', 'Vous êtes bien inscrit !');
+            $this->addFlash('success', 'Vous êtes bien inscrit !');
 
-        return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
+        else{
+            $this->addFlash('danger', 'Vous ne pouvez pas vous inscrire maintenant !');
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
     }
     #[Route('/desinscription/{id}', name: 'desinscription', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function desinscription(

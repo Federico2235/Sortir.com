@@ -50,6 +50,9 @@
                                         <dt class="has-text-weight-semibold mr-2">Pseudo :</dt>
                                         <dd>{{ app.user.pseudo }}</dd>
                                     </div>
+                                    {% if app.user.photo %}
+                                        <div><img style="height: 100px" src="{{ asset('img/photos/' ~ app.user.photo) }}" alt=""></div>
+                                    {% endif %}
                                 </dl>
                             </div>
                         </div>

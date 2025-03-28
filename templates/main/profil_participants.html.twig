@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
 {% endblock %}
 
-{% block title %}Profil de {{ participant.pseudo }}{% endblock %}
+{% block title %}Profil de {{ participant.pseudo }} | {{ parent() }}{% endblock %}
 
 {% block content %}
     <section class="section">

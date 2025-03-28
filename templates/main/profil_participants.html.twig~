@@ -38,7 +38,7 @@
                 </div>
                 <footer class="card-footer">
                     <a href="#" class="card-footer-item">Modifier</a>
-                    <a href="#" class="card-footer-item">Supprimer</a>
+                    <a href="#" class="card-footer-item delete-button">Supprimer</a>
                 </footer>
             </div>
         </div>

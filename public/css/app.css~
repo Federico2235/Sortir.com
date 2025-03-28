@@ -48,7 +48,7 @@ footer {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.card-footer .card-footer-item.hover-primary:hover {
-    background-color: #00d1b2 !important;
-    color: #fff !important;
+.hover-primary:hover {
+    background-color: #00d1b2; /* Couleur $primary de Bulma */
+    color: #fff;
 }

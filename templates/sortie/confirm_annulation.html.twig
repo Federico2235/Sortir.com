@@ -1,0 +1,22 @@
+{% extends 'layouts/layout.html.twig' %}
+
+{% block title %}
+Annuler une sortie
+{% endblock %}
+
+{% block content %}
+<div class="box">
+
+    <h1>Laisser motif d'nnulation</h1>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="motif">Motif</label>
+            <input type="text" class="form-control" id="motif" name="motif" placeholder="motif">
+        </div>
+        <button type="submit" class="btn btn-primary">Annuler</button>
+    </form>
+
+</div>
+{% endblock %}
+

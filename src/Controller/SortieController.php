@@ -80,9 +80,9 @@ final class SortieController extends AbstractController
 
     #[Route('/detail/{id}', name: 'app_detailSortie', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function detailSortie(
-        int                    $id,
-        Request                $request,
-        SortieRepository       $repository,
+        int              $id,
+        Request          $request,
+        SortieRepository $repository,
     ): Response
     {
         $sortie = $repository->find($id);
@@ -91,17 +91,18 @@ final class SortieController extends AbstractController
             throw $this->createNotFoundException("Sortie introuvable !");
         }
 
-        return $this->render('sortie/read.html.twig',[
+        return $this->render('sortie/read.html.twig', [
             'sortie' => $sortie
         ]);
     }
 
     #[Route('/inscription/{id}', name: 'inscription', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function inscription(
-        int $id,
-        SortieRepository $repository,
+        int                    $id,
+        SortieRepository       $repository,
         EntityManagerInterface $em
-    ): Response {
+    ): Response
+    {
         $sortie = $repository->find($id);
 
         if (!$sortie) {
@@ -149,4 +150,81 @@ final class SortieController extends AbstractController
     }
 
 
+    #[Route('/annulation/{id}', name: 'annulation_confirm', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function confirmAnnulation(int $id, SortieRepository $repository): Response
+    {
+        $sortie = $repository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        // Puedes pasar la salida a la vista para mostrar más detalles
+        return $this->render('sortie/confirm_annulation.html.twig', [
+            'sortie' => $sortie,
+        ]);
+    }
+
+
+    #[Route('/annulation/{id}', name: 'annulation', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function annulation(
+        int                    $id,
+        SortieRepository       $repository,
+        EntityManagerInterface $em, Request $request
+    ): Response
+    {
+        $sortie = $repository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+        $motif = $request->request->get('motif');
+        // Obtener la fecha y hora actual
+        $now = new \DateTime();
+
+        /** @var Participant|null $user */
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            $this->addFlash('danger', 'Vous devez être connecté.');
+            return $this->redirectToRoute('app_login'); // Redirige vers la page de connexion
+        }
+
+
+// Verificar si la sortie aún no ha comenzado
+        if ($sortie->getDateHeureDebut() > $now) {
+            $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
+            $sortie->setEtat($etatAnnule);
+            $sortie->setInfosSortie($sortie->getInfosSortie() . '<br><span style="color: red; font-weight: bold;">(Annulation!!: ' . $motif . ' par : ' . $user->getNom() . ' ' . $user->getPrenom() . ')</span>');
+            $em->flush(); // Mettre à jour les modifications dans la base de données $em
+
+            $this->addFlash('success', 'Sortie annulé.');
+            return $this->redirectToRoute('app_main');
+
+
+        } else {
+            $this->addFlash('danger', 'Impossible d\'annuler une sortie qui a déjà commencé.');
+            return $this->redirectToRoute('app_main');
+        }
+
+    }
+
+        #[Route('/publier/{id}', name: 'publier', requirements: ['id' => '\d+'], methods: ['POST'])]
+        public function publier(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
+        {
+            $sortie = $repository->find($id);
+
+            if (!$sortie) {
+                throw $this->createNotFoundException('Sortie non trouvée.');
+            }
+
+            $etatPublie = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
+            $sortie->setEtat($etatPublie);
+            $em->flush(); // Mettre à jour les modifications dans la base de données $em
+
+            $this->addFlash('success', 'Sortie publiée.');
+            return $this->redirectToRoute('app_main');
+
+
+        }
 }

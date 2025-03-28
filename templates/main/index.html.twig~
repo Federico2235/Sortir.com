@@ -28,8 +28,6 @@
             {{ form_end(filterForm) }}
 
             {% for sortie in sorties %}
-
-            {% if sortie.dateHeureDebut > ("now"|date_modify("+30 days"))|date("d/m/Y") %}
             <tr>
                 <td>{{ sortie.nom }}</td>
                 <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
@@ -42,7 +40,7 @@
                     {% endif %}</td>
                 <td><a href="{{ path('app_detailSortie', {'id': sortie.id}) }}">Afficher</a>
                 {% if app.user == sortie.organisateur and sortie.etat.libelle=='Créée' %}
-                    <form  action="{{ path('publier', {'id': sortie.id}) }}" method="POST">
+                    <form  action="{{ path('publier', {'id': sortie.id}) }}" method="post">
                         <button type="submit">Publier</button>
                     </form>
                     {% endif %}
@@ -51,7 +49,6 @@
                     {% endif %}
 
                 </td>
-                {% endif %}
 
 {% endfor %}
         </tbody>

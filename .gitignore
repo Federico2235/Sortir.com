@@ -203,3 +203,4 @@ fabric.properties
 ### Symfony Patch ###
 /web/css/
 /web/js/
+/public/img/

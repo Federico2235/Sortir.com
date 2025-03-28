@@ -17,6 +17,9 @@
         <dt>Téléphone :</dt> <dd>{{ participant.telephone }}</dd>
         <dt>Email :</dt> <dd>{{ participant.mail }}</dd>
         <dt>Pseudo :</dt> <dd>{{participant.pseudo }}</dd>
+       {% if participant.photo %}
+        <div><img style="height: 100px" src="{{ asset('img/photos/' ~ participant.photo) }}" alt=""></div>
+        {% endif %}
     </dl>
 </div>
 

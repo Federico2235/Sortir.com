@@ -6,7 +6,6 @@
         <div class="container">
             <div class="columns is-centered">
                 <div class="column is-6">
-                    <!-- On remplace la box par une card -->
                     <div class="card">
                         <!-- En-tête de la card -->
                         <header class="card-header">
@@ -15,7 +14,7 @@
                             </p>
                         </header>
 
-                        <!-- Formulaire ouvert juste après le header -->
+                        <!-- Début du formulaire -->
                         {{ form_start(form, { 'attr': { 'class': 'row g-3' } }) }}
 
                         <!-- Contenu de la card -->
@@ -49,6 +48,30 @@
                                         'attr': {'class': 'form-control'}
                                     }) }}
                                 </div>
+
+                                <!-- Champ photo stylisé avec Bulma -->
+                                <div class="field">
+                                    <label class="label">{{ form_label(form.photo) }}</label>
+                                    <div class="control">
+                                        <div class="file has-name is-boxed is-fullwidth">
+                                            <label class="file-label">
+                                                {{ form_widget(form.photo, { 'attr': { 'class': 'file-input' } }) }}
+                                                <span class="file-cta">
+                        <span class="file-icon">
+                          <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          Choisir un fichier…
+                        </span>
+                      </span>
+                                                <span class="file-name" id="selectedFileName">
+                        Aucun fichier choisi
+                      </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {{ form_errors(form.photo) }}
+                                </div>
                             </div>
                         </div>
 
@@ -70,4 +93,22 @@
             </div>
         </div>
     </section>
+
+    <!-- Script pour afficher le nom du fichier sélectionné -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.querySelector('.file-input');
+            const fileNameSpan = document.getElementById('selectedFileName');
+
+            if(fileInput) {
+                fileInput.addEventListener('change', () => {
+                    if (fileInput.files.length > 0) {
+                        fileNameSpan.textContent = fileInput.files[0].name;
+                    } else {
+                        fileNameSpan.textContent = 'Aucun fichier choisi';
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

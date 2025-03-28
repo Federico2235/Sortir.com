@@ -200,4 +200,15 @@ final class MainController extends AbstractController
             'participant' => $participant // Ajouté pour cohérence
         ]);
     }
+
+    #[Route('/error/{message}', name: 'app_error', requirements: ['message' => '.+'])]
+    public function error(string $message): Response
+    {
+        return $this->render('main/error.html.twig', [
+            'message' => $message
+        ]);
+    }
+
+
+
 }

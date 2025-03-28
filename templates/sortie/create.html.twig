@@ -1,19 +1,48 @@
 {% extends 'layouts/layout.html.twig' %}
-{% block title %}Créer une sortie !
-{% endblock %}{% block content %}
-    <div class="columns is-centered">
-    <div class="column is-6">
-        <div class="box"><h2 class="title">Créer une sortie
-                !</h2>
-            {{ form_start(sortieForm) }}
-            {{ form_widget(sortieForm) }}
-            {{ form_widget(lieuForm) }}
-            {{ form_widget(villeForm) }}
-            <div class="control field is-grouped is-grouped-right">
-                <button type="submit" class="button is-primary"> Ajouter une sortie !</button>
-            </div> {{ form_end(sortieForm) }}
+{% block title %}Créer une sortie !{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="card">
+                        <!-- En-tête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title has-text-centered">
+                                Créer une sortie
+                            </p>
+                        </header>
+
+                        <!-- Début du formulaire -->
+                        {{ form_start(sortieForm) }}
+
+                        <!-- Contenu de la card -->
+                        <div class="card-content">
+                            <div class="content">
+                                {{ form_widget(sortieForm) }}
+                                {{ form_widget(lieuForm) }}
+                                {{ form_widget(villeForm) }}
+                            </div>
+                        </div>
+
+                        <!-- Pied de la card -->
+                        <footer class="card-footer">
+                            <div class="card-footer-item">
+                                <button type="submit" class="button is-primary">
+                                    Ajouter une sortie !
+                                </button>
+                            </div>
+                        </footer>
+
+                        {{ form_end(sortieForm) }}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Script pour gérer la date limite en fonction de la date de début -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Utilisez les IDs générés par Symfony
@@ -35,4 +64,4 @@
             }
         });
     </script>
-    </div>{% endblock %}
+{% endblock %}

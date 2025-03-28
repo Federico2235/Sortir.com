@@ -1,5 +1,23 @@
+{#{% block form_row %}#}
+{#    {% set is_checkbox = 'checkbox' in form.vars.block_prefixes %}#}
+{#    <div class="field">#}
+{#        {{ form_label(form, null, { 'label_attr': {'class': is_checkbox ? 'checkbox' : 'label'} }) }}#}
+{#        <div class="control">#}
+{#            {% if is_checkbox %}#}
+{#                {{ form_widget(form) }}#}
+{#            {% else %}#}
+{#                {{ form_widget(form, { 'attr': {'class': 'input'} }) }}#}
+{#            {% endif %}#}
+{#        </div>#}
+{#        {{ form_errors(form) }}#}
+{#    </div>#}
+{#{% endblock %}#}
+
+{# templates/form/bulma.html.twig #}
+
 {% block form_row %}
     {% set is_checkbox = 'checkbox' in form.vars.block_prefixes %}
+<<<<<<< HEAD
     <div class="field">
         {{ form_label(form, null, { 'label_attr': {'class': is_checkbox ? 'checkbox' : 'label'} }) }}
         <div class="control">
@@ -10,6 +28,54 @@
             {% endif %}
         </div>
         {{ form_errors(form) }}
+=======
+    {% set is_radio = 'radio' in form.vars.block_prefixes %}
+    {% set is_file = 'file' in form.vars.block_prefixes %}
+
+    <div class="field mb-4">
+        {# CASE 1 : Checkbox ou Radio #}
+        {% if is_checkbox or is_radio %}
+            <label class="{{ is_checkbox ? 'checkbox' : 'radio' }}">
+                {{ form_widget(form) }}
+                {{ form_label(form, null, { 'label_attr': {'class': ''} }) }}
+            </label>
+            {{ form_errors(form) }}
+
+            {# CASE 2 : Input type "file" #}
+        {% elseif is_file %}
+            <label class="label">
+                {{ form_label(form) }}
+            </label>
+            <div class="control">
+                <div class="file has-name is-boxed is-fullwidth">
+                    <label class="file-label">
+                        {{ form_widget(form, { 'attr': { 'class': 'file-input' } }) }}
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i> {# Nécessite Font Awesome ou équivalent #}
+                            </span>
+                            <span class="file-label">
+                                Choisir un fichier…
+                            </span>
+                        </span>
+                        <span class="file-name">
+                            Aucun fichier choisi
+                        </span>
+                    </label>
+                </div>
+            </div>
+            {{ form_errors(form) }}
+
+            {# CASE 3 : Tous les autres champs (text, email, password, etc.) #}
+        {% else %}
+            <label class="label">
+                {{ form_label(form) }}
+            </label>
+            <div class="control">
+                {{ form_widget(form, { 'attr': {'class': 'input'} }) }}
+            </div>
+            {{ form_errors(form) }}
+        {% endif %}
+>>>>>>> 4b638feffca85e398147c1e4507950716f5b23c1
     </div>
 {% endblock %}
- 

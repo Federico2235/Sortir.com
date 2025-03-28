@@ -5,6 +5,7 @@
 {% block content %}
 
     <h2>Détails</h2>
+    <p>Etat de la sortie : {{ sortie.etat.libelle }}</p>
     <p>Nom de la sortie : {{ sortie.nom }}</p>
     <p>Date et heure de la sortie : {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
     <p>Date limite d'inscription : {{ sortie.dateLimiteInscription|date('d/m/Y H:i') }}</p>
@@ -19,7 +20,9 @@
     <p>Longitude : {{ sortie.lieu.longitude }}</p>
     <p>Participants : {{ sortie.participants.count() }}</p>
 
-    {% if sortie.etat == 'Ouverte' %}
+
+    {% if sortie.dateLimiteInscription > ("now"|date("d/m/Y")) %}
+    {% if sortie.etat.libelle == 'Ouverte' %}
     {% if sortie.participants.contains(app.user) %}
     <form method="post" action="{{ path('desinscription', {'id': sortie.id}) }}" id="desinscription">
         <button type="submit">Je me désinscris !</button>
@@ -30,6 +33,7 @@
         <button type="submit">Je m'inscris !</button>
     </form>
 
+    {% endif %}
     {% endif %}
     {% endif %}
 

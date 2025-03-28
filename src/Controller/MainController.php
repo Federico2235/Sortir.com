@@ -204,7 +204,7 @@ final class MainController extends AbstractController
     #[Route('/error/{message}', name: 'app_error', requirements: ['message' => '.+'])]
     public function error(string $message): Response
     {
-        return $this->render('main/error.html.twig', [
+        return $this->render('bundles/TwigBundle/Exception/error.html.twig', [
             'message' => $message
         ]);
     }

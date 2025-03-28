@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur !{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap');
+
+        body {
+            background: black;
+            color: red;
+            font-family: 'Rubik Glitch', cursive;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .glitch {
+            font-size: 3rem;
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #00ff00; }
+            50% { text-shadow: -2px -2px 0 #ff0000, 2px 2px 0 #00ff00; }
+            100% { text-shadow: 2px 2px 0 #ff0000, -2px -2px 0 #00ff00; }
+        }
+
+        .static {
+            width: 100%;
+            height: 100%;
+            background: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif') center/cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            opacity: 0.1;
+        }
+
+        .error-container {
+            margin-top: 15%;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            text-shadow: 4px 4px 0 #ff0000, -4px -4px 0 #00ff00;
+        }
+
+        .error-text {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: white;
+            background: red;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: darkred;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="static"></div>  {# Effet de bruit statique en fond #}
+
+    <div class="error-container">
+        <div class="error-code">Erreur</div>
+        <div class="glitch">ALERTE !</div>
+        <p class="error-text">
+            {{ message|default("Une anomalie a été détectée. L’accès à cette page est interdit.") }}
+            <br>Revenez en arrière avant qu'il ne soit trop tard...
+        </p>
+        <a href="{{ path('app_home') }}" class="btn">Retourner à l'accueil</a>
+    </div>
+{% endblock %}

@@ -29,6 +29,10 @@ final class SortieController extends AbstractController
         EtatRepository         $etatRepository
     ): Response
     {
+        if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
+            $this->addFlash('danger', 'La création de sorties n\'est pas autorisée sur mobile.');
+            return $this->redirectToRoute('app_error',['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
+        }
         // Création du formulaire Ville
         $ville = new Ville();
         $villeForm = $this->createForm(VilleType::class, $ville);

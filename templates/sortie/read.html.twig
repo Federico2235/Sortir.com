@@ -19,7 +19,7 @@
     <p>Longitude : {{ sortie.lieu.longitude }}</p>
     <p>Participants : {{ sortie.participants.count() }}</p>
 
-
+    {% if sortie.etat == 'Ouverte' %}
     {% if sortie.participants.contains(app.user) %}
     <form method="post" action="{{ path('desinscription', {'id': sortie.id}) }}" id="desinscription">
         <button type="submit">Je me désinscris !</button>
@@ -30,6 +30,7 @@
         <button type="submit">Je m'inscris !</button>
     </form>
 
+    {% endif %}
     {% endif %}
 
 

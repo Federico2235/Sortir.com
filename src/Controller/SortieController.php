@@ -29,6 +29,10 @@ final class SortieController extends AbstractController
         EtatRepository         $etatRepository
     ): Response
     {
+        if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
+            $this->addFlash('danger', 'La création de sorties n\'est pas autorisée sur mobile.');
+            return $this->redirectToRoute('app_error',['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
+        }
         // Création du formulaire Ville
         $ville = new Ville();
         $villeForm = $this->createForm(VilleType::class, $ville);
@@ -42,6 +46,7 @@ final class SortieController extends AbstractController
 
         // Création du formulaire Sortie
         $sortie = new Sortie();
+        $form = $this->createForm(SortieType::class, $sortie);
         $sortie->setOrganisateur($this->getUser());
         $sortie->setLieu($lieu);
         $sortie->setSite($sortie->getOrganisateur()->getSite());
@@ -53,21 +58,24 @@ final class SortieController extends AbstractController
         $sortie->setEtat($etat);
 
         // Vérification des formulaires
-        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-            $em->persist($ville);
-        }
-        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-            $em->persist($lieu);
-        }
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            $em->persist($sortie);
-            $em->flush();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($villeForm->isSubmitted() && $villeForm->isValid()) {
+                $em->persist($ville);
+            }
+            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+                $em->persist($lieu);
+            }
+            if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+                $em->persist($sortie);
+                $em->flush();
 
-            $this->addFlash('success', 'Votre sortie a été créée !');
-            return $this->redirect('/');
+                $this->addFlash('success', 'Votre sortie a été créée !');
+                return $this->redirect('/');
+            }
         }
-
         return $this->render('sortie/create.html.twig', [
+            'form' => $form->createView(),
             'sortieForm' => $sortieForm->createView(),
             'lieuForm' => $lieuForm->createView(),
             'villeForm' => $villeForm->createView(),
@@ -118,6 +126,11 @@ final class SortieController extends AbstractController
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
+        if($sortie->getEtat()->getLibelle() == 'Annulée') {
+            $this->addFlash('danger', 'La sortie est annulée.');
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+
+        }
 
         // Vérifie si la sortie est complète
         if ($sortie->getNbInscriptionsMax() <= count($sortie->getParticipants())) {
@@ -125,15 +138,44 @@ final class SortieController extends AbstractController
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
 
-        // Ajout du participant
-        $sortie->addParticipant($user);
-        //$sortie->setNbInscriptions($sortie->getNbInscriptions() - 1);
+        if($sortie->getDateLimiteInscription() < new \DateTimeImmutable()) {
+            $this->addFlash('danger', 'La sortie est cloturée.');
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
+        if($sortie->getEtat()->getLibelle() == 'Ouverte') {
 
+            // Ajout du participant
+            $sortie->addParticipant($user);
+            //$sortie->setNbInscriptions($sortie->getNbInscriptions() - 1);
+
+            $em->flush();
+
+            $this->addFlash('success', 'Vous êtes bien inscrit !');
+
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
+        else{
+            $this->addFlash('danger', 'Vous ne pouvez pas vous inscrire maintenant !');
+            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+        }
+    }
+    #[Route('/desinscription/{id}', name: 'desinscription', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function desinscription(
+        int                    $id,
+        SortieRepository       $repository,
+        EntityManagerInterface $em
+    ): Response
+    {
+        /** @var Participant|null $user */
+        $user = $this->getUser();
+        $sortie = $repository->find($id);
+        $sortie->removeParticipant($user);
         $em->flush();
 
-        $this->addFlash('success', 'Vous êtes bien inscrit !');
+        $this->addFlash('success', 'Vous êtes bien désinscrit !');
 
         return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+
     }
 
 
@@ -146,7 +188,7 @@ final class SortieController extends AbstractController
             throw $this->createNotFoundException('Sortie non trouvée.');
         }
 
-        // Puedes pasar la salida a la vista para mostrar más detalles
+
         return $this->render('sortie/confirm_annulation.html.twig', [
             'sortie' => $sortie,
         ]);
@@ -166,7 +208,7 @@ final class SortieController extends AbstractController
             throw $this->createNotFoundException('Sortie non trouvée.');
         }
         $motif = $request->request->get('motif');
-        // Obtener la fecha y hora actual
+
         $now = new \DateTime();
 
         /** @var Participant|null $user */
@@ -178,7 +220,7 @@ final class SortieController extends AbstractController
         }
 
 
-// Verificar si la sortie aún no ha comenzado
+
         if ($sortie->getDateHeureDebut() > $now) {
             $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
             $sortie->setEtat($etatAnnule);

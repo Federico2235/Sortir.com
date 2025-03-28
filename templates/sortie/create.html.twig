@@ -8,20 +8,22 @@
             {{ form_start(sortieForm) }}
             {{ form_widget(sortieForm) }}
             {{ form_widget(lieuForm) }}
-            {{ form_widget(villeForm) }}
+            {# {% if form.ville is defined %} #}
+            {{ form_widget(form.lieu) }}
+            {# {% endif %} #}
             <div class="control field is-grouped is-grouped-right">
                 <button type="submit" class="button is-primary"> Ajouter une sortie !</button>
             </div> {{ form_end(sortieForm) }}
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Utilisez les IDs générés par Symfony
             const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
             const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
 
             if (dateDebut && dateLimite) {
-                dateDebut.addEventListener('change', function() {
+                dateDebut.addEventListener('change', function () {
                     dateLimite.max = this.value;
                     if (new Date(dateLimite.value) > new Date(this.value)) {
                         dateLimite.value = '';

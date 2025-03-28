@@ -13,18 +13,18 @@ class LieuType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $villeId = $options['ville_id'];
-
+//        $villeId = $options['ville_id'];
+//
         $builder
             ->add('nom', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
                 'attr' => ['class' => 'form-control'],
                 'placeholder' => 'Sélectionnez un lieu',
-                'choices' => function (Options $options) use ($villeId) {
-                        $lieuRepository = $options['em']->getRepository(Lieu::class);
-                        return $lieuRepository->findBy(['ville' => $villeId]);
-                    },
+//                'choices' => function (Options $options) use ($villeId) {
+//                        $lieuRepository = $options['em']->getRepository(Lieu::class);
+//                        return $lieuRepository->findBy(['ville' => $villeId]);
+//                    },
             ]);
     }
 

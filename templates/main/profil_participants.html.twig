@@ -4,20 +4,43 @@
     <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
 {% endblock %}
 
-
-
-{% block title %}Page d'accueil{% endblock %}
+{% block title %}Profil de {{ participant.pseudo }}{% endblock %}
 
 {% block content %}
-<div class="box">
-   <h2>Profil de :{{ participant.pseudo}} </h2>
-    <dl>
-        <dt>Nom :</dt> <dd>{{participant.nom }}</dd>
-        <dt>Prénom :</dt> <dd>{{ participant.prenom }}</dd>
-        <dt>Téléphone :</dt> <dd>{{ participant.telephone }}</dd>
-        <dt>Email :</dt> <dd>{{ participant.mail }}</dd>
-        <dt>Pseudo :</dt> <dd>{{participant.pseudo }}</dd>
-    </dl>
-</div>
-
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        Profil de : {{ participant.pseudo }}
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        <div class="columns is-multiline">
+                            <div class="column is-half">
+                                <p><strong>Nom :</strong> {{ participant.nom }}</p>
+                            </div>
+                            <div class="column is-half">
+                                <p><strong>Prénom :</strong> {{ participant.prenom }}</p>
+                            </div>
+                            <div class="column is-half">
+                                <p><strong>Téléphone :</strong> {{ participant.telephone }}</p>
+                            </div>
+                            <div class="column is-half">
+                                <p><strong>Email :</strong> {{ participant.mail }}</p>
+                            </div>
+                            <div class="column is-full">
+                                <p><strong>Pseudo :</strong> {{ participant.pseudo }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#" class="card-footer-item">Modifier</a>
+                    <a href="#" class="card-footer-item delete-button">Supprimer</a>
+                </footer>
+            </div>
+        </div>
+    </section>
 {% endblock %}

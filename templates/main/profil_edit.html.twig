@@ -1,0 +1,73 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block title %}{{ parent() }} | Modifier profil{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <!-- On remplace la box par une card -->
+                    <div class="card">
+                        <!-- En-tête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Modifier ton profil
+                            </p>
+                        </header>
+
+                        <!-- Formulaire ouvert juste après le header -->
+                        {{ form_start(form, { 'attr': { 'class': 'row g-3' } }) }}
+
+                        <!-- Contenu de la card -->
+                        <div class="card-content">
+                            <div class="content">
+                                <!-- Champs du formulaire -->
+                                <div>
+                                    {{ form_row(form.pseudo, { 'attr': { 'class': 'form-control' } }) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.nom, { 'attr': { 'class': 'form-control' } }) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.prenom, { 'attr': { 'class': 'form-control' } }) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.telephone, { 'attr': { 'class': 'form-control' } }) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.mail, { 'attr': { 'class': 'form-control' } }) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.password.first, {
+                                        'label': 'Nouveau mot de passe',
+                                        'attr': {'class': 'form-control'}
+                                    }) }}
+                                </div>
+                                <div>
+                                    {{ form_row(form.password.second, {
+                                        'label': 'Confirmez le mot de passe',
+                                        'attr': {'class': 'form-control'}
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pied de la card -->
+                        <footer class="card-footer">
+                            <!-- Lien qui soumet le formulaire -->
+                            <a
+                                    href="#"
+                                    class="card-footer-item hover-primary"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                            >
+                                Modifier mon profil
+                            </a>
+                        </footer>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

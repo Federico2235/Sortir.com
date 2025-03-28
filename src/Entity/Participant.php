@@ -56,6 +56,9 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     #[ORM\Column(type: Types::ARRAY)]
     private array $roles = [];
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
+
     public function __construct()
     {
         $this->sorties = new ArrayCollection();
@@ -224,5 +227,17 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     public function getUserIdentifier(): string
     {
         return (string) $this->pseudo;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo):self
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 }

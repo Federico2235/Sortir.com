@@ -10,11 +10,25 @@ class SiteFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+<<<<<<< HEAD
         $site = new Site();
         $site->setNom('Rennes');
         $manager->persist($site);
         // $product = new Product();
         // $manager->persist($product);
+=======
+        $sites = ['SAINT HERBLAIN', 'CHARTRES DE BRETAGNE', 'LA ROCHE SUR YON'];
+
+        foreach ($sites as $index => $nom){
+
+            $site = new Site();
+            $site ->setNom($nom);
+
+            $manager->persist($site);
+           
+                }
+
+>>>>>>> 7c778f7ab959ca67a55bc9cd0dfcc5dd753495d2
 
         $manager->flush();
     }

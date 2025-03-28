@@ -1,0 +1,22 @@
+<?php
+
+namespace App\DataFixtures;
+
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+
+class AppFixtures extends Fixture
+{
+    public function load(ObjectManager $manager): void
+    {
+        // Primero cargamos los fixtures de Site
+        $siteFixtures = new SiteFixtures();
+        $siteFixtures->load($manager);
+
+        // Luego cargamos los fixtures de Participant (que dependen de Site)
+        $participantFixtures = new ParticipantFixtures();
+        $participantFixtures->load($manager);
+
+        // Otras fixtures que puedas tener...
+    }
+}

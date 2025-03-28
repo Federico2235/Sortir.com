@@ -1,0 +1,27 @@
+{% extends 'layouts/layout.html.twig' %}
+
+{% block title %}Détails sortie{% endblock %}
+
+{% block content %}
+
+    <h2>Détails</h2>
+    <p>Nom de la sortie : {{ sortie.nom }}</p>
+    <p>Date et heure de la sortie : {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</p>
+    <p>Date limite d'inscription : {{ sortie.dateLimiteInscription|date('d/m/Y H:i') }}</p>
+    <p>Nombre de places : {{ sortie.nbInscriptionsMax }}</p>
+    <p>Durée : {{ sortie.duree }}</p>
+    <p>Description et infos : {{ sortie.infosSortie|raw }}</p>
+    <p>Ville organisatrice : {{ sortie.lieu.ville.nom }}</p>
+    <p>Lieu : {{ sortie.lieu.nom }}</p>
+    <p>Rue : {{ sortie.lieu.rue }}</p>
+    <p>Code Postal : {{ sortie.lieu.ville.codePostal }}</p>
+    <p>Latitude : {{ sortie.lieu.latitude }}</p>
+    <p>Longitude : {{ sortie.lieu.longitude }}</p>
+    <p>Participants : {{ sortie.participants.count() }}</p>
+
+    <form method="post" action="{{ path('inscription', {'id': sortie.id}) }}" id="inscription">
+        <button type="submit">Je m'inscris !</button>
+    </form>
+
+
+{% endblock %}

@@ -35,7 +35,7 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     private ?bool $administrateur = null;
 
     #[ORM\Column]
-    private ?bool $actif = null;
+    private ?bool $actif = true;
 
     /**
      * @var Collection<int, Sortie>

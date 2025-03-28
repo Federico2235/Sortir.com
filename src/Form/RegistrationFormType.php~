@@ -55,7 +55,6 @@ class RegistrationFormType extends AbstractType
 
             ->add('roles', HiddenType::class, [
                 'data' => json_encode(['ROLE_USER']),
-                'mapped' => false
             ])
 
             // Checkbox para administrador

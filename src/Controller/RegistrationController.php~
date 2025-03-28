@@ -18,8 +18,8 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
-        $user = new Participant();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $participant = new Participant();
+        $form = $this->createForm(RegistrationFormType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -27,9 +27,20 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             // encode the plain password
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            $participant->setPassword($userPasswordHasher->hashPassword($participant, $plainPassword));
 
-            $entityManager->persist($user);
+            if ($form->get('administrateur')->getData()) {
+                // Si es marcado, asignar el rol 'ROLE_ADMIN' y administrateur a true
+                $participant->setRoles(['ROLE_ADMIN']);
+                $participant->setAdministrateur(true);
+            } else {
+                // Si no está marcado, solo se asigna el rol 'ROLE_USER'
+                $participant->setRoles(['ROLE_USER']);
+                $participant->setAdministrateur(false);
+            }
+
+
+            $entityManager->persist($participant);
             $entityManager->flush();
 
             // do anything else you need here, like send an email

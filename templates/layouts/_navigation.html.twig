@@ -9,13 +9,14 @@
     {% endif %} #}
     <ul class="flex justify-center space-x-6 p-4 bg-teal-700 bg-opacity-60 backdrop-blur-md shadow-lg">
 
-        <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="/">Accueil</a></li>
+        <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="/">Accueil</a></li>
         {% if app.user %}
-            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
-            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
-            <li class="hidden md:flex"><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
+            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
+            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+            <li class="hidden md:flex"><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
+
         {% else %}
-            <li><a class="text-gray-200 hover:text-yellow-600 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
+            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
         {% endif %}
     </ul>
 </nav>

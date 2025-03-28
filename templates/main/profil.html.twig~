@@ -29,7 +29,7 @@
                                             <figure class="image is-128x128" style="margin: 0 auto;">
                                                 <img src="{{ asset('img/photos/' ~ app.user.photo) }}"
                                                      alt="Photo de profil"
-                                                     style="object-fit: cover; border: 2px solid #ccc; border-radius: 5px; ">
+                                                     style="object-fit: cover; border: 4px solid #16959a; border-radius: 5px; ">
                                             </figure>
                                         {% else %}
                                             {# Si vous souhaitez afficher un placeholder quand il n'y a pas de photo #}

@@ -80,7 +80,7 @@
                                         <td>
                                             <!-- Bouton Afficher -->
                                             <a href="{{ path('app_detailSortie', {'id': sortie.id}) }}"
-                                               class="button is-info is-small">
+                                               class="button is-primary is-small">
                                                 Afficher
                                             </a>
                                             <!-- Bouton Publier (uniquement si l’utilisateur est organisateur et que l’état est 'Créée') -->

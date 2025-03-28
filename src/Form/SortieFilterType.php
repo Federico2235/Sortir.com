@@ -73,9 +73,10 @@ class SortieFilterType extends AbstractType
                 'label' => 'Sorties passées',
             ])
             // Bouton de Validation des filtres
-            ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
-            ]);
+//            ->add('submit', SubmitType::class, [
+//                'label' => 'Rechercher',
+//            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

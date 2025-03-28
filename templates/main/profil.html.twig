@@ -4,26 +4,71 @@
     <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
 {% endblock %}
 
-
-
-{% block title %}Page d'accueil{% endblock %}
+{% block title %}{{ parent() }} | Profil{% endblock %}
 
 {% block content %}
-    <div class="box">
-        <h1>Bonjour {{ app.user.prenom }}</h1>
-        <h2>Voici les informations de votre Profil : </h2>
-        <dl>
-            <dt>Nom :</dt> <dd>{{ app.user.nom }}</dd>
-            <dt>Prénom :</dt> <dd>{{ app.user.prenom }}</dd>
-            <dt>Téléphone :</dt> <dd>{{ app.user.telephone }}</dd>
-            <dt>Email :</dt> <dd>{{ app.user.mail }}</dd>
-            <dt>Pseudo :</dt> <dd>{{ app.user.pseudo }}</dd>
-            {% if app.user.photo %}
-            <div><img style="height: 100px" src="{{ asset('img/photos/' ~ app.user.photo) }}" alt=""></div>
-{% endif %}
-        </dl>
-        <btn class="btn btn-primary"><a href="{{ path('app_profil_edit') }}">Modifier mon profil</a></btn>
-    </div>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <div class="card">
+                        <!-- Entête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Bonjour, {{ app.user.prenom }} !
+                            </p>
+                        </header>
+
+                        <!-- Contenu de la card -->
+                        <div class="card-content">
+                            <div class="content">
+                                <h2 class="title is-5">Informations de votre profil</h2>
+
+                                <!-- Liste de définitions : chaque champ et sa valeur sur la même ligne -->
+                                <dl>
+                                    <div class="is-flex is-align-items-center mb-3">
+                                        <dt class="has-text-weight-semibold mr-2">Nom :</dt>
+                                        <dd>{{ app.user.nom }}</dd>
+                                    </div>
+
+                                    <div class="is-flex is-align-items-center mb-3">
+                                        <dt class="has-text-weight-semibold mr-2">Prénom :</dt>
+                                        <dd>{{ app.user.prenom }}</dd>
+                                    </div>
+
+                                    <div class="is-flex is-align-items-center mb-3">
+                                        <dt class="has-text-weight-semibold mr-2">Téléphone :</dt>
+                                        <dd>{{ app.user.telephone }}</dd>
+                                    </div>
+
+                                    <div class="is-flex is-align-items-center mb-3">
+                                        <dt class="has-text-weight-semibold mr-2">Email :</dt>
+                                        <dd>{{ app.user.mail }}</dd>
+                                    </div>
+
+                                    <div class="is-flex is-align-items-center">
+                                        <dt class="has-text-weight-semibold mr-2">Pseudo :</dt>
+                                        <dd>{{ app.user.pseudo }}</dd>
+                                    </div>
+                                    {% if app.user.photo %}
+                                        <div><img style="height: 100px" src="{{ asset('img/photos/' ~ app.user.photo) }}" alt=""></div>
+                                    {% endif %}
+                                </dl>
+                            </div>
+                        </div>
+
+                        <!-- Pied de la card -->
+                        <footer class="card-footer">
+                            <a href="{{ path('app_profil_edit') }}"
+                               class="card-footer-item hover-primary">
+                                Modifier mon profil
+                            </a>
+                        </footer>
 
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

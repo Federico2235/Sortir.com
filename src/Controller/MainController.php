@@ -115,7 +115,7 @@ final class MainController extends AbstractController
     public function profil(): Response
     {
         return $this->render('main/profil.html.twig', [
-            'participant' => $this->getUser(), // Changé 'user' en 'participant' pour cohérence
+            'participant' => $this->getUser(),
         ]);
     }
 

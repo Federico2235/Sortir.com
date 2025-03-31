@@ -9,40 +9,69 @@
 {% block content %}
     <section class="section">
         <div class="container">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        Profil de : {{ participant.pseudo }}
-                    </p>
-                </header>
-                <div class="card-content">
-                    <div class="content">
-                        <div class="columns is-multiline">
-                            <div class="column is-half">
-                                <p><strong>Nom :</strong> {{ participant.nom }}</p>
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <div class="card">
+                        <!-- En-tête de la carte -->
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Profil de : {{ participant.pseudo }}
+                            </p>
+                        </header>
+
+                        <!-- Contenu de la carte -->
+                        <div class="card-content">
+                            <div class="content">
+                                <div class="columns is-vcentered">
+                                    <!-- Colonne de gauche : Photo -->
+                                    <div class="column is-one-third has-text-centered">
+                                        {% if participant.photo %}
+                                            <figure class="image is-128x128" style="margin: 0 auto;">
+                                                <img src="{{ asset('img/photos/' ~ participant.photo) }}"
+                                                     alt="Photo de profil"
+                                                     style="object-fit: cover; border: 2px solid #ccc; border-radius: 5px;">
+                                            </figure>
+                                        {% else %}
+                                            <figure class="image is-128x128" style="margin: 0 auto;">
+                                                <img src="{{ asset('img/placeholder.png') }}"
+                                                     alt="Aucune photo de profil"
+                                                     style="object-fit: cover; border: 2px solid #ccc; border-radius: 5px;">
+                                            </figure>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Colonne de droite : Informations du participant -->
+                                    <div class="column">
+                                        <h2 class="title is-5">Informations du participant</h2>
+                                        <dl>
+                                            <div class="is-flex is-align-items-center mb-3">
+                                                <dt class="has-text-weight-semibold mr-2">Nom :</dt>
+                                                <dd>{{ participant.nom }}</dd>
+                                            </div>
+                                            <div class="is-flex is-align-items-center mb-3">
+                                                <dt class="has-text-weight-semibold mr-2">Prénom :</dt>
+                                                <dd>{{ participant.prenom }}</dd>
+                                            </div>
+                                            <div class="is-flex is-align-items-center mb-3">
+                                                <dt class="has-text-weight-semibold mr-2">Téléphone :</dt>
+                                                <dd>{{ participant.telephone }}</dd>
+                                            </div>
+                                            <div class="is-flex is-align-items-center mb-3">
+                                                <dt class="has-text-weight-semibold mr-2">Email :</dt>
+                                                <dd>{{ participant.mail }}</dd>
+                                            </div>
+                                            <div class="is-flex is-align-items-center">
+                                                <dt class="has-text-weight-semibold mr-2">Pseudo :</dt>
+                                                <dd>{{ participant.pseudo }}</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="column is-half">
-                                <p><strong>Prénom :</strong> {{ participant.prenom }}</p>
-                            </div>
-                            <div class="column is-half">
-                                <p><strong>Téléphone :</strong> {{ participant.telephone }}</p>
-                            </div>
-                            <div class="column is-half">
-                                <p><strong>Email :</strong> {{ participant.mail }}</p>
-                            </div>
-                            <div class="column is-full">
-                                <p><strong>Pseudo :</strong> {{ participant.pseudo }}</p>
-                            </div>
-                            {% if participant.photo %}
-                                <div><img style="height: 100px" src="{{ asset('img/photos/' ~ participant.photo) }}" alt=""></div>
-                            {% endif %}
                         </div>
+                        <!-- Pied de la carte (optionnel) -->
                     </div>
                 </div>
-                <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Modifier</a>
-                    <a href="#" class="card-footer-item delete-button">Supprimer</a>
-                </footer>
             </div>
         </div>
     </section>

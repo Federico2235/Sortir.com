@@ -26,7 +26,7 @@
 /*    font-size: var(--bulma-help-size);*/
 /*}*/
 body{
-    /*background-color: #3DCCC7;*/
+    background-color: #3DCCC7 !important;
 }
 
 footer {

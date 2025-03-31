@@ -19,14 +19,18 @@ class AdminController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $participant = new Participant();
+
+
         $form = $this->createForm(RegistrationFormType::class, $participant);
+
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
+
             $participant->setPassword($userPasswordHasher->hashPassword($participant, $plainPassword));
 
             if ($form->get('administrateur')->getData()) {
@@ -34,15 +38,15 @@ class AdminController extends AbstractController
                 $participant->setAdministrateur(true);
             } else {
                 $participant->setAdministrateur(false);
+                $participant->setRoles(['ROLE_USER']);
             }
 
 
             $entityManager->persist($participant);
-            $entityManager->flush();
 
-            // do anything else you need here, like send an email
+                $entityManager->flush();
 
-            return $security->login($participant, ParticipantAuthenticator::class, 'main');
+            return $this->redirectToRoute('app_main');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -50,21 +54,6 @@ class AdminController extends AbstractController
         ]);
     }
 
-    //desactiver utilisateur
-//    #[Route('/desactiver/{id}', name: 'app_desactiver')]
-//    public function desactiver($id, EntityManagerInterface $entityManager): Response
-//    {
-//        $participant = $entityManager->getRepository(Participant::class)->find($id);
-//
-//        if (!$participant) {
-//            throw $this->createNotFoundException('No participant found for id ' . $id);
-//        }
-//
-//        $participant->setActif(false);
-//        $entityManager->persist($participant);
-//        $entityManager->flush();
-//
-//        return $this->redirectToRoute('app_main');
-//    }
+
 
 }

@@ -14,6 +14,7 @@ use App\Form\VilleType;
 use App\Repository\EtatRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
+use App\Repository\VilleRepository;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,66 +29,81 @@ final class SortieController extends AbstractController
     public function createSortie(
         Request                $request,
         EntityManagerInterface $em,
-        EtatRepository         $etatRepository
+        EtatRepository         $etatRepository,
+        VilleRepository       $villeRepository
     ): Response
     {
         if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
             return $this->redirectToRoute('app_error', ['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
         }
+
         // Création du formulaire Ville
         $ville = new Ville();
         $villeForm = $this->createForm(VilleType::class, $ville);
-        $villeForm->handleRequest($request);
 
         // Création du formulaire Lieu
         $lieu = new Lieu();
         $lieu->setVille($ville);
         $lieuForm = $this->createForm(LieuType::class, $lieu);
-        $lieuForm->handleRequest($request);
 
         // Création du formulaire Sortie
         $sortie = new Sortie();
-        $form = $this->createForm(SortieType::class, $sortie);
         $sortie->setOrganisateur($this->getUser());
         $sortie->setLieu($lieu);
         $sortie->setSite($sortie->getOrganisateur()->getSite());
+
         $sortieForm = $this->createForm(SortieType::class, $sortie);
+
+        // Manejo de los formularios
+        $villeForm->handleRequest($request);
+        $lieuForm->handleRequest($request);
         $sortieForm->handleRequest($request);
 
-        // Initialisation de l'état
-        $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
-        $sortie->setEtat($etat);
-
-        // Vérification des formulaires
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-                $em->persist($ville);
+                $existingVille = $villeRepository->findOneBy(['nom' => $ville->getNom()]);
+
+                if ($existingVille) {
+                    // Si la ciudad ya existe, usar la existente
+                    $ville = $existingVille;
+                } else {
+                    // Si la ciudad no existe, persistir la nueva
+                    $em->persist($ville);
+
+                }
             }
             if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+                $lieu->setVille($ville); // Asignar la ciudad al objeto $lieu
                 $em->persist($lieu);
             }
-            if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-                $em->persist($sortie);
-                $em->flush();
 
-                $this->addFlash('success', 'Votre sortie a été créée !');
-                return $this->redirect('/');
-            }
+            // Inicialización de l'état
+            $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+            $sortie->setEtat($etat);
+
+            // Persistir y guardar la sortie
+            $em->persist($sortie);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre sortie a été créée !');
+            return $this->redirectToRoute('app_main'); // Asegúrate de cambiar esto según la ruta correcta.
         }
+
         return $this->render('sortie/create.html.twig', [
-            'form' => $form->createView(),
             'sortieForm' => $sortieForm->createView(),
             'lieuForm' => $lieuForm->createView(),
             'villeForm' => $villeForm->createView(),
         ]);
     }
 
+
+
+
     #[Route('/detail/{id}', name: 'app_detailSortie', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function detailSortie(
         int              $id,
         Request          $request,
-        SortieRepository $repository,
+        SortieRepository $repository
     ): Response
     {
 

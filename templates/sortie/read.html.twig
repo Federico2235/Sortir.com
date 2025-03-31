@@ -49,7 +49,9 @@
                                         <p><strong>Participants :</strong> {{ sortie.participants.count() }}</p>
                                     </div>
                                 </div>
+                                <div id="map" style="height: 400px;width: 455px;"></div>
                             </div>
+
                         </div>
 
                         <!-- Pied de la carte : affichage conditionnel des actions -->
@@ -130,4 +132,19 @@
             </div>
         </div>
     </section>
+    <script>
+
+        window.onload = function() {
+            var map = L.map('map').setView([{{ sortie.lieu.latitude }}, {{ sortie.lieu.longitude }}], 16);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([{{ sortie.lieu.latitude }}, {{ sortie.lieu.longitude }}], {draggable: true}).addTo(map);
+        };
+    </script>
+
+
+
 {% endblock %}

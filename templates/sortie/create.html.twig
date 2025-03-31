@@ -21,15 +21,18 @@
                         <div class="card-content">
                             <div class="content">
                                 {{ form_widget(sortieForm) }}
-                                {{ form_start(lieuForm) }}
                                 {{ form_row(lieuForm.nom) }}
                                 {{ form_row(lieuForm.rue) }}
-                                {{ form_row(lieuForm.latitude , {'attr': {'id': 'latitude'}}) }}
-                                {{ form_row(lieuForm.longitude, {'attr': {'id': 'longitude'}}) }}
+                                {{ form_widget(lieuForm.latitude, {'attr': {'style': 'display: none'}}) }}
+                                {{ form_widget(lieuForm.longitude, {'attr': {'style': 'display: none'}}) }}
+
+                                {# {{ dump(lieuForm.latitude.vars.id)  }} #}
+                                {# {{ dump(lieuForm.longitude.vars.id)  }} #}
+
                                 <div id="map" style="height: 400px;"></div>
-                                {#    <input type="text" id="latitude" name="latitude" readonly>#}
-                                {#    <input type="text" id="longitude" name="longitude" readonly>#}
-                                {{ form_end(lieuForm) }}
+                                {#    <input type="text" id="latitude" name="latitude" readonly> #}
+                                {#    <input type="text" id="longitude" name="longitude" readonly> #}
+
                                 {{ form_widget(villeForm) }}
                             </div>
                         </div>
@@ -37,7 +40,7 @@
                         <!-- Pied de la card -->
                         <footer class="card-footer">
                             <div class="card-footer-item">
-                                <button type="submit" class="button is-primary">
+                                <button type="submit" class="button is-primary" >
                                     Ajouter une sortie !
                                 </button>
                             </div>
@@ -52,14 +55,14 @@
 
     <!-- Script pour gérer la date limite en fonction de la date de début -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Utilisez les IDs générés par Symfony
-            const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
-            const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
+            const dateDebut = document.getElementById('{{ sortieForm.dateHeureDebut.vars.id }}');
+            const dateLimite = document.getElementById('{{ sortieForm.dateLimiteInscription.vars.id }}');
 
 
             if (dateDebut && dateLimite) {
-                dateDebut.addEventListener('change', function() {
+                dateDebut.addEventListener('change', function () {
                     dateLimite.max = this.value;
                     if (new Date(dateLimite.value) > new Date(this.value)) {
                         dateLimite.value = '';
@@ -71,24 +74,24 @@
                     dateLimite.max = dateDebut.value;
                 }
             }
-        });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            var map = L.map('map').setView([48.8566, 2.3522], 13); // Coordenadas iniciales (París)
+
+            var map = L.map('map').setView([48.1173, -1.6778], 13); // Coordenadas iniciales (París)
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
 
-            var marker = L.marker([48.8566, 2.3522], { draggable: true }).addTo(map);
+            var marker = L.marker([48.8566, 2.3522], {draggable: true}).addTo(map);
 
             function updateLatLng(lat, lng) {
-                document.getElementById("latitude").value = lat;
-                document.getElementById("longitude").value = lng;
+                document.getElementById("lieu_latitude").value = lat;
+                document.getElementById("lieu_longitude").value = lng;
             }
 
             marker.on('dragend', function (event) {
                 var position = marker.getLatLng();
+                console.log("Marker movido:", position.lat, position.lng);
                 updateLatLng(position.lat, position.lng);
             });
             map.on('click', function (event) {

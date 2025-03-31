@@ -34,7 +34,7 @@ class Sortie
     #[ORM\Column(type: Types::TEXT)]
     private ?string $infosSortie = null;
 
-    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\ManyToOne(inversedBy: 'sorties',cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $lieu = null;
 

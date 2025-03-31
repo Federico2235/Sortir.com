@@ -1,20 +1,3 @@
-{#{% block form_row %}#}
-{#    {% set is_checkbox = 'checkbox' in form.vars.block_prefixes %}#}
-{#    <div class="field">#}
-{#        {{ form_label(form, null, { 'label_attr': {'class': is_checkbox ? 'checkbox' : 'label'} }) }}#}
-{#        <div class="control">#}
-{#            {% if is_checkbox %}#}
-{#                {{ form_widget(form) }}#}
-{#            {% else %}#}
-{#                {{ form_widget(form, { 'attr': {'class': 'input'} }) }}#}
-{#            {% endif %}#}
-{#        </div>#}
-{#        {{ form_errors(form) }}#}
-{#    </div>#}
-{#{% endblock %}#}
-
-{# templates/form/bulma.html.twig #}
-
 {% block form_row %}
     {% set is_checkbox = 'checkbox' in form.vars.block_prefixes %}
     {% set is_radio = 'radio' in form.vars.block_prefixes %}

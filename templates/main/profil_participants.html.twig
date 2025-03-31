@@ -40,8 +40,12 @@
                     </div>
                 </div>
                 <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Modifier</a>
-                    <a href="#" class="card-footer-item delete-button">Supprimer</a>
+{#                   {% if is_granted('ROLE_ADMIN') %}#}
+{#                    <form action="{{ path('app_desactiver', {'id': 'participant'}) }}" method="POST">#}
+{#                      <button type="submit" class="card-footer-item delete-button">Rendre inactif</button>#}
+{#                    <a href="#" class="card-footer-item delete-button">Rendre inactif</a>#}
+{#                    </form>#}
+{#                   {% endif %}#}
                 </footer>
             </div>
         </div>

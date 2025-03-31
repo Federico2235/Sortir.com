@@ -54,6 +54,46 @@ class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/participants', name: 'app_participants')]
+    public function participants(EntityManagerInterface $entityManager): Response
+    {
+        $participants = $entityManager->getRepository(Participant::class)->findAll();
+        return $this->render('admin/participants.html.twig', [
+            'participants' => $participants,
+        ]);
+    }
+#[Route('/desactiver/{id}', name: 'app_desactiver')]
+public function desactiver(int $id, EntityManagerInterface $entityManager): Response{
 
+    $participant = $entityManager->getRepository(Participant::class)->find($id);
+
+
+    $participant->setActif(false);
+    $entityManager->flush();
+    return $this->redirectToRoute('app_participants');
+
+}
+
+    #[Route('/activer/{id}', name: 'app_activer')]
+    public function activer(int $id, EntityManagerInterface $entityManager): Response{
+
+        $participant = $entityManager->getRepository(Participant::class)->find($id);
+
+
+        $participant->setActif(true);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_participants');
+
+    }
+
+    #[Route('/supprimer/{id}', name: 'app_supprimer')]
+    public function supprimer(int $id, EntityManagerInterface $entityManager): Response
+    {
+
+        $participant = $entityManager->getRepository(Participant::class)->find($id);
+        $entityManager->remove($participant);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_participants');
+    }
 
 }

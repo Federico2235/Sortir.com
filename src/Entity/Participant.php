@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
+#[UniqueEntity(fields: ['pseudo'], message: 'There is already an account with this pseudo')]
 class Participant implements UserInterface, \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -33,7 +35,7 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     private ?bool $administrateur = null;
 
     #[ORM\Column]
-    private ?bool $actif = null;
+    private ?bool $actif = true;
 
     /**
      * @var Collection<int, Sortie>

@@ -4,7 +4,6 @@
     {#  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"> #}
     {#  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> #}
 
-
 {% endblock %}
 {% block body %}
     <header class="p-3 mt-16">
@@ -15,7 +14,7 @@
         {% include 'layouts/_navigation.html.twig' %}
     </nav>
 
-
+    
     <main class="container" style="margin-top: 6rem; margin-bottom: 6rem;">
         <div class=""
              style="">

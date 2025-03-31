@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantProfileType;
 use App\Form\SortieFilterType;
+use App\Service\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Sortie;
 use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -114,7 +116,7 @@ final class MainController extends AbstractController
     public function profil(): Response
     {
         return $this->render('main/profil.html.twig', [
-            'participant' => $this->getUser(), // Changé 'user' en 'participant' pour cohérence
+            'participant' => $this->getUser(),
         ]);
     }
 
@@ -132,7 +134,8 @@ final class MainController extends AbstractController
     public function modifierProfil(
         Request                     $request,
         EntityManagerInterface      $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        Uploader                    $uploader
     ): Response
     {
         /** @var Participant $participant */
@@ -163,6 +166,29 @@ final class MainController extends AbstractController
                 $participant->setPassword($oldPassword);
             }
 
+            /**
+             * @var UploadedFile|null $photo
+             */
+            $photo = $form->get('photo')->getData();
+
+           if ($photo !== null) {
+
+                $oldPhoto = $participant->getPhoto();
+                if ($oldPhoto) {
+                    $uploader->delete($oldPhoto, $this->getParameter('participant_photo_dir')); // Elimina el archivo viejo
+                }
+
+
+                $newFileName = $uploader->save(
+                    $photo,
+                    $participant->getNom(),
+                    $this->getParameter('participant_photo_dir')
+                );
+
+                $participant->setPhoto($newFileName);
+            }
+
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Profil mis à jour avec succès');
@@ -174,4 +200,15 @@ final class MainController extends AbstractController
             'participant' => $participant // Ajouté pour cohérence
         ]);
     }
+
+    #[Route('/error/{message}', name: 'app_error', requirements: ['message' => '.+'])]
+    public function error(string $message): Response
+    {
+        return $this->render('main/error.html.twig', [
+            'message' => $message
+        ]);
+    }
+
+
+
 }

@@ -1,51 +1,164 @@
 {% extends 'layouts/layout.html.twig' %}
-
-{% block title %}Modifie ton profil{% endblock %}
+{% block title %}{{ parent() }} | Modifier profil{% endblock %}
 
 {% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <div class="card">
+                        <!-- En-tête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Modifier ton profil
+                            </p>
+                        </header>
 
-    <div class="container mt-4">
-        <h1 class="mb-4">Modifier ton profil</h1>
+                        <!-- Début du formulaire -->
+                        {{ form_start(form, { 'attr': { 'class': 'row g-3' } }) }}
 
-        <form method="post" class="needs-validation" novalidate>
-            {{ form_start(form, { 'attr': { 'class': 'row g-3' } }) }}
+                        <!-- Contenu de la card -->
+                        <div class="card-content">
+                            <div class="content">
 
-            <div class="col-md-6">
-                {{ form_row(form.pseudo, { 'attr': { 'class': 'form-control' } }) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.nom, { 'attr': { 'class': 'form-control' } }) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.prenom, { 'attr': { 'class': 'form-control' } }) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.telephone, { 'attr': { 'class': 'form-control' } }) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.mail, { 'attr': { 'class': 'form-control' } }) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.password.first, {
-                    'label': 'Nouveau mot de passe',
-                    'attr': {'class': 'form-control'}
-                }) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.password.second, {
-                    'label': 'Confirmez le mot de passe',
-                    'attr': {'class': 'form-control'}
-                }) }}
-            </div>
+                                <!-- Champ Pseudo -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.pseudo) }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.pseudo, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.pseudo) }}
+                                </div>
 
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary mt-3">Modifier</button>
+                                <!-- Champ Nom -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.nom) }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.nom, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.nom) }}
+                                </div>
+
+                                <!-- Champ Prénom -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.prenom) }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.prenom, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.prenom) }}
+                                </div>
+
+                                <!-- Champ Téléphone -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.telephone) }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.telephone, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.telephone) }}
+                                </div>
+
+                                <!-- Champ Mail -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.mail) }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.mail, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.mail) }}
+                                </div>
+
+                                <!-- Champ Nouveau mot de passe -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.password.first, 'Nouveau mot de passe') }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.password.first, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.password.first) }}
+                                </div>
+
+                                <!-- Champ Confirmer le mot de passe -->
+                                <div class="field mb-4">
+                                    <label class="label">
+                                        {{ form_label(form.password.second, 'Confirmez le mot de passe') }}
+                                    </label>
+                                    <div class="control">
+                                        {{ form_widget(form.password.second, { 'attr': {'class': 'input'} }) }}
+                                    </div>
+                                    {{ form_errors(form.password.second) }}
+                                </div>
+
+                                <!-- Champ Photo stylisé avec Bulma -->
+                                <div class="field mb-4">
+                                    <label class="label">{{ form_label(form.photo) }}</label>
+                                    <div class="control">
+                                        <div class="file has-name is-boxed is-fullwidth">
+                                            <label class="file-label">
+                                                {{ form_widget(form.photo, { 'attr': { 'class': 'file-input' } }) }}
+                                                <span class="file-cta">
+                        <span class="file-icon">
+                          <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          Choisir un fichier…
+                        </span>
+                      </span>
+                                                <span class="file-name" id="selectedFileName">
+                        Aucun fichier choisi
+                      </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {{ form_errors(form.photo) }}
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Pied de la card -->
+                        <footer class="card-footer">
+                            <!-- Lien qui soumet le formulaire -->
+                            <a
+                                    href="#"
+                                    class="card-footer-item hover-primary"
+                                    onclick="event.preventDefault(); this.closest('form').submit();"
+                            >
+                                Modifier mon profil
+                            </a>
+                        </footer>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
+        </div>
+    </section>
 
-            {{ form_end(form) }}
-        </form>
-    </div>
+    <!-- Script pour afficher le nom du fichier sélectionné -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.querySelector('.file-input');
+            const fileNameSpan = document.getElementById('selectedFileName');
 
-
-
+            if(fileInput) {
+                fileInput.addEventListener('change', () => {
+                    if (fileInput.files.length > 0) {
+                        fileNameSpan.textContent = fileInput.files[0].name;
+                    } else {
+                        fileNameSpan.textContent = 'Aucun fichier choisi';
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

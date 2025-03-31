@@ -1,0 +1,88 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block title %}Détails sortie{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-5">
+                    <div class="card">
+                        <!-- En-tête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Détails de la sortie
+                            </p>
+                        </header>
+
+                        <!-- Contenu de la card -->
+                        <div class="card-content">
+                            <div class="content">
+                                <div class="columns is-multiline">
+                                    <div class="column is-6">
+                                        <strong>Nom de la sortie :</strong> {{ sortie.nom }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Date et heure :</strong> {{ sortie.dateHeureDebut|date('d/m/Y H:i') }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Date limite :</strong> {{ sortie.dateLimiteInscription|date('d/m/Y H:i') }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Nombre de places :</strong> {{ sortie.nbInscriptionsMax }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Durée :</strong> {{ sortie.duree }}
+                                    </div>
+                                    <div class="column is-12">
+                                        <strong>Description :</strong>
+                                        <div>{{ sortie.infosSortie|raw }}</div>
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Ville organisatrice :</strong> {{ sortie.lieu.ville.nom }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Lieu :</strong> {{ sortie.lieu.nom }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Rue :</strong> {{ sortie.lieu.rue }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Code Postal :</strong> {{ sortie.lieu.ville.codePostal }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Latitude :</strong> {{ sortie.lieu.latitude }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Longitude :</strong> {{ sortie.lieu.longitude }}
+                                    </div>
+                                    <div class="column is-6">
+                                        <strong>Participants :</strong> {{ sortie.participants.count() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pied de la card : affichage conditionnel des actions -->
+                        {% if sortie.dateLimiteInscription > ("now"|date("d/m/Y")) and sortie.etat.libelle == 'Ouverte' %}
+                            <footer class="card-footer">
+                                {% if sortie.participants.contains(app.user) %}
+                                    <div class="card-footer-item">
+                                        <form method="post" action="{{ path('desinscription', {'id': sortie.id}) }}" id="desinscription">
+                                            <button type="submit" class="button is-danger is-fullwidth">Je me désinscris !</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="card-footer-item">
+                                        <form method="post" action="{{ path('inscription', {'id': sortie.id}) }}" id="inscription">
+                                            <button type="submit" class="button is-primary is-fullwidth">Je m'inscris !</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </footer>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

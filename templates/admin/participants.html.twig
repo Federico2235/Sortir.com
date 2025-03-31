@@ -1,0 +1,73 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block title %}Accueil | {{ parent() }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <!-- Titre principal de la page -->
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="box">
+                    <h2 class="title is-3 has-text-centered">Bienvenue sur la page d'accueil</h2>
+                    <p class="subtitle is-6 has-text-centered">
+                        Retrouvez ici toutes les sorties disponibles et filtrez-les selon vos préférences.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Colonne de droite : tableau des sorties -->
+        <div class="column is-8">
+            <div class="box mb-0">
+                <!-- .table-container pour gérer le débordement horizontal sur mobile -->
+                <div class="table-container">
+                    <table class="table is-fullwidth is-striped is-hoverable ">
+                        <thead>
+                        <tr>
+                            <th>Pseudo du participant</th>
+                            <th>Mail du participant</th>
+                            <th>Nom et prenom du participant</th>
+                            <th>Role</th>
+                            <th>Telephone</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for participant in participants %}
+                        <tr>
+                            <td>{{ participant.pseudo }}</td>
+                            <td>{{ participant.mail }}</td>
+                            <td>{{ participant.nom }} {{ participant.prenom }}</td>
+                            <td>{{ participant.roles|join(', ') }}</td>
+                            <td>{{ participant.telephone }}</td>
+                            {% if participant.actif == 1 %}
+                           <td> <form action="{{ path('app_desactiver', {'id': participant.id}) }}" method="POST"
+                                  style="display:inline-block;">
+                                <button class="button is-danger is-small" type="submit">
+                                    Desactiver&nbsp;
+                                </button>
+                            </form></td>
+                            {% endif %}
+                            {% if participant.actif == 0 %}
+                           <td> <form action="{{ path('app_activer', {'id': participant.id}) }}" method="POST"
+                                  style="display:inline-block;">
+                                <button class="button is-success is-small" type="submit">
+                                    Activer&nbsp;
+                                </button>
+                            </form></td>
+                            {% endif%}
+                            <td>
+                                <form action="{{ path('app_supprimer', {'id': participant.id}) }}">
+                                 <button class="button is-danger is-small">Suprimer</button>
+                                </form></td>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Fin des columns -->
+    </div> <!-- Fin container -->
+</section>
+{% endblock %}

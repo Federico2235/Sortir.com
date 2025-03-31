@@ -1,28 +1,78 @@
 {% extends 'layouts/layout.html.twig' %}
-
 {% block title %}Créer une sortie !{% endblock %}
 
 {% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="card">
+                        <!-- En-tête de la card -->
+                        <header class="card-header">
+                            <p class="card-header-title has-text-centered">
+                                Créer une sortie
+                            </p>
+                        </header>
 
-    <h2>Créer une sortie !</h2>
+                        <!-- Début du formulaire -->
+                        {{ form_start(sortieForm) }}
 
-    {{ form_start(sortieForm) }}
-    {{ form_widget(sortieForm) }}
-    {{ form_start(lieuForm) }}
-    {{ form_row(lieuForm.nom) }}
-    {{ form_row(lieuForm.rue) }}
-    {{ form_row(lieuForm.latitude , {'attr': {'id': 'latitude'}}) }}
-    {{ form_row(lieuForm.longitude, {'attr': {'id': 'longitude'}}) }}
-    <div id="map" style="height: 400px;"></div>
-{#    <input type="text" id="latitude" name="latitude" readonly>#}
-{#    <input type="text" id="longitude" name="longitude" readonly>#}
-{{ form_end(lieuForm) }}
-    {{ form_widget(villeForm) }}
-    <button>Ajouter une sortie !</button>
-    {{ form_end(sortieForm) }}
+                        <!-- Contenu de la card -->
+                        <div class="card-content">
+                            <div class="content">
+                                {{ form_widget(sortieForm) }}
+                                {{ form_start(lieuForm) }}
+                                {{ form_row(lieuForm.nom) }}
+                                {{ form_row(lieuForm.rue) }}
+                                {{ form_row(lieuForm.latitude , {'attr': {'id': 'latitude'}}) }}
+                                {{ form_row(lieuForm.longitude, {'attr': {'id': 'longitude'}}) }}
+                                <div id="map" style="height: 400px;"></div>
+                                {#    <input type="text" id="latitude" name="latitude" readonly>#}
+                                {#    <input type="text" id="longitude" name="longitude" readonly>#}
+                                {{ form_end(lieuForm) }}
+                                {{ form_widget(villeForm) }}
+                            </div>
+                        </div>
 
+                        <!-- Pied de la card -->
+                        <footer class="card-footer">
+                            <div class="card-footer-item">
+                                <button type="submit" class="button is-primary">
+                                    Ajouter une sortie !
+                                </button>
+                            </div>
+                        </footer>
 
+                        {{ form_end(sortieForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script pour gérer la date limite en fonction de la date de début -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Utilisez les IDs générés par Symfony
+            const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
+            const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
+
+
+            if (dateDebut && dateLimite) {
+                dateDebut.addEventListener('change', function() {
+                    dateLimite.max = this.value;
+                    if (new Date(dateLimite.value) > new Date(this.value)) {
+                        dateLimite.value = '';
+                    }
+                });
+
+                // Initialiser la valeur max si dateHeureDebut a déjà une valeur
+                if (dateDebut.value) {
+                    dateLimite.max = dateDebut.value;
+                }
+            }
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
             var map = L.map('map').setView([48.8566, 2.3522], 13); // Coordenadas iniciales (París)
 

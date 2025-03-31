@@ -14,8 +14,6 @@ use App\Form\VilleType;
 use App\Repository\EtatRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-use DateInterval;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +30,8 @@ final class SortieController extends AbstractController
     ): Response
     {
         if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
-            return $this->redirectToRoute('app_error', ['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
+            $this->addFlash('danger', 'La création de sorties n\'est pas autorisée sur mobile.');
+            return $this->redirectToRoute('app_error',['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
         }
         // Création du formulaire Ville
         $ville = new Ville();
@@ -90,19 +89,10 @@ final class SortieController extends AbstractController
         SortieRepository $repository,
     ): Response
     {
-
-
         $sortie = $repository->find($id);
 
-        if (!$sortie || $sortie->getId() === null) {
-            return $this->redirectToRoute('app_error', [
-                'message' => "Cette sortie n'existe pas ou a été supprimée.",
-                'status_code' => 404
-            ]);
-        }
-
-        if ($sortie->getDateHeureDebut() < (new DateTime())->sub(new DateInterval('P30D'))) {
-            return $this->redirectToRoute('app_error', ['message' => "cette sortie n'existe pas."]);
+        if (!$sortie) {
+            throw $this->createNotFoundException("Sortie introuvable !");
         }
 
         return $this->render('sortie/read.html.twig', [
@@ -136,7 +126,7 @@ final class SortieController extends AbstractController
             $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
-        if ($sortie->getEtat()->getLibelle() == 'Annulée') {
+        if($sortie->getEtat()->getLibelle() == 'Annulée') {
             $this->addFlash('danger', 'La sortie est annulée.');
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
 
@@ -148,11 +138,11 @@ final class SortieController extends AbstractController
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
 
-        if ($sortie->getDateLimiteInscription() < new \DateTimeImmutable()) {
+        if($sortie->getDateLimiteInscription() < new \DateTimeImmutable()) {
             $this->addFlash('danger', 'La sortie est cloturée.');
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
-        if ($sortie->getEtat()->getLibelle() == 'Ouverte') {
+        if($sortie->getEtat()->getLibelle() == 'Ouverte') {
 
             // Ajout du participant
             $sortie->addParticipant($user);
@@ -163,12 +153,12 @@ final class SortieController extends AbstractController
             $this->addFlash('success', 'Vous êtes bien inscrit !');
 
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-        } else {
+        }
+        else{
             $this->addFlash('danger', 'Vous ne pouvez pas vous inscrire maintenant !');
             return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
         }
     }
-
     #[Route('/desinscription/{id}', name: 'desinscription', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function desinscription(
         int                    $id,
@@ -230,6 +220,7 @@ final class SortieController extends AbstractController
         }
 
 
+
         if ($sortie->getDateHeureDebut() > $now) {
             $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
             $sortie->setEtat($etatAnnule);
@@ -247,22 +238,22 @@ final class SortieController extends AbstractController
 
     }
 
-    #[Route('/publier/{id}', name: 'publier', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function publier(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
-    {
-        $sortie = $repository->find($id);
+        #[Route('/publier/{id}', name: 'publier', requirements: ['id' => '\d+'], methods: ['POST'])]
+        public function publier(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
+        {
+            $sortie = $repository->find($id);
 
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+            if (!$sortie) {
+                throw $this->createNotFoundException('Sortie non trouvée.');
+            }
+
+            $etatPublie = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
+            $sortie->setEtat($etatPublie);
+            $em->flush(); // Mettre à jour les modifications dans la base de données $em
+
+            $this->addFlash('success', 'Sortie publiée.');
+            return $this->redirectToRoute('app_main');
+
+
         }
-
-        $etatPublie = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
-        $sortie->setEtat($etatPublie);
-        $em->flush(); // Mettre à jour les modifications dans la base de données $em
-
-        $this->addFlash('success', 'Sortie publiée.');
-        return $this->redirectToRoute('app_main');
-
-
-    }
 }

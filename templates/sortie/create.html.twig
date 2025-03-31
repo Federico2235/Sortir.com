@@ -21,7 +21,8 @@
                         <div class="card-content">
                             <div class="content">
                                 {{ form_widget(sortieForm) }}
-                                {{ form_widget(lieuForm) }}
+                                {{ form_widget(villeForm.ville) }}{# <select id="ville_nom" #}
+                                {{ form_widget(villeForm.lieu) }}{# <select id="lieu_nom" #}
                             </div>
                         </div>
 
@@ -41,6 +42,8 @@
         </div>
     </section>
 
+
+    <script src="{{ asset('js/ville.js') }}"></script>
     <!-- Script pour gérer la date limite en fonction de la date de début -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {

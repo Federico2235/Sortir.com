@@ -24,8 +24,8 @@ final class MainController extends AbstractController
     #[Route('/', name: 'app_main')]
     public function index(
         SortieRepository $sortieRepository,
-        Request $request,
-        Security $security,
+        Request          $request,
+        Security         $security,
     ): Response
     {
         // Appel du fomulaire de filtres
@@ -112,7 +112,6 @@ final class MainController extends AbstractController
     }
 
     #[Route('/profil', name: 'app_profil')]
-
     public function profil(): Response
     {
         return $this->render('main/profil.html.twig', [
@@ -130,7 +129,6 @@ final class MainController extends AbstractController
 
 
     #[Route('/profil/edit', name: 'app_profil_edit')]
-
     public function modifierProfil(
         Request                     $request,
         EntityManagerInterface      $entityManager,
@@ -171,7 +169,7 @@ final class MainController extends AbstractController
              */
             $photo = $form->get('photo')->getData();
 
-           if ($photo !== null) {
+            if ($photo !== null) {
 
                 $oldPhoto = $participant->getPhoto();
                 if ($oldPhoto) {
@@ -208,7 +206,6 @@ final class MainController extends AbstractController
             'message' => $message
         ]);
     }
-
 
 
 }

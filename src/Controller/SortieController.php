@@ -41,7 +41,7 @@ final class SortieController extends AbstractController
         // Création du formulaire Lieu
         $lieu = new Lieu();
         $lieu->setVille($ville);
-        $lieuForm = $this->createForm(LieuType::class, $lieu);
+        $lieuForm = $this->createForm(LieuType::class, $lieu, ['action' => $this->generateUrl('app_createSortie')]);
         $lieuForm->handleRequest($request);
 
         // Création du formulaire Sortie
@@ -78,6 +78,7 @@ final class SortieController extends AbstractController
             'form' => $form->createView(),
             'sortieForm' => $sortieForm->createView(),
             'villeForm' => $villeForm->createView(),
+            'lieuForm' => $lieuForm->createView(),
         ]);
     }
 

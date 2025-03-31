@@ -26,8 +26,9 @@
 /*    font-size: var(--bulma-help-size);*/
 /*}*/
 body{
-    background-color: #3DCCC7 !important;
+    background-color: #a5d5d5 !important;
 }
+
 
 footer {
     border-top-left-radius: 15px;

@@ -1,31 +1,33 @@
 let villeInput = document.getElementById('ville_ville');
 let lieuxInput = document.getElementById('ville_lieu');
-let updateForm = async (data, url, method) => {
+
+let updateForm = async (url) => {
+
     const response = await fetch(url, {
-        method: method,
-        data: data,
+        method: "GET",
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'charset': 'utf-8'
+            "Content-Type": "application/json",
+            "charset": "utf-8"
         }
     });
-    return await response.text();
-};
+    console.log(response);
 
-const parseTextToHtml = (text) => {
-    const parser = new DOMParser();
-    const html = parser.parseFromString(text, 'text/html');
+    return await response.json();
 
-    return html;
 };
 
 const changeOptions = async (event) => {
+    let villeId = event.target.value;
+    let url = `/ville=${villeId}`;
+    let lieux = await updateForm(url);
 
-    const requestBody = '/ville=' + event.target.value;
-    const updateFormResponse = await updateForm(requestBody, villeInput.getAttribute('action'), villeInput.getAttribute('method'));
-    const html = parseTextToHtml(updateFormResponse);
-
-    const newLieuxInput = html.getElementById('lieu_nom');
-    lieuxInput.innerHTML = newLieuxInput.innerHTML;
+    lieuxInput.innerHTML = "";
+    lieux.forEach(lieu => {
+        let option = document.createElement("option");
+        option.value = lieu.id;
+        option.textContent = lieu.nom;
+        lieuxInput.appendChild(option);
+    });
 };
-villeInput.addEventListener('change', (event) => changeOptions(event));
+
+villeInput.addEventListener("change", changeOptions);

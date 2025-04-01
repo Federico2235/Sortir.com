@@ -7,63 +7,68 @@
         <!-- Titre principal de la page -->
         <div class="columns is-centered">
             <div class="column is-8">
-                <div class="box">
-                    <h2 class="title is-3 has-text-centered">Bienvenue sur la page d'accueil</h2>
+                <div class="">
+                    <h2 class="title is-3 has-text-centered">Liste des participants</h2>
                     <p class="subtitle is-6 has-text-centered">
-                        Retrouvez ici toutes les sorties disponibles et filtrez-les selon vos préférences.
+                        Retrouvez ici tous les utilisateurs inscrits
                     </p>
                 </div>
             </div>
         </div>
 
-
-        <!-- Colonne de droite : tableau des sorties -->
-        <div class="column is-8">
-            <div class="box mb-0">
-                <!-- .table-container pour gérer le débordement horizontal sur mobile -->
-                <div class="table-container">
-                    <table class="table is-fullwidth is-striped is-hoverable ">
-                        <thead>
-                        <tr>
-                            <th>Pseudo du participant</th>
-                            <th>Mail du participant</th>
-                            <th>Nom et prenom du participant</th>
-                            <th>Role</th>
-                            <th>Telephone</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for participant in participants %}
-                        <tr>
-                            <td>{{ participant.pseudo }}</td>
-                            <td>{{ participant.mail }}</td>
-                            <td>{{ participant.nom }} {{ participant.prenom }}</td>
-                            <td>{{ participant.roles|join(', ') }}</td>
-                            <td>{{ participant.telephone }}</td>
-                            {% if participant.actif == 1 %}
-                           <td> <form action="{{ path('app_desactiver', {'id': participant.id}) }}" method="POST"
-                                  style="display:inline-block;">
-                                <button class="button is-danger is-small" type="submit">
-                                    Desactiver&nbsp;
-                                </button>
-                            </form></td>
-                            {% endif %}
-                            {% if participant.actif == 0 %}
-                           <td> <form action="{{ path('app_activer', {'id': participant.id}) }}" method="POST"
-                                  style="display:inline-block;">
-                                <button class="button is-success is-small" type="submit">
-                                    Activer&nbsp;
-                                </button>
-                            </form></td>
-                            {% endif%}
-                            <td>
-                                <form action="{{ path('app_supprimer', {'id': participant.id}) }}">
-                                 <button class="button is-danger is-small">Suprimer</button>
-                                </form></td>
-                                {% endfor %}
-                        </tbody>
-                    </table>
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="box mb-0">
+                    <!-- .table-container pour gérer le débordement horizontal sur mobile -->
+                    <div class="table-container">
+                        <table class="table is-fullwidth is-striped is-hoverable ">
+                            <thead>
+                            <tr>
+                                <th>Pseudo du participant</th>
+                                <th>Mail du participant</th>
+                                <th>Nom et prenom du participant</th>
+                                <th>Role</th>
+                                <th>Telephone</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for participant in participants %}
+                            <tr>
+                                <td>{{ participant.pseudo }}</td>
+                                <td>{{ participant.mail }}</td>
+                                <td>{{ participant.nom }} {{ participant.prenom }}</td>
+                                <td>{{ participant.roles|join(', ') }}</td>
+                                <td>{{ participant.telephone }}</td>
+                                <td>
+                                    {% if participant.actif == 1 %}
+                                        <div style="margin-bottom: 5px;">
+                                            <form action="{{ path('app_desactiver', {'id': participant.id}) }}" method="POST">
+                                                <button class="button is-warning is-small" type="submit">
+                                                    Desactiver&nbsp;
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% elseif participant.actif == 0 %}
+                                        <div style="margin-bottom: 5px;">
+                                            <form action="{{ path('app_activer', {'id': participant.id}) }}" method="POST">
+                                                <button class="button is-success is-small" type="submit">
+                                                    &nbsp;&nbsp;&nbsp;Activer&nbsp;&nbsp;&nbsp;
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <form action="{{ path('app_supprimer', {'id': participant.id}) }}">
+                                            <button class="button is-danger is-small">Supprimer&nbsp;</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

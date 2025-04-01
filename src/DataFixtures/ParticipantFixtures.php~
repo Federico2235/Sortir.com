@@ -74,7 +74,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant3->setSite($site3);
         $participant3->setPassword($this->passwordHasher->hashPassword($participant3, 'tatata'));
         $participant3->setPhoto('avatar.jpg');
-        $participant3->setActif(true);
 
         $participant3->setRoles(['ROLE_ADMIN']);
         $manager->persist($participant3);

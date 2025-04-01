@@ -36,7 +36,7 @@ final class SortieController extends AbstractController
         if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
             return $this->redirectToRoute('app_error', ['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
         }
-        // Création du formulaire Sortie
+        // Création du formulaire SortieFixtures
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
         $sortie->setOrganisateur($this->getUser());
@@ -152,7 +152,7 @@ final class SortieController extends AbstractController
         $sortie = $repository->find($id);
 
         if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+            throw $this->createNotFoundException('SortieFixtures non trouvée.');
         }
 
         /** @var Participant|null $user */
@@ -227,7 +227,7 @@ final class SortieController extends AbstractController
         $sortie = $repository->find($id);
 
         if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+            throw $this->createNotFoundException('SortieFixtures non trouvée.');
         }
 
 
@@ -247,7 +247,7 @@ final class SortieController extends AbstractController
         $sortie = $repository->find($id);
 
         if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+            throw $this->createNotFoundException('SortieFixtures non trouvée.');
         }
         $motif = $request->request->get('motif');
 
@@ -268,7 +268,7 @@ final class SortieController extends AbstractController
             $sortie->setInfosSortie($sortie->getInfosSortie() . '<br><span style="color: red; font-weight: bold;">(Annulation!!: ' . $motif . ' par : ' . $user->getNom() . ' ' . $user->getPrenom() . ')</span>');
             $em->flush(); // Mettre à jour les modifications dans la base de données $em
 
-            $this->addFlash('success', 'Sortie annulé.');
+            $this->addFlash('success', 'SortieFixtures annulé.');
             return $this->redirectToRoute('app_main');
 
 
@@ -285,14 +285,14 @@ final class SortieController extends AbstractController
         $sortie = $repository->find($id);
 
         if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+            throw $this->createNotFoundException('SortieFixtures non trouvée.');
         }
 
         $etatPublie = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
         $sortie->setEtat($etatPublie);
         $em->flush(); // Mettre à jour les modifications dans la base de données $em
 
-        $this->addFlash('success', 'Sortie publiée.');
+        $this->addFlash('success', 'SortieFixtures publiée.');
         return $this->redirectToRoute('app_main');
 
 
@@ -303,13 +303,13 @@ final class SortieController extends AbstractController
         $sortie = $repository->find($id);
 
         if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+            throw $this->createNotFoundException('SortieFixtures non trouvée.');
         }
 
         $em->remove($sortie);
         $em->flush(); // Mettre à jour les modifications dans la base de données $em
 
-        $this->addFlash('success', 'Sortie supprimée.');
+        $this->addFlash('success', 'SortieFixtures supprimée.');
         return $this->redirectToRoute('app_main');
 
 

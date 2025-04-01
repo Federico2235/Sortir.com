@@ -200,4 +200,5 @@ fabric.properties
 ### Symfony Patch ###
 /web/css/
 /web/js/
-/public/img/
+/public/img/photos/*
+!/public/img/photos/avatar.jpg

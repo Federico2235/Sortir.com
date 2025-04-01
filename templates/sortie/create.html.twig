@@ -21,12 +21,13 @@
                         <div class="card-content">
                             <div class="content">
                                 {{ form_widget(sortieForm) }}
+                                <a class="button is-link" href="{{ path('app_ajouterLieu') }}">Ajouter lieu</a>
                             </div>
                         </div>
 
                         <!-- Pied de la card -->
                         <footer class="card-footer">
-                            <div class="card-footer-item">
+                            <div class="card-footer-item mt-4">
                                 <button type="submit" class="button is-primary">
                                     Ajouter une sortie !
                                 </button>

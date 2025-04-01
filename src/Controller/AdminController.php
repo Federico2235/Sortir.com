@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
@@ -40,11 +41,12 @@ class AdminController extends AbstractController
                 $participant->setAdministrateur(false);
                 $participant->setRoles(['ROLE_USER']);
             }
+            $participant->setPhoto('avatar.jpg');
 
 
             $entityManager->persist($participant);
 
-                $entityManager->flush();
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_main');
         }
@@ -62,20 +64,23 @@ class AdminController extends AbstractController
             'participants' => $participants,
         ]);
     }
-#[Route('/desactiver/{id}', name: 'app_desactiver')]
-public function desactiver(int $id, EntityManagerInterface $entityManager): Response{
 
-    $participant = $entityManager->getRepository(Participant::class)->find($id);
+    #[Route('/desactiver/{id}', name: 'app_desactiver')]
+    public function desactiver(int $id, EntityManagerInterface $entityManager): Response
+    {
+
+        $participant = $entityManager->getRepository(Participant::class)->find($id);
 
 
-    $participant->setActif(false);
-    $entityManager->flush();
-    return $this->redirectToRoute('app_participants');
+        $participant->setActif(false);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_participants');
 
-}
+    }
 
     #[Route('/activer/{id}', name: 'app_activer')]
-    public function activer(int $id, EntityManagerInterface $entityManager): Response{
+    public function activer(int $id, EntityManagerInterface $entityManager): Response
+    {
 
         $participant = $entityManager->getRepository(Participant::class)->find($id);
 

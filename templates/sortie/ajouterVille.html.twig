@@ -1,0 +1,24 @@
+{% extends 'layouts/layout.html.twig' %}
+{% block title %}Créer une ville !{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-6">
+                    <div class="box">
+                        <h1 class="title">Créer une ville</h1>
+                        {{ form_start(villeForm) }}
+                        <div class="field">
+                            {{ form_widget(villeForm) }}
+                        </div>
+                        <div class="field has-text-centered">
+                            <button type="submit" class="button is-success">Ajouter la ville</button>
+                        </div>
+                        {{ form_end(villeForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

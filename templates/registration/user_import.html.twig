@@ -1,0 +1,48 @@
+{% extends 'layouts/layout.html.twig' %}
+
+{% block title %}Import d'utilisateurs{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <div class="box">
+                    <h1 class="title">Import d'utilisateurs</h1>
+
+                    {{ form_start(form) }}
+                        <div class="field">
+                            {{ form_row(form.csv_file) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(form.plainPassword) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(form.site) }}
+                        </div>
+
+                        <div class="field has-text-centered" style="margin-top: 30px;">
+                            <div class="control">
+                                <button type="submit" class="button is-primary">Importer</button>
+                            </div>
+                        </div>
+
+                    {{ form_end(form) }}
+
+                    {% if app.flashes is not empty %}
+                        <div class="mt-4">
+                            {% for type, messages in app.flashes %}
+                                {% for message in messages %}
+                                    <div class="notification is-{{ type }}">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -42,22 +42,25 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant->setPseudo('johndoe');
         $participant->setRoles(['ROLE_USER']);
         $participant->setPassword($this->passwordHasher->hashPassword($participant, '123456'));
-
+        $participant->setPhoto('avatar.jpg');
 
         $participant->setSite($site1);
         $manager->persist($participant);
+
 
         $participant2 = new Participant();
         $participant2->setNom('Smith');
         $participant2->setPrenom('Emily');
         $participant2->setTelephone('987654321');
         $participant2->setMail('emilysmith@example.com');
-        $participant2->setAdministrateur(true);
+        $participant2->setAdministrateur(false);
         $participant2->setActif(true);
         $participant2->setPseudo('emilysmith123');
         $participant2->setRoles(['ROLE_USER']);
         $participant2->setSite($site2);
         $participant2->setPassword($this->passwordHasher->hashPassword($participant2, 'lalala'));
+        $participant2->setPhoto('avatar.jpg');
+
         $manager->persist($participant2);
 
 
@@ -71,6 +74,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant3->setPseudo('louis_martin');
         $participant3->setSite($site3);
         $participant3->setPassword($this->passwordHasher->hashPassword($participant3, 'tatata'));
+        $participant3->setPhoto('avatar.jpg');
+        $participant3->setActif(true);
+
         $participant3->setRoles(['ROLE_ADMIN']);
         $manager->persist($participant3);
 

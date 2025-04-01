@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[UniqueEntity(fields: ['pseudo'], message: 'There is already an account with this pseudo')]
@@ -20,15 +21,37 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom est obligatoire")]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Le nom doit faire au moins {{ limit }} caractères",
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères"
+    )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prénom est obligatoire")]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Le prénom doit faire au moins {{ limit }} caractères",
+        maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères"
+    )]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 25)]
+    #[Assert\NotBlank(message: "Le téléphone est obligatoire")]
+    #[Assert\Regex(
+        pattern: "/^[0-9]{10}$/",
+        message: "Le numéro de téléphone doit contenir 10 chiffres"
+    )]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'email est obligatoire")]
+    #[Assert\Email(message: "L'email '{{ value }}' n'est pas valide")]
+    #[Assert\Length(max: 255, maxMessage: "L'email ne peut pas dépasser {{ limit }} caractères")]
     private ?string $mail = null;
 
     #[ORM\Column]
@@ -48,9 +71,33 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
     private ?Site $site = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le pseudo est obligatoire")]
+    #[Assert\Length(
+        min: 4,
+        max: 255,
+        minMessage: "Le pseudo doit faire au moins {{ limit }} caractères",
+        maxMessage: "Le pseudo ne peut pas dépasser {{ limit }} caractères"
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-Z0-9_]+$/",
+        message: "Le pseudo ne peut contenir que des lettres, chiffres et underscores"
+    )]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le mot de passe est obligatoire", groups: ["registration"])]
+    #[Assert\Length(
+        min: 8,
+        max: 255,
+        minMessage: "Le mot de passe doit faire au moins {{ limit }} caractères",
+        maxMessage: "Le mot de passe ne peut pas dépasser {{ limit }} caractères",
+        groups: ["registration"]
+    )]
+    #[Assert\Regex(
+        pattern: "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/",
+        message: "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial",
+        groups: ["registration"]
+    )]
     private ?string $password = null;
 
     #[ORM\Column(type: Types::ARRAY)]

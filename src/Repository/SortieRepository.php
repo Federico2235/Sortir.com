@@ -42,7 +42,6 @@ class SortieRepository extends ServiceEntityRepository
     //    }
     public function save(Sortie $sortie, bool $flush = true): void
     {
-        dump("test");
         $em = $this->getEntityManager();
 
         $em->persist($sortie);

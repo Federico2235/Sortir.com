@@ -35,48 +35,8 @@ final class MainController extends AbstractController
         Security         $security,
     ): Response
     {
-        // Récupération des sorties
-        $sorties = $sortieRepository->findAll();
-
-        // Vérification du status de la sortie (Créée, Ouverte, Cloturée, Activité en cours, Passée, Annulée)
-        foreach ($sorties as $sortie) {
-            $etat = $sortie->getEtat();
-            $now = new DateTimeImmutable('now');
-
-            $dateLimite =  $sortie->getDateLimiteInscription();
-            $dateDebut =  $sortie->getDateHeureDebut();
-            $dateFin =  $dateDebut->modify("+{$sortie->getDuree()} minutes");
-            $dateHistorisation = $dateFin->modify('+30 days');
-            dump("DateLimite : " . $dateLimite->format('Y-m-d H:i:s'));
-            dump("DateActuel : " . $now->format('Y-m-d H:i:s'));
-            dump("DateDebut : " . $dateDebut->format('Y-m-d H:i:s'));
-            dump("DateFin : " . $dateFin->format('Y-m-d H:i:s'));
-            dump("DateHistorisation : " . $dateHistorisation->format('Y-m-d H:i:s'));
-
-
-            if ($dateLimite < $now && $now < $dateDebut) {
-                dump("Cloturée");
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Cloturée']));
-            }
-            if ($dateDebut < $now && $now < $dateFin) {
-                dump("Activité en cours");
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Activité en cours']));
-            }
-            if ($dateFin < $now && $now < $dateHistorisation) {
-                dump("Passée");
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Terminée']));
-            }
-            if ($dateHistorisation < $now) {
-                dump("Historisée");
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Historisée']));
-            }
-
-            if ($sortie->getEtat()->getLibelle() !== $etat->getLibelle()) {
-                $sortieRepository->save($sortie, true);
-
-            }
-
-        }
+        // Méthode de mise à jour des états des sorties
+        $this->updateEtats($sortieRepository, $etatRepository);
 
         // Appel du fomulaire de filtres
         $filterForm = $this->createForm(SortieFilterType::class);
@@ -255,6 +215,40 @@ final class MainController extends AbstractController
         return $this->render('main/error.html.twig', [
             'message' => $message
         ]);
+    }
+
+    private function updateEtats(SortieRepository $sortieRepository, EtatRepository $etatRepository): void
+    {
+        // Récupération des sorties
+        $sorties = $sortieRepository->findAll();
+
+        // Vérification du status de la sortie (Créée, Ouverte, Cloturée, Activité en cours, Passée, Annulée)
+        foreach ($sorties as $sortie) {
+            $etat = $sortie->getEtat();
+            $now = new DateTimeImmutable('now');
+
+            $dateLimite =  $sortie->getDateLimiteInscription();
+            $dateDebut =  $sortie->getDateHeureDebut();
+            $dateFin =  $dateDebut->modify("+{$sortie->getDuree()} minutes");
+            $dateHistorisation = $dateFin->modify('+30 days');
+
+            if ($dateLimite < $now && $now < $dateDebut) {
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Cloturée']));
+            }
+            if ($dateDebut < $now && $now < $dateFin) {
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Activité en cours']));
+            }
+            if ($dateFin < $now && $now < $dateHistorisation) {
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Terminée']));
+            }
+            if ($dateHistorisation < $now) {
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Historisée']));
+            }
+
+            if ($sortie->getEtat()->getLibelle() !== $etat->getLibelle()) {
+                $sortieRepository->save($sortie, true);
+            }
+        }
     }
 
 

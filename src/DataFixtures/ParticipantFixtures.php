@@ -16,6 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
     {
         $this->passwordHasher = $passwordHasher;
     }
+
     public function load(ObjectManager $manager): void
     {
         $site1 = new Site();
@@ -55,10 +56,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant2->setActif(true);
         $participant2->setPseudo('emilysmith123');
         $participant2->setRoles(['ROLE_USER']);
-     $participant2->setSite($site2);
-     $participant2->setPassword($this->passwordHasher->hashPassword($participant2, 'lalala'));
-     $manager->persist($participant2);
-
+        $participant2->setSite($site2);
+        $participant2->setPassword($this->passwordHasher->hashPassword($participant2, 'lalala'));
+        $manager->persist($participant2);
 
 
         $participant3 = new Participant();
@@ -71,12 +71,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant3->setPseudo('louis_martin');
         $participant3->setSite($site3);
         $participant3->setPassword($this->passwordHasher->hashPassword($participant3, 'tatata'));
-       $participant3->setRoles(['ROLE_ADMIN']);
+        $participant3->setRoles(['ROLE_ADMIN']);
         $manager->persist($participant3);
-
-
-
-
 
 
         $manager->flush();

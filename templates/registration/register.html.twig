@@ -1,29 +1,51 @@
-
-
-
 {% extends 'layouts/layout.html.twig' %}
 
 {% block title %}Register{% endblock %}
 
 {% block content %}
-    <h1>Register</h1>
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <h1 class="title">Register</h1>
+                <div class="box">
+                    {{ form_start(registrationForm) }}
+                        <div class="field">
+                            {{ form_row(registrationForm.pseudo) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(registrationForm.nom) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(registrationForm.prenom) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(registrationForm.mail) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(registrationForm.telephone) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(registrationForm.site) }}
+                        </div>
+                         <div class="field">
+                            {{ form_row(registrationForm.plainPassword, { label: 'Password' }) }}
+                        </div>
+                        <div class="field">
+                            {{ form_row(registrationForm.administrateur) }}
+                        </div>
 
-
-
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.pseudo) }}
-    {{ form_row(registrationForm.nom) }}
-    {{ form_row(registrationForm.prenom) }}
-{{ form_row(registrationForm.mail) }}
-    {{ form_row(registrationForm.telephone) }}
-    {{ form_row(registrationForm.site) }}
-
-
-{#        {{ form_row(registrationForm.agreeTerms) }}#}
-    {{ form_row(registrationForm.plainPassword, {
-        label: 'Password'
-    }) }}
-    {{ form_row(registrationForm.administrateur) }}
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+                        <footer class="card-footer">
+                            <div class="card-footer-item mt-4">
+                             <button type="submit" class="button is-primary">
+                                  Ajouter une sortie !
+                             </button>
+                             </div>
+                        </footer>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

@@ -34,22 +34,10 @@ final class SortieController extends AbstractController
         if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
             return $this->redirectToRoute('app_error', ['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
         }
-        // Création du formulaire Ville
-        $ville = new Ville();
-        $villeForm = $this->createForm(VilleType::class, $ville);
-        $villeForm->handleRequest($request);
-
-        // Création du formulaire Lieu
-        $lieu = new Lieu();
-        $lieu->setVille($ville);
-        $lieuForm = $this->createForm(LieuType::class, $lieu);
-        $lieuForm->handleRequest($request);
-
         // Création du formulaire Sortie
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
         $sortie->setOrganisateur($this->getUser());
-        $sortie->setLieu($lieu);
         $sortie->setSite($sortie->getOrganisateur()->getSite());
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
@@ -61,16 +49,9 @@ final class SortieController extends AbstractController
         // Vérification des formulaires
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-                $em->persist($ville);
-            }
-            if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-                $em->persist($lieu);
-            }
             if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
                 $em->persist($sortie);
                 $em->flush();
-
                 $this->addFlash('success', 'Votre sortie a été créée !');
                 return $this->redirect('/');
             }
@@ -78,8 +59,6 @@ final class SortieController extends AbstractController
         return $this->render('sortie/create.html.twig', [
             'form' => $form->createView(),
             'sortieForm' => $sortieForm->createView(),
-            'lieuForm' => $lieuForm->createView(),
-            'villeForm' => $villeForm->createView(),
         ]);
     }
 

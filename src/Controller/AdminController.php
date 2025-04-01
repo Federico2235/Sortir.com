@@ -41,6 +41,7 @@ class AdminController extends AbstractController
                 $participant->setAdministrateur(false);
                 $participant->setRoles(['ROLE_USER']);
             }
+            $participant->setPhoto('avatar.jpg');
 
 
             $entityManager->persist($participant);

@@ -19,9 +19,12 @@ class UserImportController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('csv_file')->getData();
+            $plainPassword = $form->get('plainPassword')->getData();
+            $site = $form->get('site')->getData()->getId();
+
 
             try {
-                $result = $importer->import($file);
+                $result = $importer->import($file, $plainPassword, $site);
                 $this->addFlash('success', sprintf('%d utilisateurs importés avec succès !', $result['success']));
 
                 if (!empty($result['errors'])) {
@@ -34,7 +37,7 @@ class UserImportController extends AbstractController
             return $this->redirectToRoute('app_user_import');
         }
 
-        return $this->render('registration\user_import.html.twig', [
+        return $this->render('registration/user_import.html.twig', [
             'form' => $form->createView(),
         ]);
     }

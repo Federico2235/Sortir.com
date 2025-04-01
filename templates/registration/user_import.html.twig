@@ -8,7 +8,19 @@
 
     {{ form_start(form) }}
     {{ form_row(form.csv_file) }}
+    {{ form_row(form.plainPassword) }}
+    {{ form_row(form.site) }}
 
     <button type="submit" class="btn btn-primary">Importer</button>
     {{ form_end(form) }}
+
+    {% if app.flashes is not empty %}
+        <div class="mt-4">
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

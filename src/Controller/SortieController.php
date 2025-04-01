@@ -119,6 +119,26 @@ final class SortieController extends AbstractController
 
     }
 
+    #[Route ('/ajouterVille', name: 'app_ajouterVille', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function ajouterVille(
+        Request          $request,
+        EntityManagerInterface $em,
+    ): Response
+    {
+        $ville = new Ville();
+        $villeForm = $this->createForm(VilleType::class, $ville);
+        $villeForm->handleRequest($request);
+        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
+            $em->persist($ville);
+            $em->flush();
+            return $this->redirectToRoute('app_ajouterLieu');
+
+        }
+        return $this->render('sortie/ajouterVille.html.twig', [
+            'villeForm' => $villeForm
+        ]) ;
+    }
+
 
 
     #[Route('/inscription/{id}', name: 'inscription', requirements: ['id' => '\d+'], methods: ['POST'])]

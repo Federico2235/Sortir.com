@@ -12,7 +12,7 @@
             <div class="column">
                 {{ form_start(lieuForm) }}
                 {{ form_widget(lieuForm) }}
-                <a href="">Ajouter une ville</a>
+                <a href="{{ path('app_ajouterVille') }}">Ajouter une ville</a>
                 <div id="map" style="height: 400px;"></div>
                 <button type="submit" class="button is-primary">Ajouter le lieu</button>
                 {{ form_end(lieuForm) }}

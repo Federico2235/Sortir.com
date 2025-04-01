@@ -103,17 +103,17 @@ final class SortieController extends AbstractController
     ): Response
     {
         $lieu = new Lieu();
-        $form = $this->createForm(LieuType::class, $lieu);
-        $form->handleRequest($request);
+        $lieuForm = $this->createForm(LieuType::class, $lieu);
+        $lieuForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
             $em->persist($lieu);
             $em->flush();
             return $this->redirectToRoute('app_createSortie');
         }
 
         return $this->render('sortie/ajouterLieu.html.twig', [
-            'form' => $form
+            'lieuForm' => $lieuForm
         ]);
 
 

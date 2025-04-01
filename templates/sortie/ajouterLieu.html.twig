@@ -6,7 +6,45 @@
         <div class="columns is-variable is-5 is-align-items-flex-start">
             <div class="column">
                 <h1 class="title">Créer un lieu</h1>
-                <div class="field">
+            </div>
+        </div>
+        <div class="columns is-variable is-5 is-align-items-flex-start">
+            <div class="column">
+                {{ form_start(lieuForm) }}
+                {{ form_widget(lieuForm) }}
+                <a href="">Ajouter une ville</a>
+                <div id="map" style="height: 400px;"></div>
+                <button type="submit" class="button is-primary">Ajouter le lieu</button>
+                {{ form_end(lieuForm) }}
+            </div>
+        </div>
+    </div>
+    <script>
 
 
+        var map = L.map('map').setView([48.1173, -1.6778], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([48.11198, -1.67429], {draggable: true}).addTo(map);
+
+        function updateLatLng(lat, lng) {
+            document.getElementById("lieu_latitude").value = lat;
+            document.getElementById("lieu_longitude").value = lng;
+        }
+
+        marker.on('dragend', function (event) {
+            var position = marker.getLatLng();
+            console.log("Marker movido:", position.lat, position.lng);
+            updateLatLng(position.lat, position.lng);
+        });
+        map.on('click', function (event) {
+            marker.setLatLng(event.latlng);
+            updateLatLng(event.latlng.lat, event.latlng.lng);
+        });
+
+    </script>
+{% endblock %}
 

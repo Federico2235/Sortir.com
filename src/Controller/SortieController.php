@@ -23,9 +23,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class SortieController extends AbstractController
 {
+
+    #[IsGranted('ROLE_USER')]
     #[Route('/create', name: 'app_createSortie', methods: ['GET', 'POST'])]
     public function createSortie(
         Request                $request,
@@ -97,6 +100,7 @@ final class SortieController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/ajouterLieu', name: 'app_ajouterLieu', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function ajouterLieu(
         Request          $request,
@@ -120,6 +124,8 @@ final class SortieController extends AbstractController
 
     }
 
+
+    #[IsGranted('ROLE_USER')]
     #[Route ('/ajouterVille', name: 'app_ajouterVille', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function ajouterVille(
         Request          $request,
@@ -221,6 +227,7 @@ final class SortieController extends AbstractController
     }
 
 
+    #[isGranted('ROLE_ADMIN')]
     #[Route('/annulation/{id}', name: 'annulation_confirm', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function confirmAnnulation(int $id, SortieRepository $repository): Response
     {
@@ -237,6 +244,7 @@ final class SortieController extends AbstractController
     }
 
 
+    #[isGranted('ROLE_ADMIN')]
     #[Route('/annulation/{id}', name: 'annulation', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function annulation(
         int                    $id,
@@ -297,6 +305,7 @@ final class SortieController extends AbstractController
 
 
     }
+    #[isGranted('ROLE_ADMIN')]
     #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','GET'])]
     public function delete(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
     {

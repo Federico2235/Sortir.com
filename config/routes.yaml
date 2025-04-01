@@ -3,3 +3,7 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+# config/routes.yaml
+app_user_import:
+    path: /admin/import-users
+    controller: App\Controller\UserImportController::import

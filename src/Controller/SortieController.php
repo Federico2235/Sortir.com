@@ -17,6 +17,7 @@ use App\Repository\SortieRepository;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -292,6 +293,23 @@ final class SortieController extends AbstractController
         $em->flush(); // Mettre à jour les modifications dans la base de données $em
 
         $this->addFlash('success', 'Sortie publiée.');
+        return $this->redirectToRoute('app_main');
+
+
+    }
+    #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','GET'])]
+    public function delete(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
+    {
+        $sortie = $repository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
+
+        $em->remove($sortie);
+        $em->flush(); // Mettre à jour les modifications dans la base de données $em
+
+        $this->addFlash('success', 'Sortie supprimée.');
         return $this->redirectToRoute('app_main');
 
 

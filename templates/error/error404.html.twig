@@ -1,0 +1,21 @@
+{% extends 'layouts/layout.html.twig' %}
+
+{% block title %}Erreur 404 - Page non trouvée{% endblock %}
+
+{% block content %}
+    <section class="hero is-fullheight is-danger">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-size-1">404</h1>
+                <h2 class="subtitle is-size-3">Oups, la page que vous recherchez n'existe pas !</h2>
+                <p class="is-size-5">
+                    Nous sommes désolés, mais il semble que la page ait été déplacée ou supprimée.
+                </p>
+                <br>
+                <a href="{{ path('homepage') }}" class="button is-light is-large">
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

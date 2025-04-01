@@ -129,6 +129,7 @@ final class MainController extends AbstractController
     }
 
 
+    #[isGranted ('ROLE_USER')]
     #[Route('/profil/edit', name: 'app_profil_edit')]
 
     public function modifierProfil(

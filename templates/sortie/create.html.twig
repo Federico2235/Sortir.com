@@ -40,15 +40,17 @@
         </div>
     </section>
 
+    <!-- Inclure le fichier JavaScript des selecteurs -->
+    <script src="{{ asset('js/villes-lieux-selectors.js') }}"></script>
     <!-- Script pour gérer la date limite en fonction de la date de début -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Utilisez les IDs générés par Symfony
             const dateDebut = document.getElementById('{{ form.dateHeureDebut.vars.id }}');
             const dateLimite = document.getElementById('{{ form.dateLimiteInscription.vars.id }}');
 
             if (dateDebut && dateLimite) {
-                dateDebut.addEventListener('change', function() {
+                dateDebut.addEventListener('change', function () {
                     dateLimite.max = this.value;
                     if (new Date(dateLimite.value) > new Date(this.value)) {
                         dateLimite.value = '';

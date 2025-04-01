@@ -30,7 +30,7 @@ class RegistrationFormType extends AbstractType
             ->add('site', EntityType::class, [
                'class' => Site::class,
                'choice_label' => 'nom',
-               'placeholder' => 'Seleccioner un site de ratachement',
+               'placeholder' => 'Sélectionner un site de rattachement',
            ])
 
 

@@ -16,6 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
     {
         $this->passwordHasher = $passwordHasher;
     }
+
     public function load(ObjectManager $manager): void
     {
         $site1 = new Site();
@@ -41,7 +42,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant->setPseudo('johndoe');
         $participant->setRoles(['ROLE_USER']);
         $participant->setPassword($this->passwordHasher->hashPassword($participant, '123456'));
-
+        $participant->setPhoto('avatar.jpg');
 
         $participant->setSite($site1);
         $manager->persist($participant);
@@ -51,14 +52,15 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant2->setPrenom('Emily');
         $participant2->setTelephone('987654321');
         $participant2->setMail('emilysmith@example.com');
-        $participant2->setAdministrateur(true);
+        $participant2->setAdministrateur(false);
         $participant2->setActif(true);
         $participant2->setPseudo('emilysmith123');
         $participant2->setRoles(['ROLE_USER']);
-     $participant2->setSite($site2);
-     $participant2->setPassword($this->passwordHasher->hashPassword($participant2, 'lalala'));
-     $manager->persist($participant2);
+        $participant2->setSite($site2);
+        $participant2->setPassword($this->passwordHasher->hashPassword($participant2, 'lalala'));
+        $participant2->setPhoto('avatar.jpg');
 
+        $manager->persist($participant2);
 
 
         $participant3 = new Participant();
@@ -66,17 +68,16 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant3->setPrenom('Louis');
         $participant3->setTelephone('555123456');
         $participant3->setMail('louismartin@example.com');
-        $participant3->setAdministrateur(false);
+        $participant3->setAdministrateur(true);
         $participant3->setActif(false);
         $participant3->setPseudo('louis_martin');
         $participant3->setSite($site3);
         $participant3->setPassword($this->passwordHasher->hashPassword($participant3, 'tatata'));
-       $participant3->setRoles(['ROLE_ADMIN']);
+        $participant3->setPhoto('avatar.jpg');
+        $participant3->setActif(true);
+
+        $participant3->setRoles(['ROLE_ADMIN']);
         $manager->persist($participant3);
-
-
-
-
 
 
         $manager->flush();

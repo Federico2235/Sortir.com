@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Participant;
 use App\Form\ParticipantProfileType;
 use App\Form\SortieFilterType;
+use App\Repository\EtatRepository;
 use App\Service\Uploader;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Sortie;
 use App\Repository\SortieRepository;
@@ -21,13 +24,60 @@ use function Symfony\Component\String\s;
 
 final class MainController extends AbstractController
 {
+    /**
+     * @throws \DateMalformedStringException
+     */
     #[Route('/', name: 'app_main')]
     public function index(
         SortieRepository $sortieRepository,
-        Request $request,
-        Security $security,
+        EtatRepository   $etatRepository,
+        Request          $request,
+        Security         $security,
     ): Response
     {
+        // Récupération des sorties
+        $sorties = $sortieRepository->findAll();
+
+        // Vérification du status de la sortie (Créée, Ouverte, Cloturée, Activité en cours, Passée, Annulée)
+        foreach ($sorties as $sortie) {
+            $etat = $sortie->getEtat();
+            $now = new DateTimeImmutable('now');
+
+            $dateLimite =  $sortie->getDateLimiteInscription();
+            $dateDebut =  $sortie->getDateHeureDebut();
+            $dateFin =  $dateDebut->modify("+{$sortie->getDuree()} minutes");
+            $dateHistorisation = $dateFin->modify('+30 days');
+            dump("DateLimite : " . $dateLimite->format('Y-m-d H:i:s'));
+            dump("DateActuel : " . $now->format('Y-m-d H:i:s'));
+            dump("DateDebut : " . $dateDebut->format('Y-m-d H:i:s'));
+            dump("DateFin : " . $dateFin->format('Y-m-d H:i:s'));
+            dump("DateHistorisation : " . $dateHistorisation->format('Y-m-d H:i:s'));
+
+
+            if ($dateLimite < $now && $now < $dateDebut) {
+                dump("Cloturée");
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Cloturée']));
+            }
+            if ($dateDebut < $now && $now < $dateFin) {
+                dump("Activité en cours");
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Activité en cours']));
+            }
+            if ($dateFin < $now && $now < $dateHistorisation) {
+                dump("Passée");
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Terminée']));
+            }
+            if ($dateHistorisation < $now) {
+                dump("Historisée");
+                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Historisée']));
+            }
+
+            if ($sortie->getEtat()->getLibelle() !== $etat->getLibelle()) {
+                $sortieRepository->save($sortie, true);
+
+            }
+
+        }
+
         // Appel du fomulaire de filtres
         $filterForm = $this->createForm(SortieFilterType::class);
         $filterForm->handleRequest($request);
@@ -112,7 +162,6 @@ final class MainController extends AbstractController
     }
 
     #[Route('/profil', name: 'app_profil')]
-
     public function profil(): Response
     {
         return $this->render('main/profil.html.twig', [
@@ -130,7 +179,6 @@ final class MainController extends AbstractController
 
 
     #[Route('/profil/edit', name: 'app_profil_edit')]
-
     public function modifierProfil(
         Request                     $request,
         EntityManagerInterface      $entityManager,
@@ -171,7 +219,7 @@ final class MainController extends AbstractController
              */
             $photo = $form->get('photo')->getData();
 
-           if ($photo !== null) {
+            if ($photo !== null) {
 
                 $oldPhoto = $participant->getPhoto();
                 if ($oldPhoto) {
@@ -208,7 +256,6 @@ final class MainController extends AbstractController
             'message' => $message
         ]);
     }
-
 
 
 }

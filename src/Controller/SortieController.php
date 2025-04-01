@@ -47,6 +47,10 @@ final class SortieController extends AbstractController
         $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
         $sortie->setEtat($etat);
 
+        // Renvoie villes et lieux de la BDD
+        $villes = $em->getRepository(Ville::class)->findAll();
+        $lieux = $em->getRepository(Lieu::class)->findAll();
+
         // Vérification des formulaires
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -60,6 +64,8 @@ final class SortieController extends AbstractController
         return $this->render('sortie/create.html.twig', [
             'form' => $form->createView(),
             'sortieForm' => $sortieForm->createView(),
+            'villes' => $villes,
+            'lieux' => $lieux
         ]);
     }
 

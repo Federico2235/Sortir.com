@@ -97,6 +97,13 @@ class SortieType extends AbstractType
         });
 
         $builder
+            ->add('ville', EntityType::class, [
+                'class' => Ville::class,
+                'choice_label' => 'nom',
+                'placeholder' => 'Sélectionnez un lieu',
+                'attr' => ['class' => 'form-control'],
+                'mapped' => false,
+            ])
             ->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',

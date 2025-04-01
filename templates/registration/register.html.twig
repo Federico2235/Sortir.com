@@ -1,6 +1,3 @@
-
-
-
 {% extends 'layouts/layout.html.twig' %}
 
 {% block title %}Register{% endblock %}
@@ -41,22 +38,24 @@
                             {#        {{ form_row(registrationForm.agreeTerms) }}#}
                         </div>
                         <footer class="card-footer">
-                            <div class="card-footer-item mt-4">
+                            <div class="card-footer-item mt-4 mb-4">
                              <button type="submit" class="button is-primary">
                                   Ajouter une sortie !
                              </button>
                              </div>
                         </footer>
                     {{ form_end(registrationForm) }}
-                    <!-- Ajout d'utilisateurs via fichier CSV -->
-                    <h1>Import d'utilisateurs</h1>
-                    <hr>
+                    <footer class="card-footer">
+                        <!-- Ajout d'utilisateurs via fichier CSV -->
+                        <h2>Import d'utilisateurs</h2>
+                        <hr>
+                        <div class="has-text-centered mt-6 mb-4">
+                            <a href="{{ path('app_user_import') }}" class="button is-link">
+                                Importer des utilisateurs via CSV
+                            </a>
+                        </div>
+                    </footer>
 
-                    <div class="text-center">
-                        <a href="{{ path('app_user_import') }}" class="btn btn-secondary">
-                            Importer des utilisateurs via CSV
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

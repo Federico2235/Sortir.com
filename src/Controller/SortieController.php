@@ -17,6 +17,7 @@ use App\Repository\SortieRepository;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,6 +95,51 @@ final class SortieController extends AbstractController
             'sortie' => $sortie
         ]);
     }
+
+    #[Route('/ajouterLieu', name: 'app_ajouterLieu', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function ajouterLieu(
+        Request          $request,
+        EntityManagerInterface $em,
+    ): Response
+    {
+        $lieu = new Lieu();
+        $lieuForm = $this->createForm(LieuType::class, $lieu);
+        $lieuForm->handleRequest($request);
+
+        if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
+            $em->persist($lieu);
+            $em->flush();
+            return $this->redirectToRoute('app_createSortie');
+        }
+
+        return $this->render('sortie/ajouterLieu.html.twig', [
+            'lieuForm' => $lieuForm
+        ]);
+
+
+    }
+
+    #[Route ('/ajouterVille', name: 'app_ajouterVille', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function ajouterVille(
+        Request          $request,
+        EntityManagerInterface $em,
+    ): Response
+    {
+        $ville = new Ville();
+        $villeForm = $this->createForm(VilleType::class, $ville);
+        $villeForm->handleRequest($request);
+        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
+            $em->persist($ville);
+            $em->flush();
+            return $this->redirectToRoute('app_ajouterLieu');
+
+        }
+        return $this->render('sortie/ajouterVille.html.twig', [
+            'villeForm' => $villeForm
+        ]) ;
+    }
+
+
 
     #[Route('/inscription/{id}', name: 'inscription', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function inscription(

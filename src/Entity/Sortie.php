@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
@@ -16,18 +17,50 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @Assert\NotBlank(message="Le nom de la sortie est obligatoire")
+     * @Assert\Length(
+     *      min=5,
+     *      max=100,
+     *      minMessage="Le nom doit faire au moins {{ limit }} caractères",
+     *      maxMessage="Le nom ne peut pas dépasser {{ limit }} caractères"
+     * )
+     */
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
+    /**
+     * @Assert\NotBlank(message="La date de début est obligatoire")
+     * @Assert\GreaterThan(
+     *      "today",
+     *      message="La date de début doit être dans le futur"
+     * )
+     */
     #[ORM\Column]
     private ?\DateTimeImmutable $dateHeureDebut = null;
 
     #[ORM\Column]
     private ?int $duree = null;
 
+     /**
+     * @Assert\NotBlank(message="La date limite est obligatoire")
+     * @Assert\LessThan(
+     *      propertyPath="dateHeureDebut",
+     *      message="La date limite doit être avant la date de début"
+     * )
+     * @Assert\GreaterThan(
+     *      "today",
+     *      message="La date limite doit être dans le futur"
+     * )
+     */
     #[ORM\Column]
     private ?\DateTimeImmutable $dateLimiteInscription = null;
 
+
+    /**
+     * @Assert\Positive(message="Le nombre de places doit être positif")
+     * @Assert\NotBlank(message="Le nombre de places est obligatoire")
+     */
     #[ORM\Column]
     private ?int $nbInscriptionsMax = null;
 

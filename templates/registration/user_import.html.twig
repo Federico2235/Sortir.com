@@ -1,0 +1,14 @@
+{# templates/user/import.html.twig #}
+{% extends 'layouts/layout.html.twig' %}
+
+{% block title %}Import d'utilisateurs{% endblock %}
+
+{% block content %}
+    <h1>Import d'utilisateurs</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.csv_file) }}
+
+    <button type="submit" class="btn btn-primary">Importer</button>
+    {{ form_end(form) }}
+{% endblock %}

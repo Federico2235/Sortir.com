@@ -26,4 +26,15 @@
     {{ form_row(registrationForm.administrateur) }}
         <button type="submit" class="btn">Register</button>
     {{ form_end(registrationForm) }}
+    <!-- Ajout d'utilisateurs via fichier CSV -->
+    <h1>Import d'utilisateurs</h1>
+    <hr>
+
+    <div class="text-center">
+        <a href="{{ path('app_user_import') }}" class="btn btn-secondary">
+            Importer des utilisateurs via CSV
+        </a>
+    </div>
+
+
 {% endblock %}

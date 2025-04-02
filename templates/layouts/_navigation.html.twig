@@ -1,31 +1,62 @@
-<nav class="fixed top-0 left-0 right-0 z-50">
-{#      {% if admin %}#}
-{#        <li class="nav-item">#}
-{#            <a class="nav-link" href="#">Villes</a>#}
-{#        </li>#}
-{#        <li class="nav-item">#}
-{#            <a class="nav-link" href="#">Sites</a>#}
-{#        </li>#}
-{#    {% endif %}#}
-    <ul class="flex justify-center space-x-6 p-4 bg-teal-700 bg-opacity-60 backdrop-blur-md shadow-lg">
+<nav class="fixed top-0 left-0 right-0 z-50" x-data="{ open: false }">
+    <!-- Conteneur principal en flex centré -->
+    <div class="bg-teal-700 bg-opacity-60 backdrop-blur-md shadow-lg flex items-center justify-center p-5 relative">
+        <!-- Logo (affiché en desktop à gauche et centré en mobile) -->
+        <div class="absolute left-4 hidden md:block">
+            <img src="{{ asset('img/logo/full-logo-blanc.svg') }}" alt="logo" class="h-8 w-auto">
+        </div>
+        <!-- Logo centré pour mobile uniquement -->
+        <div class="md:hidden">
+            <img src="{{ asset('img/logo/full-logo-blanc.svg') }}" alt="logo" class="h-8 w-auto">
+        </div>
 
-        <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="/">Accueil</a></li>
-        {% if is_granted('ROLE_ADMIN') %}
-            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_register') }}">Inscription
-                    utilisateur</a></li>
-            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_participants') }}">Gestion
-                    des participants</a></li>
-        {% endif %}
-        {% if app.user %}
-            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_profil') }}">Mon
-                    profil</a></li>
-            <li class="hidden md:flex"><a class="text-gray-200 hover:text-teal-800 transition-colors"
-                                          href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
-            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_logout') }}">Se
-                    déconnecter</a></li>
-        {% else %}
-            <li><a class="text-gray-200 hover:text-teal-800 transition-colors" href="{{ path('app_login') }}">Se
-                    connecter</a></li>
-        {% endif %}
-    </ul>
+        <!-- Liens de navigation centrés (affichés en desktop) -->
+        <ul class="hidden md:flex space-x-6 text-gray-200">
+            <li><a class="hover:text-teal-800 transition-colors" href="/">Accueil</a></li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_register') }}">Inscription utilisateur</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_participants') }}">Gestion des participants</a></li>
+            {% endif %}
+            {% if app.user %}
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+            {% else %}
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
+            {% endif %}
+        </ul>
+
+        <!-- Bouton burger (affiché uniquement en mobile), positionné à droite -->
+        <button @click="open = !open"
+                class="md:hidden absolute right-4 text-gray-200 hover:text-teal-800 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="2"
+                 stroke="currentColor"
+                 class="w-6 h-6">
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3.75 5.25h16.5m-16.5 7.5h16.5m-16.5 7.5h16.5" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Menu mobile -->
+    <div class="md:hidden" x-show="open" @click.outside="open = false" x-cloak>
+        <ul class="bg-teal-700 bg-opacity-90 backdrop-blur-md shadow-lg flex flex-col items-center space-y-4 py-4 text-gray-200">
+            <li><a class="hover:text-teal-800 transition-colors" href="/">Accueil</a></li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_register') }}">Inscription utilisateur</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_participants') }}">Gestion des participants</a></li>
+            {% endif %}
+            {% if app.user %}
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+            {% else %}
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_login') }}">Se connecter</a></li>
+            {% endif %}
+        </ul>
+    </div>
 </nav>

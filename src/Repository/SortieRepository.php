@@ -40,4 +40,14 @@ class SortieRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function save(Sortie $sortie, bool $flush = true): void
+    {
+        $em = $this->getEntityManager();
+
+        $em->persist($sortie);
+
+        if ($flush) {
+            $em->flush();
+        }
+    }
 }

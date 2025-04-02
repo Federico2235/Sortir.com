@@ -47,6 +47,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant->setSite($site1);
         $manager->persist($participant);
 
+
         $participant2 = new Participant();
         $participant2->setNom('Smith');
         $participant2->setPrenom('Emily');
@@ -68,7 +69,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
         $participant3->setPrenom('Louis');
         $participant3->setTelephone('555123456');
         $participant3->setMail('louismartin@example.com');
-        $participant3->setAdministrateur(true);
+        $participant3->setAdministrateur(false);
         $participant3->setActif(false);
         $participant3->setPseudo('louis_martin');
         $participant3->setSite($site3);

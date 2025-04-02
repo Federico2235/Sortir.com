@@ -227,7 +227,7 @@ final class SortieController extends AbstractController
     }
 
 
-    #[isGranted('ROLE_ADMIN')]
+    #[isGranted('ROLE_USER')]
     #[Route('/annulation/{id}', name: 'annulation_confirm', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function confirmAnnulation(int $id, SortieRepository $repository): Response
     {
@@ -244,7 +244,7 @@ final class SortieController extends AbstractController
     }
 
 
-    #[isGranted('ROLE_ADMIN')]
+    #[isGranted('ROLE_USER')]
     #[Route('/annulation/{id}', name: 'annulation', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function annulation(
         int                    $id,

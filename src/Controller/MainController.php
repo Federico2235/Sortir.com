@@ -127,7 +127,7 @@ final class MainController extends AbstractController
 
                 $oldPhoto = $participant->getPhoto();
                 if ($oldPhoto) {
-                    $uploader->delete($oldPhoto, $this->getParameter('participant_photo_dir')); // Elimina el archivo viejo
+                    $uploader->delete($oldPhoto, $this->getParameter('participant_photo_dir'));
                 }
 
 

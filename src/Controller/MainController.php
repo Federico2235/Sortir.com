@@ -36,7 +36,6 @@ final class MainController extends AbstractController
     #[Route('/', name: 'app_main')]
     public function index(
         SortieRepository $sortieRepository,
-        EtatRepository   $etatRepository,
         Request          $request,
         Security         $security,
     ): Response

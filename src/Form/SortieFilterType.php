@@ -68,9 +68,9 @@ class SortieFilterType extends AbstractType
                 'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
             ])
             // Checkpoint Anciennes sortie
-            ->add('passee', CheckboxType::class, [
+            ->add('terminee', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Sorties passées',
+                'label' => 'Sorties terminées',
             ])
             // Bouton de Validation des filtres
 //            ->add('submit', SubmitType::class, [

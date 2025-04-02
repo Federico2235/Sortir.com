@@ -94,7 +94,7 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         //// Checkpoint les Sorties sont passées
-        if (!empty($filters['passee'])) {
+        if (!empty($filters['terminee'])) {
             $qb->andWhere('s.dateHeureDebut < :now')
                 ->setParameter('now', new \DateTime());
         }
@@ -118,16 +118,17 @@ class SortieRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s')
             ->leftJoin('s.etat', 'e')
+            ->leftJoin('s.site', 'site')
             ->where('e.libelle IN (:etats)')
+
             ->orWhere('s.dateLimiteInscription < :now')
             ->orWhere('s.dateHeureDebut < :now')
             ->orWhere('DATE_ADD(s.dateHeureDebut, s.duree, \'minute\') < :now')
             ->orWhere('DATE_ADD(DATE_ADD(s.dateHeureDebut, s.duree, \'minute\'), 30, \'day\') < :now')
-            ->setParameter('now', $now)
-            ->setParameter('etats', ['Cloturée', 'Activité en cours', 'Terminée', 'Historisée'])
-            ->getQuery()
-            ->getResult();
 
-        return $qb;
+            ->setParameter('now', $now)
+            ->setParameter('etats', ['Cloturée', 'Activité en cours', 'Terminée', 'Historisée']);
+
+        return $qb->getQuery()->getResult();
     }
 }

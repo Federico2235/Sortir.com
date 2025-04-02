@@ -10,7 +10,8 @@ villeInput.addEventListener('change', function () {
     option.disabled = true;
     option.defaultSelected = true;
     lieuInput.appendChild(option);
-    fetch('/villes/' + villeInput.value + '/lieux')
+    let url = '{{ path ("app_ville_lieux", {"id": villeInput.value}) }}';
+    fetch(url)
         .then(response => response.json())
         .then(lieux => {
             lieux.forEach(lieu => {

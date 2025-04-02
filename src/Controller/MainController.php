@@ -226,27 +226,32 @@ final class MainController extends AbstractController
         // Vérification du status de la sortie (Créée, Ouverte, Cloturée, Activité en cours, Passée, Annulée)
         foreach ($sorties as $sortie) {
             $etat = $sortie->getEtat();
-            $now = new DateTimeImmutable('now');
 
-            $dateLimite =  $sortie->getDateLimiteInscription();
-            $dateDebut =  $sortie->getDateHeureDebut();
-            $dateFin =  $dateDebut->modify("+{$sortie->getDuree()} minutes");
+            // Définition des dates
+            $now = new DateTimeImmutable('now');
+            $dateLimite = $sortie->getDateLimiteInscription();
+            $dateDebut = $sortie->getDateHeureDebut();
+            $dateFin = $dateDebut->modify("+{$sortie->getDuree()} minutes");
             $dateHistorisation = $dateFin->modify('+30 days');
 
-            if ($dateLimite < $now && $now < $dateDebut) {
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Cloturée']));
+
+            if ($etat->getLibelle() !== 'Annulée' && $etat->getLibelle() !== 'Créée') {
+                if ($dateLimite < $now && $now < $dateDebut) {
+                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Cloturée']));
+                }
+                if ($dateDebut < $now && $now < $dateFin) {
+                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Activité en cours']));
+                }
+                if ($dateFin < $now && $now < $dateHistorisation) {
+                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Terminée']));
+                }
             }
-            if ($dateDebut < $now && $now < $dateFin) {
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Activité en cours']));
-            }
-            if ($dateFin < $now && $now < $dateHistorisation) {
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Terminée']));
-            }
+
             if ($dateHistorisation < $now) {
                 $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Historisée']));
             }
 
-            if ($sortie->getEtat()->getLibelle() !== $etat->getLibelle()) {
+            if ($sortie->getEtat() !== $etat) {
                 $sortieRepository->save($sortie, true);
             }
         }

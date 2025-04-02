@@ -1,32 +1,8 @@
-/*:root {*/
-/*    --bulma-footer-background-color: #1a1a1a; !* Exemple : gris très foncé *!*/
-/*    --bulma-footer-color: #f5f5f5;             !* Exemple : texte clair *!*/
-/*    --bulma-footer-padding: 1.5rem;              !* Exemple : 2rem de padding *!*/
-/*}*/
 
 
-/*footer {*/
-/*    background-color: var(--bulma-footer-background-color);*/
-/*    color: var(--bulma-footer-color);*/
-/*    padding: var(--bulma-footer-padding);*/
-/*}*/
 
-/*form {*/
-/*    border-radius: var(--bulma-control-radius),*/
-/*    var(--bulma-control-radius-small);*/
-/*    border-width: var(--bulma-control-border-width);*/
-/*    border-color: var(--bulma-control-size);*/
-/*    height: var(--bulma-control-height);*/
-/*    line-height: var(--bulma-control-line-height);*/
-/*    padding: var(--bulma-control-padding-horizontal),*/
-/*    var(--bulma-control-padding-vertical);*/
-/*    box-shadow: var(--bulma-control-focus-shadow-l);*/
-/*    color: var(--bulma-label-color);*/
-/*    font-weight: var(--bulma-label-weight);*/
-/*    font-size: var(--bulma-help-size);*/
-/*}*/
 body{
-    /*background-color: #a5d5d5 !important;*/
+    background-color: #f7f2e6bf !important;
 }
 
 
@@ -74,3 +50,189 @@ footer {
 .error {
 
 }
+
+/*--------------------------------------*/
+
+/* ==============================
+   1) VARIABLES & RESET
+============================== */
+
+/*:root {*/
+/*    --color-primary: #16997A;   !* Couleur la plus sombre *!*/
+/*    --color-secondary: #489FB5; !* Couleur médiane *!*/
+/*    --color-accent: #82C0CC;    !* Couleur la plus claire *!*/
+
+/*    --color-white: #ffffff;*/
+/*    --color-black: #000000;*/
+/*    --color-bg: #f9f9f9;        !* Fond global clair *!*/
+/*    --color-text: #333333;      !* Couleur principale du texte *!*/
+
+/*    --font-heading: 'Poppins', sans-serif;*/
+/*    --font-body: 'Roboto', sans-serif;*/
+/*}*/
+
+/*!* Reset rapide (optionnel) *!*/
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+/*!* ==============================*/
+/*   2) STYLES GLOBAUX*/
+/*============================== *!*/
+
+/*body {*/
+/*    font-family: var(--font-body);*/
+/*    background-color: var(--color-bg);*/
+/*    color: var(--color-text);*/
+/*    line-height: 1.6;*/
+/*}*/
+
+/*h1, h2, h3, h4, h5, h6 {*/
+/*    font-family: var(--font-heading);*/
+/*    margin-bottom: 0.75rem;*/
+/*}*/
+
+/*p {*/
+/*    margin-bottom: 1rem;*/
+/*}*/
+
+/*.container {*/
+/*    max-width: 1200px;*/
+/*    margin: 0 auto;*/
+/*    padding: 1rem;*/
+/*}*/
+
+/*!* ==============================*/
+/*   3) HEADER / NAVBAR*/
+/*============================== *!*/
+
+/*!* Header principal *!*/
+/*header {*/
+/*    background-color: var(--color-primary);*/
+/*    color: var(--color-white);*/
+/*    text-align: center;*/
+/*    padding: 2rem 1rem;*/
+/*}*/
+
+/*!* Titre & sous-titre du header *!*/
+/*header .header-title {*/
+/*    font-family: var(--font-heading);*/
+/*    font-size: 3rem;*/
+/*    margin-bottom: 0.5rem;*/
+/*}*/
+
+/*header .header-subtitle {*/
+/*    font-family: var(--font-body);*/
+/*    font-size: 1.25rem;*/
+/*    font-weight: 300;*/
+/*}*/
+
+/*!* Exemple de navbar (si tu en as besoin) *!*/
+/*.navbar {*/
+/*    background-color: var(--color-primary);*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*    padding: 1rem 2rem;*/
+/*}*/
+
+/*.navbar-logo {*/
+/*    font-family: var(--font-heading);*/
+/*    font-size: 1.8rem;*/
+/*    font-weight: 700;*/
+/*    color: var(--color-white);*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.navbar-links a {*/
+/*    color: var(--color-white);*/
+/*    text-decoration: none;*/
+/*    margin: 0 1rem;*/
+/*    font-weight: 500;*/
+/*    transition: color 0.3s ease;*/
+/*}*/
+
+/*.navbar-links a:hover {*/
+/*    color: var(--color-accent);*/
+/*}*/
+
+/*!* ==============================*/
+/*   4) BLOCS / FORMULAIRES*/
+/*============================== *!*/
+
+/*!* Petit bloc "carte" pour encadrer des sections, un form, etc. *!*/
+/*.card {*/
+/*    background-color: var(--color-white);*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 6px;*/
+/*    padding: 1.5rem;*/
+/*    margin-bottom: 2rem;*/
+/*    box-shadow: 0 2px 4px rgba(0,0,0,0.1);*/
+/*}*/
+
+/*!* Formulaire *!*/
+/*form label {*/
+/*    display: block;*/
+/*    margin-bottom: 0.5rem;*/
+/*    font-weight: 500;*/
+/*}*/
+
+/*form input[type="text"],*/
+/*form input[type="date"],*/
+/*form select,*/
+/*form textarea {*/
+/*    width: 100%;*/
+/*    padding: 0.75rem;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 4px;*/
+/*    margin-bottom: 1rem;*/
+/*    font-family: var(--font-body);*/
+/*}*/
+
+/*!* Boutons *!*/
+/*.button,*/
+/*button {*/
+/*    display: inline-block;*/
+/*    background-color: var(--color-secondary);*/
+/*    color: var(--color-white);*/
+/*    border: none;*/
+/*    padding: 0.75rem 1.5rem;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    font-weight: 500;*/
+/*    transition: background-color 0.3s ease;*/
+/*}*/
+
+/*.button:hover,*/
+/*button:hover {*/
+/*    background-color: var(--color-accent);*/
+/*}*/
+
+/*!* ==============================*/
+/*   5) TABLES*/
+/*============================== *!*/
+
+/*.table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    margin-bottom: 2rem;*/
+/*    font-family: var(--font-body);*/
+/*}*/
+
+/*.table thead {*/
+/*    background-color: var(--color-secondary);*/
+/*    color: var(--color-white);*/
+/*}*/
+
+/*.table th,*/
+/*.table td {*/
+/*    text-align: left;*/
+/*    padding: 0.75rem;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*}*/
+
+/*.table tbody tr:nth-child(even) {*/
+/*    background-color: #f5f5f5;*/
+/*}*/

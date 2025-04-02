@@ -5,18 +5,17 @@ Annuler une sortie
 {% endblock %}
 
 {% block content %}
-<div class="box">
+<div class="max-w-lg mx-auto p-6 bg-white rounded shadow mt-10">
 
-    <h1>Laisser motif d'nnulation</h1>
+    <h1 class="text-2xl font-bold text-center mb-6">Saisissez votre motif d'annulation</h1>
 
     <form method="post">
-        <div class="form-group">
-            <label for="motif">Motif</label>
-            <input type="text" class="form-control" id="motif" name="motif" placeholder="motif">
+        <div class="mb-4">
+            <label for="motif" class="block text-gray-700 text-sm font-bold mb-2">Motif</label>
+            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="motif" name="motif" placeholder="Motif">
         </div>
-        <button type="submit" class="btn btn-primary">Annuler</button>
+        <button type="submit" class="bg-teal-700 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Annuler</button>
     </form>
 
 </div>
 {% endblock %}
-

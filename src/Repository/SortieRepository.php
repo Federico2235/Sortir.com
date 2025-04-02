@@ -72,6 +72,26 @@ class SortieRepository extends ServiceEntityRepository
             return false;
         }
 
+    //    public function findOneBySomeField($value): ?SortieFixtures
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
+    public function save(Sortie $sortie, bool $flush = true): void
+    {
+        $em = $this->getEntityManager();
+
+        $em->persist($sortie);
+
+        if ($flush) {
+            $em->flush();
+        }
+    }
+}
         if ($sortie->getEtat()->getLibelle() == 'Ouverte') {
             $sortie->addParticipant($participant);
             $this->em->flush();

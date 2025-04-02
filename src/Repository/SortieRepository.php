@@ -12,6 +12,8 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -35,23 +37,31 @@ class SortieRepository extends ServiceEntityRepository
         $etat = $this->em->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
         $sortie->setEtat($etat);
 
-        $this->em->persist($sortie);
-        $this->em->flush();
+        $this->save($sortie);
     }
 
     public function getSortieDetails(int $id): ?Sortie
     {
-        $sortie = $this->find($id);
+        try {
+            $sortie = $this->createQueryBuilder('s')
+                ->addSelect('o', 'site', 'e', 'l', 'v', 'p')
+                ->leftJoin('s.organisateur', 'o')
+                ->leftJoin('s.site', 'site')
+                ->leftJoin('s.etat', 'e')
+                ->leftJoin('s.lieu', 'l')
+                ->leftJoin('l.ville', 'v')
+                ->leftJoin('s.participants', 'p')
+                ->where('s.id = :id')
+                ->andWhere('s.dateHeureDebut >= :dateLimit')
+                ->setParameter('id', $id)
+                ->setParameter('dateLimit', (new DateTime())->sub(new DateInterval('P30D')))
+                ->getQuery()
+                ->getOneOrNullResult();
 
-        if (!$sortie || $sortie->getId() === null) {
+            return $sortie instanceof Sortie ? $sortie : null;
+        } catch (NonUniqueResultException) {
             return null;
         }
-
-        if ($sortie->getDateHeureDebut() < (new DateTime())->sub(new DateInterval('P30D'))) {
-            return null;
-        }
-
-        return $sortie;
     }
 
     public function inscrireParticipant(Sortie $sortie, Participant $participant): bool
@@ -59,88 +69,116 @@ class SortieRepository extends ServiceEntityRepository
         if ($sortie->getParticipants()->contains($participant)) {
             return false;
         }
-
-        if ($sortie->getEtat()->getLibelle() == 'Annulée') {
+        // Vérification rapide avec COUNT pour éviter de charger tous les participants
+        try {
+            $nbParticipants = $this->em->createQueryBuilder()
+                ->select('COUNT(p.id)')
+                ->from(Participant::class, 'p')
+                ->join('p.sorties', 's')
+                ->where('s.id = :sortieId')
+                ->setParameter('sortieId', $sortie->getId())
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (NoResultException|NonUniqueResultException) {
             return false;
         }
 
-        if ($sortie->getNbInscriptionsMax() <= count($sortie->getParticipants())) {
+        $conditions = [
+            $sortie->getParticipants()->contains($participant),
+            $sortie->getEtat()->getLibelle() === 'Annulée',
+            $sortie->getNbInscriptionsMax() <= $nbParticipants,
+            $sortie->getDateLimiteInscription() < new DateTimeImmutable(),
+            $sortie->getEtat()->getLibelle() !== 'Ouverte',
+        ];
+
+        if (in_array(true, $conditions, true)) {
             return false;
-        }
+        };
 
-        if ($sortie->getDateLimiteInscription() < new DateTimeImmutable()) {
-            return false;
-        }
-
-    //    public function findOneBySomeField($value): ?SortieFixtures
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-    public function save(Sortie $sortie, bool $flush = true): void
-    {
-        $em = $this->getEntityManager();
-
-        $em->persist($sortie);
-
-        if ($flush) {
-            $em->flush();
-        }
-    }
-}
-        if ($sortie->getEtat()->getLibelle() == 'Ouverte') {
-            $sortie->addParticipant($participant);
-            $this->em->flush();
-            return true;
-        }
-
-        return false;
+        $sortie->addParticipant($participant);
+        $this->em->flush();
+        return true;
     }
 
     public function desinscrireParticipant(Sortie $sortie, Participant $participant): void
     {
         $sortie->removeParticipant($participant);
         $this->em->flush();
+
     }
 
     public function annulerSortie(Sortie $sortie, string $motif, Participant $admin): bool
     {
-        $now = new DateTime();
-
-        if ($sortie->getDateHeureDebut() <= $now) {
+        if ($sortie->getDateHeureDebut() <= new DateTime()) {
             return false;
         }
 
-        $etatAnnule = $this->em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
-        $sortie->setEtat($etatAnnule);
-        $sortie->setInfosSortie($sortie->getInfosSortie() . '<br><span style="color: red; font-weight: bold;">(Annulation!!: ' . $motif . ' par : ' . $admin->getNom() . ' ' . $admin->getPrenom() . ')</span>');
-        $this->em->flush();
+        // Requête DQL optimisée pour la mise à jour
+        $updated = $this->em->createQuery('
+            UPDATE App\Entity\Sortie s
+            SET s.etat = (
+                SELECT e.id FROM App\Entity\Etat e WHERE e.libelle = :etatAnnule
+            ),
+            s.infosSortie = CONCAT(s.infosSortie, :motif)
+            WHERE s.id = :id
+            AND s.dateHeureDebut > CURRENT_TIMESTAMP()
+        ')
+            ->setParameters([
+                'etatAnnule' => 'Annulée',
+                'motif' => '<br><span style="color: red; font-weight: bold;">(Annulation!!: '
+                    . $motif . ' par : ' . $admin->getNom() . ' ' . $admin->getPrenom() . ')</span>',
+                'id' => $sortie->getId()
+            ])
+            ->execute();
 
-        return true;
+        return $updated > 0;
     }
 
     public function publierSortie(Sortie $sortie): void
     {
-        $etatPublie = $this->em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
-        $sortie->setEtat($etatPublie);
-        $this->em->flush();
+        // Requête optimisée pour la publication
+        $this->em->createQuery('
+            UPDATE App\Entity\Sortie s
+            SET s.etat = (
+                SELECT e.id FROM App\Entity\Etat e WHERE e.libelle = :etatPublie
+            )
+            WHERE s.id = :id
+        ')
+            ->setParameters([
+                'etatPublie' => 'Ouverte',
+                'id' => $sortie->getId()
+            ])
+            ->execute();
     }
 
     public function deleteSortie(Sortie $sortie): void
     {
-        $this->em->remove($sortie);
-        $this->em->flush();
+        // Suppression en cascade plus efficace
+        $this->em->createQuery('
+            DELETE FROM App\Entity\Sortie s WHERE s.id = :id
+        ')
+            ->setParameter('id', $sortie->getId())
+            ->execute();
     }
 
-    public function getVillesAndLieux(): array
+    public function getVillesWithLieux(): array
     {
-        return [
-            'villes' => $this->em->getRepository(Ville::class)->findAll(),
-            'lieux' => $this->em->getRepository(Lieu::class)->findAll()
-        ];
+        return $this->em->createQueryBuilder()
+            ->select('v', 'l')
+            ->from(Ville::class, 'v')
+            ->leftJoin('v.lieux', 'l')
+            ->orderBy('v.nom', 'ASC')
+            ->addOrderBy('l.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function save(Sortie $sortie, bool $flush = true): void
+    {
+        $this->em->persist($sortie);
+
+        if ($flush) {
+            $this->em->flush();
+        }
     }
 }

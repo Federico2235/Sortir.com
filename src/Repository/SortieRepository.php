@@ -236,8 +236,10 @@ class SortieRepository extends ServiceEntityRepository
 
         //// Checkpoint les Sorties sont passées
         if (!empty($filters['terminee'])) {
-            $qb->andWhere('s.dateHeureDebut < :now')
-                ->setParameter('now', new \DateTime());
+            // Faire une jointure explicite avec l'entité Etat
+            $qb->join('s.etat', 'e')  // 'e' est l'alias pour l'entité Etat
+            ->andWhere('e.libelle = :terminee')
+                ->setParameter('terminee', 'Terminée');
         }
 
         // Affichage des sorties correspondant aux critères sélectionnés

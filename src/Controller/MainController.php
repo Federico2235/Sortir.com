@@ -15,6 +15,7 @@ use App\Entity\Sortie;
 use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -123,33 +124,45 @@ final class MainController extends AbstractController
              */
             $photo = $form->get('photo')->getData();
 
+            // Version encore améliorée avec vérifications supplémentaires
             if ($photo !== null) {
-
-                $oldPhoto = $participant->getPhoto();
-                if ($oldPhoto) {
-                    $uploader->delete($oldPhoto, $this->getParameter('participant_photo_dir'));
+                // Vérification du type MIME pour la sécurité
+                if (!in_array($photo->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
+                    $this->addFlash('error', 'Format d\'image non supporté');
+                    return $this->redirectToRoute('app_profil_edit');
                 }
 
+                // Génération du nom de fichier
+                $newFileName = md5(uniqid()).'.'.$photo->guessExtension();
 
-                $newFileName = $uploader->save(
-                    $photo,
-                    $participant->getNom(),
-                    $this->getParameter('participant_photo_dir')
-                );
+                // Déplacement sécurisé du fichier
+                try {
+                    $photo->move(
+                        $this->getParameter('participant_photo_dir'),
+                        $newFileName
+                    );
 
-                $participant->setPhoto($newFileName);
+                    // Suppression de l'ancienne photo
+                    if ($participant->getPhoto() && $participant->getPhoto() !== 'avatar.jpg') {
+                        @unlink($this->getParameter('participant_photo_dir').'/'.$participant->getPhoto());
+                    }
+
+                    $participant->setPhoto($newFileName);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l\'enregistrement de la photo');
+                    return $this->redirectToRoute('app_profil_edit');
+                }
             }
 
-
+            $entityManager->persist($participant);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Profil mis à jour avec succès');
             return $this->redirectToRoute('app_profil');
         }
 
         return $this->render('main/profil_edit.html.twig', [
+            'participant' => $participant,
             'form' => $form->createView(),
-            'participant' => $participant // Ajouté pour cohérence
         ]);
     }
 

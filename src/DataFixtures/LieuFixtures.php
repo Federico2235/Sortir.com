@@ -111,6 +111,7 @@ class LieuFixtures extends Fixture
                 $lieu->setLongitude($lieuData['lon']);
                 $lieu->setVille($ville);
                 $manager->persist($lieu);
+                $this->setReference('lieu_' . ($i + 1), $lieu);
             }
         }
 

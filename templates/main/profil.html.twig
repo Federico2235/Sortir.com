@@ -26,15 +26,15 @@
                                     <!-- Colonne de gauche : Photo de profil -->
                                     <div class="column is-one-third has-text-centered">
                                         {% if app.user.photo %}
-                                            <figure class="image is-128x128" style="margin: 0 auto;">
-                                                <img src="{{ asset('img/photos/' ~ app.user.photo) }}"
-                                                     alt="Photo de profil"
-                                                     style="object-fit: cover; border: 2px solid #ccc; border-radius: 5px; ">
-                                            </figure>
+
+                                                <img src="{{ asset('img/photos/' ~ app.user.photo ) }}" alt=""
+                                                     alt="Photo de profil">
+{#                                                     style="object-fit: cover; border: 2px solid #ccc; border-radius: 5px; ">#}
+
                                         {% else %}
                                             {# Pour afficher un placeholder quand il n'y a pas de photo #}
                                             <figure class="image is-128x128" style="margin: 0 auto;">
-                                                <img src="{{ asset('img/placeholder.png') }}"
+                                                <img src="{{ asset('img/photos/avatar.jpg') }}"
                                                      alt="Aucune photo de profil"
                                                      style="object-fit: cover; border: 2px solid #ccc; border-radius: 5px;">
                                             </figure>

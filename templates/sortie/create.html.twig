@@ -15,12 +15,12 @@
                         </header>
 
                         <!-- Début du formulaire -->
-                        {{ form_start(sortieForm) }}
+                        {{ form_start(form) }}
 
                         <!-- Contenu de la card -->
                         <div class="card-content">
                             <div class="content">
-                                {{ form_widget(sortieForm) }}
+                                {{ form_widget(form) }}
                                 <a class="button is-link" href="{{ path('app_ajouterLieu') }}">Ajouter lieu</a>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             </div>
                         </footer>
 
-                        {{ form_end(sortieForm) }}
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>

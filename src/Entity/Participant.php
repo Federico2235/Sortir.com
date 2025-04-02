@@ -28,6 +28,10 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
         minMessage: "Le nom doit faire au moins {{ limit }} caractères",
         maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères"
     )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-ZÀ-ÿ\s\'\-]+$/",
+        message: "Le nom ne doit contenir que des lettres, espaces, apostrophes ou tirets"
+    )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
@@ -37,6 +41,10 @@ class Participant implements UserInterface, \Symfony\Component\Security\Core\Use
         max: 255,
         minMessage: "Le prénom doit faire au moins {{ limit }} caractères",
         maxMessage: "Le prénom ne peut pas dépasser {{ limit }} caractères"
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-zA-ZÀ-ÿ\s\'\-]+$/",
+        message: "Le nom ne doit contenir que des lettres, espaces, apostrophes ou tirets"
     )]
     private ?string $prenom = null;
 

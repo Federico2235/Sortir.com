@@ -4,6 +4,7 @@
 {% block content %}
     <section class="section">
         <div class="container">
+
             <!-- Titre principal de la page -->
             <div class="columns is-centered">
                 <div class="column is-8">
@@ -64,6 +65,7 @@
                                 </thead>
                                 <tbody>
                                 {% for sortie in sorties %}
+                                {% if app.user == sortie.organisateur and sortie.etat.libelle == 'Créée' or sortie.etat.libelle == 'Ouverte' or sortie.etat.libelle == 'Clôturée' or sortie.etat.libelle == 'Activité en cours' or sortie.etat.libelle == 'Terminée' or sortie.etat.libelle == 'Annulée' %}
                                     <tr>
                                         <td>{{ sortie.nom }}</td>
                                         <td>{{ sortie.dateHeureDebut | date('d/m/Y') }}</td>
@@ -99,6 +101,8 @@
                                             {% endif %}
                                         </td>
                                     </tr>
+
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>

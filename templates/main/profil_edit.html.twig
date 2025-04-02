@@ -79,23 +79,19 @@
                                 <!-- Champ Nouveau mot de passe -->
                                 <div class="field mb-4">
                                     <label class="label">
-                                        {{ form_label(form.password.first, 'Nouveau mot de passe') }}
+                                        {{ form_label(form.password, 'Nouveau mot de passe (laisser vide pour ne pas modifier)') }}
                                     </label>
                                     <div class="control">
-                                        {{ form_widget(form.password.first, { 'attr': {'class': 'input'} }) }}
+                                        {{ form_widget(form.password, {
+                                            'attr': {
+                                                'class': 'input',
+                                                'autocomplete': 'new-password',
+                                                'placeholder': '••••••••'
+                                            }
+                                        }) }}
                                     </div>
-                                    {{ form_errors(form.password.first) }}
-                                </div>
-
-                                <!-- Champ Confirmer le mot de passe -->
-                                <div class="field mb-4">
-                                    <label class="label">
-                                        {{ form_label(form.password.second, 'Confirmez le mot de passe') }}
-                                    </label>
-                                    <div class="control">
-                                        {{ form_widget(form.password.second, { 'attr': {'class': 'input'} }) }}
-                                    </div>
-                                    {{ form_errors(form.password.second) }}
+                                    {{ form_errors(form.password) }}
+                                    <p class="help is-info">Laissez ce champ vide si vous ne souhaitez pas modifier votre mot de passe</p>
                                 </div>
 
                                 <!-- Champ Photo stylisé avec Bulma -->

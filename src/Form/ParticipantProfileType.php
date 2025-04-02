@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\Length;
 
 class ParticipantProfileType extends AbstractType
 {
@@ -25,13 +26,22 @@ class ParticipantProfileType extends AbstractType
                 'required' => false
             ])
             ->add('mail', EmailType::class)
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe doivent correspondre',
-                'required' => $options['is_password_required'],
-                'first_options' => ['label' => 'Nouveau mot de passe'],
-                'second_options' => ['label' => 'Confirmation'],
-                'mapped' => true
+            ->add('password', PasswordType::class, [
+                'label' => 'Nouveau mot de passe (laisser vide pour ne pas modifier)',
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'autocomplete' => 'new-password',
+                    'placeholder' => '••••••••'
+                ],
+                'constraints' => [
+                    new Length([
+                        'min' => 8,
+                        'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères',
+                        // La longueur max est gérée par Symfony pour des raisons de sécurité
+                        'max' => 4096,
+                    ]),
+                ],
             ])
             ->add('photo', FileType::class, [
                 'mapped' => false,

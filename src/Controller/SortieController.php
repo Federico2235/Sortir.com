@@ -6,19 +6,11 @@ use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
-use App\Entity\Etat;
-use App\Entity\Site;
 use App\Form\LieuType;
 use App\Form\SortieType;
 use App\Form\VilleType;
-use App\Repository\EtatRepository;
-use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
-use DateInterval;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,72 +19,48 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class SortieController extends AbstractController
 {
+    public function __construct(
+        private readonly SortieRepository $sortieRepository,
+        private readonly EntityManagerInterface $em
+    ) {
+    }
 
     #[IsGranted('ROLE_USER')]
     #[Route('/create', name: 'app_createSortie', methods: ['GET', 'POST'])]
-    public function createSortie(
-        Request                $request,
-        EntityManagerInterface $em,
-        EtatRepository         $etatRepository
-    ): Response
+    public function createSortie(Request $request): Response
     {
         if ($request->headers->has('User-Agent') && preg_match('/Mobile|Android|iPhone|iPad/i', $request->headers->get('User-Agent'))) {
             return $this->redirectToRoute('app_error', ['message' => "Tu es un petit malin ! Tu ne peux pas créer de sortie sur mobile."]);
         }
-        // Création du formulaire Sortie
+
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
-        $sortie->setOrganisateur($this->getUser());
-        $sortie->setSite($sortie->getOrganisateur()->getSite());
-        $sortieForm = $this->createForm(SortieType::class, $sortie);
-        $sortieForm->handleRequest($request);
-
-        // Initialisation de l'état
-        $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
-        $sortie->setEtat($etat);
-
-        // Renvoie villes et lieux de la BDD
-        $villes = $em->getRepository(Ville::class)->findAll();
-        $lieux = $em->getRepository(Lieu::class)->findAll();
-
-        // Vérification des formulaires
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-                $em->persist($sortie);
-                $em->flush();
-                $this->addFlash('success', 'Votre sortie a été créée !');
-                return $this->redirectToRoute('app_main');
-            }
+            $this->sortieRepository->createSortie($sortie, $this->getUser());
+            $this->addFlash('success', 'Votre sortie a été créée !');
+            return $this->redirectToRoute('app_main');
         }
+
+        $villesWithLieux = $this->sortieRepository->getVillesWithLieux();
+
         return $this->render('sortie/create.html.twig', [
-            'form' => $form->createView(),
-            'sortieForm' => $sortieForm->createView(),
-            'villes' => $villes,
-            'lieux' => $lieux
+            'form' => $form->createView(), // Un seul nom de variable pour le formulaire
+            'villes' => $villesWithLieux,
         ]);
     }
 
     #[Route('/detail/{id}', name: 'app_detailSortie', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function detailSortie(
-        int              $id,
-        Request          $request,
-        SortieRepository $repository,
-    ): Response
+    public function detailSortie(int $id): Response
     {
+        $sortie = $this->sortieRepository->getSortieDetails($id);
 
-
-        $sortie = $repository->find($id);
-
-        if (!$sortie || $sortie->getId() === null) {
+        if (!$sortie) {
             return $this->redirectToRoute('app_error', [
                 'message' => "Cette sortie n'existe pas ou a été supprimée.",
                 'status_code' => 404
             ]);
-        }
-
-        if ($sortie->getDateHeureDebut() < (new DateTime())->sub(new DateInterval('P30D'))) {
-            return $this->redirectToRoute('app_error', ['message' => "cette sortie n'existe pas."]);
         }
 
         return $this->render('sortie/read.html.twig', [
@@ -101,226 +69,157 @@ final class SortieController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/ajouterLieu', name: 'app_ajouterLieu', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function ajouterLieu(
-        Request          $request,
-        EntityManagerInterface $em,
-    ): Response
+    #[Route('/ajouterLieu', name: 'app_ajouterLieu', methods: ['GET', 'POST'])]
+    public function ajouterLieu(Request $request): Response
     {
         $lieu = new Lieu();
         $lieuForm = $this->createForm(LieuType::class, $lieu);
         $lieuForm->handleRequest($request);
 
         if ($lieuForm->isSubmitted() && $lieuForm->isValid()) {
-            $em->persist($lieu);
-            $em->flush();
-            return $this->redirectToRoute('app_createSortie');
+            $this->em->persist($lieu);
+            $this->em->flush();
+
+            // Recharge les villes avec leurs lieux après ajout
+            $villesWithLieux = $this->sortieRepository->getVillesWithLieux();
+            $this->addFlash('success', 'Lieu ajouté avec succès !');
+
+            return $this->redirectToRoute('app_createSortie', [
+                'villes' => $villesWithLieux
+            ]);
         }
 
         return $this->render('sortie/ajouterLieu.html.twig', [
-            'lieuForm' => $lieuForm
+            'lieuForm' => $lieuForm->createView()
         ]);
-
-
     }
 
-
     #[IsGranted('ROLE_USER')]
-    #[Route ('/ajouterVille', name: 'app_ajouterVille', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function ajouterVille(
-        Request          $request,
-        EntityManagerInterface $em,
-    ): Response
+    #[Route('/ajouterVille', name: 'app_ajouterVille', methods: ['GET', 'POST'])]
+    public function ajouterVille(Request $request): Response
     {
         $ville = new Ville();
         $villeForm = $this->createForm(VilleType::class, $ville);
         $villeForm->handleRequest($request);
+
         if ($villeForm->isSubmitted() && $villeForm->isValid()) {
-            $em->persist($ville);
-            $em->flush();
+            $this->em->persist($ville);
+            $this->em->flush();
+
+            $this->addFlash('success', 'Ville ajoutée avec succès !');
             return $this->redirectToRoute('app_ajouterLieu');
-
         }
+
         return $this->render('sortie/ajouterVille.html.twig', [
-            'villeForm' => $villeForm
-        ]) ;
-    }
-
-
-
-    #[Route('/inscription/{id}', name: 'inscription', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function inscription(
-        int                    $id,
-        SortieRepository       $repository,
-        EntityManagerInterface $em
-    ): Response
-    {
-        $sortie = $repository->find($id);
-
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
-        }
-
-        /** @var Participant|null $user */
-        $user = $this->getUser();
-
-        if (!$user instanceof Participant) {
-            $this->addFlash('danger', 'Vous devez être connecté pour vous inscrire.');
-            return $this->redirectToRoute('app_login'); // Redirige vers la page de connexion
-        }
-
-        // Vérifie si l'utilisateur est déjà inscrit
-        if ($sortie->getParticipants()->contains($user)) {
-            $this->addFlash('warning', 'Vous êtes déjà inscrit à cette sortie.');
-            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-        }
-        if ($sortie->getEtat()->getLibelle() == 'Annulée') {
-            $this->addFlash('danger', 'La sortie est annulée.');
-            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-
-        }
-
-        // Vérifie si la sortie est complète
-        if ($sortie->getNbInscriptionsMax() <= count($sortie->getParticipants())) {
-            $this->addFlash('danger', 'La sortie est complète.');
-            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-        }
-
-        if ($sortie->getDateLimiteInscription() < new \DateTimeImmutable()) {
-            $this->addFlash('danger', 'La sortie est cloturée.');
-            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-        }
-        if ($sortie->getEtat()->getLibelle() == 'Ouverte') {
-
-            // Ajout du participant
-            $sortie->addParticipant($user);
-            //$sortie->setNbInscriptions($sortie->getNbInscriptions() - 1);
-
-            $em->flush();
-
-            $this->addFlash('success', 'Vous êtes bien inscrit !');
-
-            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-        } else {
-            $this->addFlash('danger', 'Vous ne pouvez pas vous inscrire maintenant !');
-            return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-        }
-    }
-
-    #[Route('/desinscription/{id}', name: 'desinscription', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function desinscription(
-        int                    $id,
-        SortieRepository       $repository,
-        EntityManagerInterface $em
-    ): Response
-    {
-        /** @var Participant|null $user */
-        $user = $this->getUser();
-        $sortie = $repository->find($id);
-        $sortie->removeParticipant($user);
-        $em->flush();
-
-        $this->addFlash('success', 'Vous êtes bien désinscrit !');
-
-        return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
-
-    }
-
-
-    #[isGranted('ROLE_USER')]
-    #[Route('/annulation/{id}', name: 'annulation_confirm', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function confirmAnnulation(int $id, SortieRepository $repository): Response
-    {
-        $sortie = $repository->find($id);
-
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
-        }
-
-
-        return $this->render('sortie/confirm_annulation.html.twig', [
-            'sortie' => $sortie,
+            'villeForm' => $villeForm->createView()
         ]);
     }
 
-
-    #[isGranted('ROLE_USER')]
-    #[Route('/annulation/{id}', name: 'annulation', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function annulation(
-        int                    $id,
-        SortieRepository       $repository,
-        EntityManagerInterface $em, Request $request
-    ): Response
+    #[Route('/inscription/{id}', name: 'inscription', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function inscription(int $id): Response
     {
-        $sortie = $repository->find($id);
+        $user = $this->getUser();
+        $sortie = $this->sortieRepository->find($id);
 
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+        if (!$sortie || !$user instanceof Participant) {
+            $this->addFlash('danger', 'Action impossible.');
+            return $this->redirectToRoute($sortie ? 'app_detailSortie' : 'app_login', ['id' => $id]);
         }
-        $motif = $request->request->get('motif');
 
-        $now = new \DateTime();
+        if ($this->sortieRepository->inscrireParticipant($sortie, $user)) {
+            $this->addFlash('success', 'Vous êtes bien inscrit !');
+        } else {
+            $this->addFlash('danger', 'Inscription impossible !');
+        }
 
-        /** @var Participant|null $user */
+        return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+    }
+
+    #[Route('/desinscription/{id}', name: 'desinscription', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function desinscription(int $id): Response
+    {
+        $sortie = $this->sortieRepository->find($id);
         $user = $this->getUser();
 
-        if (!$user instanceof Participant) {
-            $this->addFlash('danger', 'Vous devez être connecté.');
-            return $this->redirectToRoute('app_login'); // Redirige vers la page de connexion
+        if ($sortie && $user instanceof Participant) {
+            $this->sortieRepository->desinscrireParticipant($sortie, $user);
+            $this->addFlash('success', 'Vous êtes bien désinscrit !');
         }
 
+        return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
+    }
 
-        if ($sortie->getDateHeureDebut() > $now) {
-            $etatAnnule = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
-            $sortie->setEtat($etatAnnule);
-            $sortie->setInfosSortie($sortie->getInfosSortie() . '<br><span style="color: red; font-weight: bold;">(Annulation!!: ' . $motif . ' par : ' . $user->getNom() . ' ' . $user->getPrenom() . ')</span>');
-            $em->flush(); // Mettre à jour les modifications dans la base de données $em
+    #[IsGranted('ROLE_USER')]
+    #[Route('/annulation/{id}', name: 'annulation_confirm', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function confirmAnnulation(int $id): Response
+    {
+        $sortie = $this->sortieRepository->find($id);
 
-            $this->addFlash('success', 'Sortie annulé.');
+        // Vérifie si la sortie existe
+        if (!$sortie) {
+            $this->addFlash('error', 'La sortie demandée n\'existe pas.');
             return $this->redirectToRoute('app_main');
+        }
 
+        // Vérifie si l'utilisateur est l'organisateur ou un admin
+        $user = $this->getUser();
+        if ($sortie->getOrganisateur()->getId() !== $user->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Vous n\'avez pas les droits pour annuler cette sortie.');
+            return $this->redirectToRoute('app_main');
+        }
 
+        // Vérifie si la sortie peut encore être annulée
+        if ($sortie->getDateHeureDebut() < new \DateTime()) {
+            $this->addFlash('error', 'Impossible d\'annuler une sortie déjà commencée.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        return $this->render('sortie/confirm_annulation.html.twig', [
+            'sortie' => $sortie
+        ]);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/annulation/{id}', name: 'annulation', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function annulation(int $id, Request $request): Response
+    {
+        $sortie = $this->sortieRepository->find($id);
+        $motif = $request->request->get('motif');
+        $user = $this->getUser();
+
+        if ($sortie && $user instanceof Participant && $this->sortieRepository->annulerSortie($sortie, $motif, $user)) {
+            $this->addFlash('success', 'Sortie annulée.');
         } else {
-            $this->addFlash('danger', 'Impossible d\'annuler une sortie qui a déjà commencé.');
-            return $this->redirectToRoute('app_main');
+            $this->addFlash('danger', 'Impossible d\'annuler cette sortie.');
         }
 
+        return $this->redirectToRoute('app_main');
     }
 
     #[Route('/publier/{id}', name: 'publier', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function publier(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
+    public function publier(int $id): Response
     {
-        $sortie = $repository->find($id);
+        $sortie = $this->sortieRepository->find($id);
 
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+        if ($sortie) {
+            $this->sortieRepository->publierSortie($sortie);
+            $this->addFlash('success', 'Sortie publiée.');
         }
 
-        $etatPublie = $em->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
-        $sortie->setEtat($etatPublie);
-        $em->flush(); // Mettre à jour les modifications dans la base de données $em
-
-        $this->addFlash('success', 'Sortie publiée.');
         return $this->redirectToRoute('app_main');
-
-
     }
-    #[isGranted('ROLE_ADMIN')]
-    #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','GET'])]
-    public function delete(int $id, SortieRepository $repository, EntityManagerInterface $em): Response
-    {
-        $sortie = $repository->find($id);
 
-        if (!$sortie) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST','GET'])]
+    public function delete(int $id): Response
+    {
+        $sortie = $this->sortieRepository->find($id);
+
+        if ($sortie) {
+            $this->sortieRepository->deleteSortie($sortie);
+            $this->addFlash('success', 'Sortie supprimée.');
         }
 
-        $em->remove($sortie);
-        $em->flush(); // Mettre à jour les modifications dans la base de données $em
-
-        $this->addFlash('success', 'Sortie supprimée.');
         return $this->redirectToRoute('app_main');
-
-
     }
 }

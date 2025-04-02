@@ -12,13 +12,16 @@ class EtatFixtures extends Fixture
     {
         $etats = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Terminée', 'Annulée', 'Historisée'];
 
-        foreach ($etats as $libelle) {
 
-            $etat = new Etat();
-            $etat->setLibelle($libelle);
 
-            $manager->persist($etat);
-            $manager->flush();
+            foreach ($etats as $index => $libelle) {
+                $etat = new Etat();
+                $etat->setLibelle($libelle);
+
+                $manager->persist($etat);
+                $this->addReference('etat_' . ($index + 1), $etat);
+
         }
+        $manager->flush();
     }
 }

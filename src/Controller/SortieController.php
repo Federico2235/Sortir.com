@@ -149,17 +149,37 @@ final class SortieController extends AbstractController
         return $this->redirectToRoute('app_detailSortie', ['id' => $id]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/annulation/{id}', name: 'annulation_confirm', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function confirmAnnulation(int $id): Response
     {
         $sortie = $this->sortieRepository->find($id);
+
+        // Vérifie si la sortie existe
+        if (!$sortie) {
+            $this->addFlash('error', 'La sortie demandée n\'existe pas.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        // Vérifie si l'utilisateur est l'organisateur ou un admin
+        $user = $this->getUser();
+        if ($sortie->getOrganisateur()->getId() !== $user->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Vous n\'avez pas les droits pour annuler cette sortie.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        // Vérifie si la sortie peut encore être annulée
+        if ($sortie->getDateHeureDebut() < new \DateTime()) {
+            $this->addFlash('error', 'Impossible d\'annuler une sortie déjà commencée.');
+            return $this->redirectToRoute('app_main');
+        }
+
         return $this->render('sortie/confirm_annulation.html.twig', [
             'sortie' => $sortie
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/annulation/{id}', name: 'annulation', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function annulation(int $id, Request $request): Response
     {

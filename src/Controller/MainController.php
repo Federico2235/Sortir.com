@@ -7,6 +7,7 @@ use App\Entity\Participant;
 use App\Form\ParticipantProfileType;
 use App\Form\SortieFilterType;
 use App\Repository\EtatRepository;
+use App\Service\SortieEtatUpdater;
 use App\Service\Uploader;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +25,11 @@ use function Symfony\Component\String\s;
 
 final class MainController extends AbstractController
 {
+    public function __construct(
+        private SortieEtatUpdater $sortieEtatUpdater,
+    )
+    {}
+
     /**
      * @throws \DateMalformedStringException
      */
@@ -35,79 +41,17 @@ final class MainController extends AbstractController
         Security         $security,
     ): Response
     {
-        // Méthode de mise à jour des états des sorties
-        $this->updateEtats($sortieRepository, $etatRepository);
 
-        // Appel du fomulaire de filtres
+        // Méthode de mise à jour des états des sorties
+        $this->sortieEtatUpdater->updateEtats();
+
+        // Formulaire de filtres
         $filterForm = $this->createForm(SortieFilterType::class);
         $filterForm->handleRequest($request);
 
-        // Récupération des critères de filtres
-        $site = $filterForm->get('site')->getData();
-        $nom = $filterForm->get('nom')->getData();
-        $dateDebut = $filterForm->get('dateDebut')->getData();
-        $dateFin = $filterForm->get('dateFin')->getData();
-        $organisateur = $filterForm->get('organisateur')->getData();
-        $inscrit = $filterForm->get('inscrit')->getData();
-        $nonInscrit = $filterForm->get('nonInscrit')->getData();
-        $passee = $filterForm->get('passee')->getData();
-
-        // Création du builder de la requête qui va assembler les différents filtres
-        $queryBuilder = $sortieRepository->createQueryBuilder('s')
-            ->where('s.dateHeureDebut >= :dateLimite')
-            ->setParameter('dateLimite', new \DateTime('-1 month'));
-
-        // Sélecteur prposeant les différents sites
-        if ($site) {
-            $queryBuilder->andWhere('s.site = :site')
-                ->setParameter('site', $site);
-        }
-
-        // Barre de recherche par mot
-        if ($nom) {
-            $queryBuilder->andWhere('s.nom LIKE :nom')
-                ->setParameter('nom', '%' . $nom . '%');
-        }
-
-        // INTERVAL
-        //// Sélecteur début de l'interval
-        if ($dateDebut) {
-            $queryBuilder->andWhere('s.dateHeureDebut >= :dateDebut')
-                ->setParameter('dateDebut', $dateDebut);
-        }
-        //// Sélecteur fin de l'interval
-        if ($dateFin) {
-            $queryBuilder->andWhere('s.dateHeureDebut <= :dateFin')
-                ->setParameter('dateFin', $dateFin);
-        }
-
-        // CHECKLIST
-        //// Checkpoint Utilisateur est organisateur
-        if ($organisateur) {
-            $queryBuilder->andWhere('s.organisateur = :organisateur')
-                ->setParameter('organisateur', $security->getUser());
-        }
-
-        //// Checkpoint Utilisateur est inscrit
-        if ($inscrit) {
-            $queryBuilder->andWhere(':user MEMBER OF s.participants')
-                ->setParameter('user', $security->getUser());
-        }
-
-        //// Checkpoint Utilisateur n'est organisateur
-        if ($nonInscrit) {
-            $queryBuilder->andWhere(':user NOT MEMBER OF s.participants')
-                ->setParameter('user', $security->getUser());
-        }
-
-        //// Checkpoint les Sorties sont passées
-        if ($passee) {
-            $queryBuilder->andWhere('s.dateHeureDebut < :now')
-                ->setParameter('now', new \DateTime());
-        }
-
-        // Affichage des sorties correspondant aux critères sélectionnés
-        $sorties = $queryBuilder->getQuery()->getResult();
+        // Création des filtres à partir du formulaire
+        $filters = $filterForm->getData();
+        $sorties = $sortieRepository->sortieFilters($filters, $security->getUser());
 
         return $this->render('main/index.html.twig', [
             'sorties' => $sorties,
@@ -217,45 +161,4 @@ final class MainController extends AbstractController
             'message' => $message
         ]);
     }
-
-    private function updateEtats(SortieRepository $sortieRepository, EtatRepository $etatRepository): void
-    {
-        // Récupération des sorties
-        $sorties = $sortieRepository->findAll();
-
-        // Vérification du status de la sortie (Créée, Ouverte, Cloturée, Activité en cours, Passée, Annulée)
-        foreach ($sorties as $sortie) {
-            $etat = $sortie->getEtat();
-
-            // Définition des dates
-            $now = new DateTimeImmutable('now');
-            $dateLimite = $sortie->getDateLimiteInscription();
-            $dateDebut = $sortie->getDateHeureDebut();
-            $dateFin = $dateDebut->modify("+{$sortie->getDuree()} minutes");
-            $dateHistorisation = $dateFin->modify('+30 days');
-
-
-            if ($etat->getLibelle() !== 'Annulée' && $etat->getLibelle() !== 'Créée') {
-                if ($dateLimite < $now && $now < $dateDebut) {
-                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Cloturée']));
-                }
-                if ($dateDebut < $now && $now < $dateFin) {
-                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Activité en cours']));
-                }
-                if ($dateFin < $now && $now < $dateHistorisation) {
-                    $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Terminée']));
-                }
-            }
-
-            if ($dateHistorisation < $now) {
-                $sortie->setEtat($etatRepository->findOneBy(['libelle' => 'Historisée']));
-            }
-
-            if ($sortie->getEtat() !== $etat) {
-                $sortieRepository->save($sortie, true);
-            }
-        }
-    }
-
-
 }

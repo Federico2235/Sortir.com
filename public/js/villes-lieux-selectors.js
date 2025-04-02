@@ -3,6 +3,7 @@ let lieuInput = document.getElementById('sortie_lieu');
 lieuInput.innerHTML = '<option value="">Veuillez choisir une ville</option>';
 
 villeInput.addEventListener('change', function () {
+    let url = document.getElementById('villeSelected').value;
     lieuInput.innerHTML = '';
     let option = document.createElement('option');
     option.value = null;
@@ -10,8 +11,7 @@ villeInput.addEventListener('change', function () {
     option.disabled = true;
     option.defaultSelected = true;
     lieuInput.appendChild(option);
-    let url = '{{ path ("app_ville_lieux", {"id": villeInput.value}) }}';
-    fetch(url)
+    fetch(url + '/' + villeInput.value)
         .then(response => response.json())
         .then(lieux => {
             lieux.forEach(lieu => {

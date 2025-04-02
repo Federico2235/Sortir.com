@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ApiLieuController extends AbstractController
 {
-    #[Route('/villes/{villeId}/lieux', name: 'api_lieux_by_ville', methods: ['GET'])]
-    public function getLieuxParVille(int $villeId, LieuRepository $lieuRepository): JsonResponse
+    #[Route('/villes/lieux/{villeId}', name: 'api_lieux_by_ville', methods: ['GET'])]
+    public function getLieuxParVille(LieuRepository $lieuRepository, int $villeId = null): JsonResponse
     {
         // Récupérer les lieux liés à la ville donnée
         $lieux = $lieuRepository->findBy(['ville' => $villeId]);

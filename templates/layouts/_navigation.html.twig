@@ -3,7 +3,7 @@
     <div class="bg-teal-700 bg-opacity-60 backdrop-blur-md shadow-lg flex items-center justify-center p-5 relative">
         <!-- Logo (affiché en desktop à gauche et centré en mobile) -->
         <div class="absolute left-4 hidden md:block">
-            <img src="{{ asset('img/logo/full-logo-blanc.svg') }}" alt="logo" class="h-8 w-auto">
+            <a href="{{ path('app_main') }}"><img src="{{ asset('img/logo/full-logo-blanc.svg') }}" alt="logo" class="h-8 w-auto"></a>
         </div>
         <!-- Logo centré pour mobile uniquement -->
         <div class="md:hidden">
@@ -18,7 +18,7 @@
                 <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_participants') }}">Gestion des participants</a></li>
             {% endif %}
             {% if app.user %}
-                <li><a class="hover:text-teal-800 transition-colors" href="/">Accueil</a></li>
+                <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_main') }}">Accueil</a></li>
                 <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_profil') }}">Mon profil</a></li>
                 <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_createSortie') }}">Créer une sortie</a></li>
                 <li><a class="hover:text-teal-800 transition-colors" href="{{ path('app_logout') }}">Se déconnecter</a></li>
